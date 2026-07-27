@@ -1,10 +1,11 @@
 require('dotenv').config({ path: __dirname + '/.env' });
-const express   = require('express');
-const cors      = require('cors');
-const path      = require('path');
-const fs        = require('fs');
-const helmet    = require('helmet');
-const rateLimit = require('express-rate-limit');
+const express     = require('express');
+const compression = require('compression');
+const cors        = require('cors');
+const path        = require('path');
+const fs          = require('fs');
+const helmet      = require('helmet');
+const rateLimit   = require('express-rate-limit');
 
 // ── Başlangıç ortam değişkeni kontrolü ──────────────────────────────────────
 if (!process.env.JWT_SECRET) {
@@ -15,6 +16,8 @@ if (!process.env.JWT_SECRET) {
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(compression());
 
 // ── Güvenlik başlıkları (helmet) ─────────────────────────────────────────────
 app.use(helmet({
