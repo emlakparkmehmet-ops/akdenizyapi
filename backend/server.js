@@ -88,6 +88,25 @@ function escapeHtml(text) {
     .replace(/'/g, '&#039;');
 }
 
+// ── LLMS.txt & LLMS-FULL.txt (Yapay Zeka & Agent Erişilebilirliği) ─────────
+app.get('/llms.txt', (req, res) => {
+  const filePath = path.resolve(__dirname, '../frontend/llms.txt');
+  if (fs.existsSync(filePath)) {
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    return res.sendFile(filePath);
+  }
+  res.status(404).send('Not Found');
+});
+
+app.get('/llms-full.txt', (req, res) => {
+  const filePath = path.resolve(__dirname, '../frontend/llms-full.txt');
+  if (fs.existsSync(filePath)) {
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    return res.sendFile(filePath);
+  }
+  res.status(404).send('Not Found');
+});
+
 // ── Dinamik Sitemap (XML) ───────────────────────────────────────────────────
 app.get('/sitemap.xml', async (req, res) => {
   try {
@@ -108,7 +127,8 @@ app.get('/sitemap.xml', async (req, res) => {
       { loc: 'https://antalyadiscephe.com/kepez-isi-yalitimi.html', priority: '0.8', changefreq: 'monthly' },
       { loc: 'https://antalyadiscephe.com/konyaalti-dis-cephe.html', priority: '0.8', changefreq: 'monthly' },
       { loc: 'https://antalyadiscephe.com/lara-mantolama.html', priority: '0.8', changefreq: 'monthly' },
-      { loc: 'https://antalyadiscephe.com/muratpasa-mantolama.html', priority: '0.8', changefreq: 'monthly' }
+      { loc: 'https://antalyadiscephe.com/muratpasa-mantolama.html', priority: '0.8', changefreq: 'monthly' },
+      { loc: 'https://antalyadiscephe.com/llms.txt', priority: '0.5', changefreq: 'monthly' }
     ];
 
     const today = new Date().toISOString().split('T')[0];
