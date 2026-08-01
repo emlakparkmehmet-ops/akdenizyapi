@@ -83,6 +83,27 @@ document.addEventListener('DOMContentLoaded', () => {
     if (link.href === window.location.href) link.classList.add('active');
   });
 
+  // ── SSS / FAQ Accordion ──
+  document.querySelectorAll('.faq-question').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const isActive = item.classList.contains('active');
+      const container = item.parentElement;
+      if (container) {
+        container.querySelectorAll('.faq-item').forEach(i => {
+          i.classList.remove('active');
+          const ans = i.querySelector('.faq-answer');
+          if (ans) ans.style.maxHeight = null;
+        });
+      }
+      if (!isActive) {
+        item.classList.add('active');
+        const ans = item.querySelector('.faq-answer');
+        if (ans) ans.style.maxHeight = ans.scrollHeight + 'px';
+      }
+    });
+  });
+
   // Sayfaya özgü init
   const page = document.body.dataset.page;
   if (page === 'home')    initHome();
