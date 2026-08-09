@@ -1,27 +1,50 @@
 # Akdeniz Yapı Dekorasyon (Antalya Dış Cephe & Mantolama)
 
-> Akdeniz Yapı Dekorasyon, Antalya genelinde dış cephe ısı yalıtımı, EPS ve taşyünü mantolama, mineral sıva, dış cephe boya, çatı yenileme ve komple bina tadilatı hizmetleri sunan kurumsal inşaat ve yalıtım firmasıdır.
+> Akdeniz Yapı Dekorasyon, Antalya genelinde dış cephe ısı yalıtımı, EPS ve taşyünü mantolama, mineral sıva, dış cephe boya, çatı yenileme ve komple bina tadilatı hizmetleri sunan kurumsal inşaat ve yalıtım firmasıdır. 500+ tamamlanan proje, 10 yıl iş garantisi ve %100 müşteri memnuniyeti ile hizmet verir.
 
-## Ana Hizmetler ve Sayfalar
+## Ana Sayfalar
 
 - [Ana Sayfa](https://antalyadiscephe.com/): Akdeniz Yapı Dekorasyon genel tanıtım, hizmet özetleri, canlı renk simülatörü ve ücretsiz keşif formu.
 - [Hizmetlerimiz](https://antalyadiscephe.com/hizmetler.html): Dış cephe mantolama, ısı yalıtımı, mineral sıva uygulamaları ve cephe yenileme hizmet detayları.
-- [Muratpaşa Dış Cephe Mantolama](https://antalyadiscephe.com/muratpasa-mantolama.html): Muratpaşa ilçesinde bina yalıtımı, mantolama fiyatları ve kaliteli cephe kaplama çözümleri.
-- [Konyaaltı Dış Cephe Yalıtımı](https://antalyadiscephe.com/konyaalti-dis-cephe.html): Konyaaltı bölgesinde neme ve tuza dayanıklı özel dış cephe yalıtım sistemleri.
-- [Kepez Isı Yalıtımı](https://antalyadiscephe.com/kepez-isi-yalitimi.html): Kepez ilçesindeki binalara özel yüksek tasarruflu EPS ve taşyünü mantolama hizmeti.
-- [Lara Mantolama](https://antalyadiscephe.com/lara-mantolama.html): Lara bölgesindeki konut ve rezidanslar için modern ve dekoratif dış cephe kaplama.
+- [Antalya Isı Yalıtımı (Kapsamlı Rehber)](https://antalyadiscephe.com/isi-yalitimi-antalya.html): Antalya geneli ısı yalıtımı ve mantolama ana rehber sayfası.
 - [Referanslarımız ve Projeler](https://antalyadiscephe.com/referanslar.html): Antalya genelinde başarıyla tamamlanan bina mantolama ve dış cephe yenileme projeleri.
-- [Kampanyalar ve Teklifler](https://antalyadiscephe.com/kampanyalar.html): Sezonluk mantolama indirimleri, taksitli ödeme seçenekleri ve avantajlı fiyat paketleri.
-- [İletişim ve Keşif Talebi](https://antalyadiscephe.com/iletisim.html): Adres, telefon (+90-530-936-1017), çalışma saatleri ve online keşif başvuru formu.
+- [Kampanyalar ve Teklifler](https://antalyadiscephe.com/kampanyalar.html): Sezonluk mantolama kampanyaları ve avantajlı teklifler.
+- [İletişim ve Keşif Talebi](https://antalyadiscephe.com/iletisim.html): Adres, telefon, çalışma saatleri ve online keşif başvuru formu.
+
+## Ana Hizmetler
+
+- [Dış Cephe Isı Yalıtımı (Mantolama)](https://antalyadiscephe.com/hizmetler/dis-cephe-isi-yalitimi): EPS ve taşyünü levhalarla komple dış cephe ısı yalıtımı.
+- [Mineral Sıva](https://antalyadiscephe.com/hizmetler/mineral-siva): Dekoratif mineral sıva ve dış cephe kaplama uygulamaları.
+- [Su Yalıtımı ve Termal İzolasyon](https://antalyadiscephe.com/hizmetler/su-yalitimi-termal): Temel, teras ve cephe su yalıtımı çözümleri.
+- [İç ve Dış Cephe Boyası](https://antalyadiscephe.com/hizmetler/ic-dis-cephe-boyasi): Silikon esaslı dış cephe boyaları ve iç mekan boya uygulamaları.
+- [Alçı ve Kartonpiyer](https://antalyadiscephe.com/hizmetler/alci-kartonpiyer): Alçı sıva, kartonpiyer ve dekoratif tavan işleri.
+- [Çatı Onarım](https://antalyadiscephe.com/hizmetler/cati-onarim): Çatı aktarma, onarım ve çatı su yalıtımı.
+- [Seramik ve Mermer Döşeme](https://antalyadiscephe.com/hizmetler/seramik-mermer-doseme): Seramik, fayans ve mermer döşeme uygulamaları.
+- [Komple Tadilat](https://antalyadiscephe.com/hizmetler/komple-tadilat): Anahtar teslim bina ve daire tadilatı.
+
+## Bölge Sayfaları
+
+- [Muratpaşa Dış Cephe Mantolama](https://antalyadiscephe.com/muratpasa-mantolama.html): Muratpaşa ilçesinde bina yalıtımı ve kaliteli cephe kaplama çözümleri.
+- [Konyaaltı Dış Cephe Yalıtımı](https://antalyadiscephe.com/konyaalti-dis-cephe.html): Konyaaltı bölgesinde neme ve tuza dayanıklı dış cephe yalıtım sistemleri.
+- [Kepez Isı Yalıtımı](https://antalyadiscephe.com/kepez-isi-yalitimi.html): Kepez ilçesindeki binalara özel yüksek tasarruflu EPS ve taşyünü mantolama.
+- [Lara Mantolama](https://antalyadiscephe.com/lara-mantolama.html): Lara bölgesindeki konut ve rezidanslar için modern dış cephe kaplama.
+- [Döşemealtı Mantolama](https://antalyadiscephe.com/dosemealti-mantolama.html): Döşemealtı bölgesinde ısı yalıtımı ve mantolama hizmetleri.
+- [Aksu Mantolama](https://antalyadiscephe.com/aksu-mantolama.html): Aksu ilçesinde dış cephe mantolama ve yalıtım uygulamaları.
+- [Serik Isı Yalıtımı](https://antalyadiscephe.com/serik-isi-yalitimi.html): Serik, Kadriye ve Belek bölgesinde ısı yalıtımı ve mantolama.
 
 ## Şirket ve İletişim Bilgileri
 
 - **Firma Adı:** Akdeniz Yapı Dekorasyon
-- **Telefon:** +90 530 936 1017
+- **Adres:** Şafak Mah. 4258. Sk. No:12, 07090 Kepez/Antalya
+- **Telefon 1 (Birincil + WhatsApp):** 0530 936 10 17 (Yunus Demirel) — WhatsApp: +90 530 936 10 17
+- **Telefon 2:** 0505 086 98 07 (Serhat Sincar)
+- **Instagram:** https://instagram.com/akdeniz.yapidekorasyon
 - **Web Sitesi:** https://antalyadiscephe.com
-- **Hizmet Bölgeleri:** Muratpaşa, Konyaaltı, Kepez, Lara, Aksu, Döşemealtı, Serik, Manavgat, Alanya / Antalya
+- **Hizmet Bölgeleri:** Muratpaşa, Konyaaltı, Kepez, Lara, Döşemealtı, Aksu, Serik ve tüm Antalya
 - **Çalışma Saatleri:** Pazartesi - Cumartesi: 08:00 - 19:00
-- **Garanti:** Tüm uygulamalarda 10 Yıl Malzeme ve İşçilik Garantisi
+- **Öne Çıkanlar:** 500+ Tamamlanan Proje, 12+ Referans Proje, 10 Yıl İş Garantisi, %100 Müşteri Memnuniyeti, 20+ Hizmet Çeşidi
+- **20+ Hizmet Çeşidi Açılımı:** 8 ana kategori altında EPS/karbonlu EPS/taşyünü mantolama, mineral/silikonlu/akrilik sıva, iç-dış cephe boyası, alçı sıva/saten alçı/kartonpiyer/asma tavan, çatı aktarma ve çatı su yalıtımı, seramik/fayans/granit/mermer döşeme, su-ısı-ses yalıtımı ve anahtar teslim komple tadilat uygulamalarını kapsar.
+- **Fiyatlandırma:** Kesin fiyat ücretsiz keşifle belirlenir; fiyatı etkileyen faktörler cephe metrekaresi, yalıtım levhası tipi ve kalınlığı, iskele kurulumu ve bina yüksekliğidir.
 
 ## Optional
 

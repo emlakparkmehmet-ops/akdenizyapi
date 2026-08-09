@@ -258,13 +258,11 @@ async function loadFeaturedProjects() {
   try {
     const res = await fetch(`${API}/projects?featured=1`);
     const projects = await res.json();
-    if (!projects.length) {
-      grid.innerHTML = '<p class="empty-msg">Henüz referans eklenmemiş.</p>';
-      return;
-    }
+    /* API boşsa statik kartlar (sayfada hazır) korunur, dokunma */
+    if (!projects.length) return;
     grid.innerHTML = projects.slice(0, 6).map(p => {
       const slug = p.slug || p.id;
-      const url = `/referans-detay.html?slug=${encodeURIComponent(slug)}`;
+      const url = `/referanslar/${encodeURIComponent(slug)}`;
       return `
       <a href="${url}" class="ref-card" style="text-decoration:none;color:inherit;display:block;cursor:pointer;">
         <div class="ref-img" style="position:relative;">
@@ -281,7 +279,7 @@ async function loadFeaturedProjects() {
       </a>`;
     }).join('');
   } catch {
-    grid.innerHTML = '<p class="empty-msg">Referanslar yüklenemedi.</p>';
+    /* Hata durumunda da statik kartlar korunur */
   }
 }
 
@@ -459,7 +457,7 @@ async function initReferanslar() {
     }
     grid.innerHTML = projects.map(p => {
       const slug = p.slug || p.id;
-      const url = `/referans-detay.html?slug=${encodeURIComponent(slug)}`;
+      const url = `/referanslar/${encodeURIComponent(slug)}`;
       return `
       <a href="${url}" class="ref-card" style="text-decoration:none;color:inherit;display:block;cursor:pointer;">
         <div class="ref-img" style="position:relative;">

@@ -13,8 +13,10 @@ const storage = multer.diskStorage({
     cb(null, dir);
   },
   filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    cb(null, `service_${Date.now()}${ext}`);
+    const ext = path.extname(file.originalname).toLowerCase();
+    // Slug tabanlı SEO dostu dosya adı: <slug>-antalya-<timestamp><uzantı>
+    const base = makeSlug((req.body && req.body.title) || path.basename(file.originalname, ext)) || 'hizmet';
+    cb(null, `${base}-antalya-${Date.now()}${ext}`);
   }
 });
 const ALLOWED_MIMES = ['image/jpeg', 'image/png', 'image/webp'];

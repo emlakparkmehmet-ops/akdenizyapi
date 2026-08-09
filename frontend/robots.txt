@@ -1,8 +1,73 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# ── Yapay Zeka & LLM Botları — Açık İzin ─────────────────────────
+# Not: Robots spec'ine göre adlandırılmış gruplar '*' grubunun
+# kurallarını DEVRALMAZ; Disallow satırları her grupta tekrarlanır.
+User-agent: GPTBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Meta-ExternalAgent
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Amazonbot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: CCBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# ── LLM bilgi dosyaları ──────────────────────────────────────────
+# Kısa indeks: https://antalyadiscephe.com/llms.txt
+# Kapsamlı sürüm: https://antalyadiscephe.com/llms-full.txt
 
 Sitemap: https://antalyadiscephe.com/sitemap.xml
-
-# Yapay Zeka & LLM Ajanları Erişilebilirliği
-Allow: /llms.txt
-Allow: /llms-full.txt

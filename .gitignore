@@ -18,5 +18,8 @@ backend/uploads/*
 # Log dosyaları
 *.log
 
-# Geliştirici araçları
+# Geliştirici araçları ve API Keyler
 _gen_*.js
+service_account.json
+*.json.key
+

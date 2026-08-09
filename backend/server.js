@@ -15,7 +15,32 @@ if (!process.env.JWT_SECRET) {
 }
 
 const app  = express();
+
+// Railway/reverse proxy arkasında X-Forwarded-For başlığına güven
+// (express-rate-limit v7 aksi halde ValidationError üretir; login ve iletişim formu 500'e düşer)
+app.set('trust proxy', 1);
+
 const PORT = process.env.PORT || 3000;
+
+const SITE           = 'https://antalyadiscephe.com';
+const ORG_ID         = 'https://antalyadiscephe.com/#organization';
+const STATIC_LASTMOD = '2026-08-07'; // Statik sayfalar için sabit lastmod — her istekte new Date() ÜRETME
+const FRONTEND_DIR   = path.resolve(__dirname, '../frontend');
+const NOT_FOUND_PAGE = path.resolve(FRONTEND_DIR, '404.html');
+
+// ── Canonical host middleware (EN BAŞTA) ─────────────────────────────────────
+// http → https ve www → apex 301 yönlendirmesi (localhost hariç)
+app.use((req, res, next) => {
+  const host = String(req.headers.host || '').toLowerCase();
+  if (host.startsWith('localhost') || host.startsWith('127.0.0.1') || host.startsWith('[::1]')) {
+    return next();
+  }
+  const proto = String(req.headers['x-forwarded-proto'] || '').split(',')[0].trim();
+  if (proto !== 'https' || host.startsWith('www.')) {
+    return res.redirect(301, `${SITE}${req.originalUrl}`);
+  }
+  next();
+});
 
 app.use(compression());
 
@@ -57,6 +82,12 @@ app.use(cors({
 app.use(express.json({ limit: '100kb' }));
 app.use(express.urlencoded({ extended: true, limit: '100kb' }));
 
+// ── /admin altındaki TÜM yanıtlara noindex başlığı ──────────────────────────
+app.use('/admin', (req, res, next) => {
+  res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+  next();
+});
+
 // ── Login brute-force koruması ───────────────────────────────────────────────
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 dakika
@@ -76,7 +107,7 @@ const contactLimiter = rateLimit({
   message: { error: 'Çok fazla mesaj gönderdiniz. Lütfen daha sonra tekrar deneyin.' },
 });
 
-const db        = require('./database');
+const db = require('./database');
 
 function escapeHtml(text) {
   if (!text) return '';
@@ -88,20 +119,89 @@ function escapeHtml(text) {
     .replace(/'/g, '&#039;');
 }
 
+// JSON-LD'yi <script> içine güvenle gömmek için
+function jsonLd(obj) {
+  return JSON.stringify(obj).replace(/</g, '\\u003c');
+}
+
+// 404 sayfası gönderici (noindex meta'lı frontend/404.html)
+function send404(req, res) {
+  res.status(404);
+  res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+  if (fs.existsSync(NOT_FOUND_PAGE)) {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-cache');
+    return res.sendFile(NOT_FOUND_PAGE);
+  }
+  return res.type('text/plain').send('404 - Sayfa bulunamadı');
+}
+
+// Paragraf listesi üret (SSR gövde enjeksiyonu için)
+function toParagraphs(text, style) {
+  return String(text || '')
+    .split(/\r?\n+/)
+    .map(s => s.trim())
+    .filter(Boolean)
+    .map(p => `<p${style ? ` style="${style}"` : ''}>${escapeHtml(p)}</p>`)
+    .join('\n');
+}
+
+// Şablon head'inden statik canonical + og:* + twitter:* etiketlerini söker,
+// sayfaya özel title/description/canonical/OG setini enjekte eder.
+function injectHeadMeta(html, { pageTitle, description, canonicalUrl, imageUrl, ogType, extraHead }) {
+  html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(pageTitle)}</title>`);
+
+  if (/<meta name="description"/i.test(html)) {
+    html = html.replace(/<meta name="description"[^>]*\/?>/i, `<meta name="description" content="${escapeHtml(description)}" />`);
+  } else {
+    html = html.replace('</head>', `  <meta name="description" content="${escapeHtml(description)}" />\n</head>`);
+  }
+
+  // Statik canonical + MEVCUT og:image/twitter:image dahil tüm og:*/twitter:* etiketlerini kaldır (tek OG seti kalsın)
+  html = html.replace(/[ \t]*<link rel="canonical"[^>]*\/?>\r?\n?/gi, '');
+  html = html.replace(/[ \t]*<meta property="og:[^"]*"[^>]*\/?>\r?\n?/gi, '');
+  html = html.replace(/[ \t]*<meta name="twitter:[^"]*"[^>]*\/?>\r?\n?/gi, '');
+
+  const seoBlock = `
+  <link rel="canonical" href="${canonicalUrl}" />
+  <meta property="og:title" content="${escapeHtml(pageTitle)}" />
+  <meta property="og:description" content="${escapeHtml(description)}" />
+  <meta property="og:url" content="${canonicalUrl}" />
+  <meta property="og:type" content="${ogType || 'article'}" />
+  <meta property="og:site_name" content="Akdeniz Yapı Dekorasyon" />
+  <meta property="og:locale" content="tr_TR" />
+  <meta property="og:image" content="${imageUrl}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${escapeHtml(pageTitle)}" />
+  <meta name="twitter:description" content="${escapeHtml(description)}" />
+  <meta name="twitter:image" content="${imageUrl}" />
+${extraHead || ''}`;
+
+  return html.replace('</head>', `${seoBlock}\n</head>`);
+}
+
+// <!-- SSR:CONTENT --> ... <!-- /SSR:CONTENT --> arasını sunucu içeriğiyle değiştirir
+function injectSsrContent(html, content) {
+  return html.replace(
+    /<!-- SSR:CONTENT -->[\s\S]*?<!-- \/SSR:CONTENT -->/,
+    () => `<!-- SSR:CONTENT -->\n${content}\n        <!-- /SSR:CONTENT -->`
+  );
+}
+
 // ── LLMS.txt & LLMS-FULL.txt (Yapay Zeka & Agent Erişilebilirliği) ─────────
 app.get('/llms.txt', (req, res) => {
-  const filePath = path.resolve(__dirname, '../frontend/llms.txt');
+  const filePath = path.resolve(FRONTEND_DIR, 'llms.txt');
   if (fs.existsSync(filePath)) {
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
     return res.sendFile(filePath);
   }
   res.status(404).send('Not Found');
 });
 
 app.get('/llms-full.txt', (req, res) => {
-  const filePath = path.resolve(__dirname, '../frontend/llms-full.txt');
+  const filePath = path.resolve(FRONTEND_DIR, 'llms-full.txt');
   if (fs.existsSync(filePath)) {
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
     return res.sendFile(filePath);
   }
   res.status(404).send('Not Found');
@@ -114,39 +214,50 @@ app.get('/sitemap.xml', async (req, res) => {
     try {
       services = await db.allAsync('SELECT slug, created_at FROM services ORDER BY id DESC');
     } catch (_) { services = []; }
-    
+
+    let projects = [];
+    try {
+      projects = db.allRowsAsync
+        ? await db.allRowsAsync('SELECT slug, created_at FROM projects WHERE slug IS NOT NULL ORDER BY id DESC')
+        : [];
+    } catch (_) { projects = []; }
+
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
     xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
+    // Statik sayfalar — sabit lastmod (her istekte değişmez)
     const staticPages = [
-      { loc: 'https://antalyadiscephe.com/', priority: '1.0', changefreq: 'weekly' },
-      { loc: 'https://antalyadiscephe.com/hizmetler.html', priority: '0.9', changefreq: 'monthly' },
-      { loc: 'https://antalyadiscephe.com/referanslar.html', priority: '0.8', changefreq: 'monthly' },
-      { loc: 'https://antalyadiscephe.com/kampanyalar.html', priority: '0.8', changefreq: 'weekly' },
-      { loc: 'https://antalyadiscephe.com/iletisim.html', priority: '0.7', changefreq: 'monthly' },
-      { loc: 'https://antalyadiscephe.com/kepez-isi-yalitimi.html', priority: '0.8', changefreq: 'monthly' },
-      { loc: 'https://antalyadiscephe.com/konyaalti-dis-cephe.html', priority: '0.8', changefreq: 'monthly' },
-      { loc: 'https://antalyadiscephe.com/lara-mantolama.html', priority: '0.8', changefreq: 'monthly' },
-      { loc: 'https://antalyadiscephe.com/muratpasa-mantolama.html', priority: '0.8', changefreq: 'monthly' },
-      { loc: 'https://antalyadiscephe.com/llms.txt', priority: '0.5', changefreq: 'monthly' }
+      { loc: `${SITE}/`,                            priority: '1.0', changefreq: 'weekly'  },
+      { loc: `${SITE}/hizmetler.html`,              priority: '0.9', changefreq: 'monthly' },
+      { loc: `${SITE}/referanslar.html`,            priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/kampanyalar.html`,            priority: '0.8', changefreq: 'weekly'  },
+      { loc: `${SITE}/iletisim.html`,               priority: '0.7', changefreq: 'monthly' },
+      { loc: `${SITE}/isi-yalitimi-antalya.html`,   priority: '0.9', changefreq: 'monthly' },
+      { loc: `${SITE}/kepez-isi-yalitimi.html`,     priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/konyaalti-dis-cephe.html`,    priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/lara-mantolama.html`,         priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/muratpasa-mantolama.html`,    priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/dosemealti-mantolama.html`,   priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/aksu-mantolama.html`,         priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/serik-isi-yalitimi.html`,     priority: '0.8', changefreq: 'monthly' },
     ];
-
-    const today = new Date().toISOString().split('T')[0];
 
     for (const page of staticPages) {
       xml += `  <url>\n`;
       xml += `    <loc>${page.loc}</loc>\n`;
-      xml += `    <lastmod>${today}</lastmod>\n`;
+      xml += `    <lastmod>${STATIC_LASTMOD}</lastmod>\n`;
       xml += `    <changefreq>${page.changefreq}</changefreq>\n`;
       xml += `    <priority>${page.priority}</priority>\n`;
       xml += `  </url>\n`;
     }
 
-    if (services && services.length > 0) {
+    // Hizmet detayları (DB)
+    if (Array.isArray(services)) {
       for (const s of services) {
-        const date = s.created_at ? new Date(s.created_at).toISOString().split('T')[0] : today;
+        if (!s || !s.slug) continue;
+        const date = s.created_at ? new Date(s.created_at).toISOString().split('T')[0] : STATIC_LASTMOD;
         xml += `  <url>\n`;
-        xml += `    <loc>https://antalyadiscephe.com/hizmetler/${escapeHtml(s.slug)}</loc>\n`;
+        xml += `    <loc>${SITE}/hizmetler/${escapeHtml(s.slug)}</loc>\n`;
         xml += `    <lastmod>${date}</lastmod>\n`;
         xml += `    <changefreq>weekly</changefreq>\n`;
         xml += `    <priority>0.9</priority>\n`;
@@ -154,14 +265,34 @@ app.get('/sitemap.xml', async (req, res) => {
       }
     }
 
+    // Referans projeleri (DB)
+    if (Array.isArray(projects)) {
+      for (const p of projects) {
+        if (!p || !p.slug) continue;
+        const date = p.created_at ? new Date(p.created_at).toISOString().split('T')[0] : STATIC_LASTMOD;
+        xml += `  <url>\n`;
+        xml += `    <loc>${SITE}/referanslar/${escapeHtml(p.slug)}</loc>\n`;
+        xml += `    <lastmod>${date}</lastmod>\n`;
+        xml += `    <changefreq>monthly</changefreq>\n`;
+        xml += `    <priority>0.7</priority>\n`;
+        xml += `  </url>\n`;
+      }
+    }
+
     xml += `</urlset>`;
 
     res.header('Content-Type', 'application/xml');
+    res.header('Cache-Control', 'public, max-age=3600');
     res.send(xml);
   } catch (err) {
     console.error('Sitemap error:', err);
     res.status(500).send('Sitemap üretilirken hata oluştu.');
   }
+});
+
+// ── /index.html → / (301) ────────────────────────────────────────────────────
+app.get('/index.html', (req, res) => {
+  res.redirect(301, '/');
 });
 
 // ── 301 Permanent Redirect (Eski query parametreli linkler için) ──────────────
@@ -173,71 +304,118 @@ app.get('/hizmet-detay.html', (req, res) => {
   return res.redirect(301, '/hizmetler.html');
 });
 
-// ── Clean URL Route (/hizmetler/:slug) + Dynamic SEO Meta Injections ─────────
+app.get('/referans-detay.html', (req, res) => {
+  const slug = req.query.slug || req.query.id;
+  if (slug) {
+    return res.redirect(301, `/referanslar/${encodeURIComponent(slug)}`);
+  }
+  return res.redirect(301, '/referanslar.html');
+});
+
+// ── Clean URL Route (/hizmetler/:slug) — SSR meta + gövde + JSON-LD ──────────
 app.get('/hizmetler/:slug', async (req, res, next) => {
   try {
     const slug = req.params.slug;
+    const isNum = /^\d+$/.test(slug);
     let service = null;
     try {
-      service = await db.getAsync(`
-        SELECT s.*, c.name as category_name, c.icon as category_icon
-        FROM services s
-        LEFT JOIN categories c ON s.category_id = c.id
-        WHERE s.slug = ?
-      `, [slug]);
+      service = isNum
+        ? await db.getAsync(`
+            SELECT s.*, c.name as category_name, c.icon as category_icon
+            FROM services s
+            LEFT JOIN categories c ON s.category_id = c.id
+            WHERE s.id = ?
+          `, [slug])
+        : await db.getAsync(`
+            SELECT s.*, c.name as category_name, c.icon as category_icon
+            FROM services s
+            LEFT JOIN categories c ON s.category_id = c.id
+            WHERE s.slug = ?
+          `, [slug]);
     } catch (_) { service = null; }
 
-    const filePath = path.resolve(__dirname, '../frontend/hizmet-detay.html');
+    // Bilinmeyen slug/id → 404 (noindex sayfa)
+    if (!service) return send404(req, res);
+
+    // Sayısal legacy id ile gelindiyse ve slug varsa → canonical URL'ye 301
+    if (isNum && service.slug) {
+      return res.redirect(301, `/hizmetler/${encodeURIComponent(service.slug)}`);
+    }
+
+    const filePath = path.resolve(FRONTEND_DIR, 'hizmet-detay.html');
     if (!fs.existsSync(filePath)) return next();
 
     let html = fs.readFileSync(filePath, 'utf8');
 
-    // Göreceli statik kaynak yollarını alt dizin rotaları (/hizmetler/:slug) için kök dizine zorla (/style.css, /js/main.js)
-    html = html.replace(/href="style\.css"/g, 'href="/style.css"')
-               .replace(/src="js\/main\.js"/g, 'src="/js/main.js"');
+    const pageTitle = `Antalya ${service.title} | Akdeniz Yapı Dekorasyon`;
+    const cleanDesc = service.short_desc
+      ? service.short_desc.replace(/\s+/g, ' ').trim()
+      : `Antalya ${service.title} hizmeti. Akdeniz Yapı Dekorasyon güvencesiyle profesyonel uygulamalar ve kaliteli çözümler.`;
+    const canonicalUrl = `${SITE}/hizmetler/${service.slug}`;
+    const imageUrl = service.image
+      ? (service.image.startsWith('http') ? service.image : `${SITE}${service.image}`)
+      : `${SITE}/images/og-banner.png`;
 
-    if (service) {
-      const pageTitle = `Antalya ${service.title} | Akdeniz Yapı Dekorasyon`;
-      const cleanDesc = service.short_desc
-        ? service.short_desc.replace(/\s+/g, ' ').trim()
-        : `Antalya ${service.title} hizmeti. Akdeniz Yapı Dekorasyon güvencesiyle profesyonel uygulamalar ve kaliteli çözümler.`;
-      const canonicalUrl = `https://antalyadiscephe.com/hizmetler/${service.slug}`;
-      const imageUrl = service.image
-        ? (service.image.startsWith('http') ? service.image : `https://antalyadiscephe.com${service.image}`)
-        : 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80';
+    // Service + BreadcrumbList JSON-LD (sunucu tarafı)
+    const serviceLd = {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      'name': `Antalya ${service.title}`,
+      'serviceType': service.title,
+      'description': cleanDesc,
+      'url': canonicalUrl,
+      'image': imageUrl,
+      'areaServed': { '@type': 'City', 'name': 'Antalya' },
+      'provider': { '@id': ORG_ID },
+    };
+    const breadcrumbLd = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        { '@type': 'ListItem', 'position': 1, 'name': 'Ana Sayfa',  'item': `${SITE}/` },
+        { '@type': 'ListItem', 'position': 2, 'name': 'Hizmetler',  'item': `${SITE}/hizmetler.html` },
+        { '@type': 'ListItem', 'position': 3, 'name': `Antalya ${service.title}`, 'item': canonicalUrl },
+      ],
+    };
+    const extraHead =
+      `  <script type="application/ld+json">${jsonLd(serviceLd)}</script>\n` +
+      `  <script type="application/ld+json">${jsonLd(breadcrumbLd)}</script>`;
 
-      // HTML Title güncelle
-      html = html.replace(/<title>.*?<\/title>/i, `<title>${escapeHtml(pageTitle)}</title>`);
+    html = injectHeadMeta(html, {
+      pageTitle,
+      description: cleanDesc,
+      canonicalUrl,
+      imageUrl,
+      ogType: 'article',
+      extraHead,
+    });
 
-      // Meta Description güncelle veya ekle
-      if (/<meta name="description"/i.test(html)) {
-        html = html.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${escapeHtml(cleanDesc)}" />`);
-      } else {
-        html = html.replace('</head>', `  <meta name="description" content="${escapeHtml(cleanDesc)}" />\n</head>`);
-      }
+    // Gövde SSR: breadcrumb + h1 + içerik konteyneri (JS yüklenince üstüne yazar)
+    const safeTitle = escapeHtml(service.title);
+    html = html.replace(/(<span id="breadcrumbTitle">)[\s\S]*?(<\/span>)/, (m, a, b) => `${a}${safeTitle}${b}`);
+    html = html.replace(/(<h1 id="pageHeroTitle">)[\s\S]*?(<\/h1>)/, (m, a, b) => `${a}Antalya ${safeTitle}${b}`);
 
-      // Canonical link varsa kaldır (duplikasyon olmasın)
-      html = html.replace(/<link rel="canonical".*?\/>/gi, '');
-
-      // Dynamic SEO ve OG Meta Etiketleri
-      const seoInjections = `
-  <link rel="canonical" href="${canonicalUrl}" />
-  <meta property="og:title" content="${escapeHtml(pageTitle)}" />
-  <meta property="og:description" content="${escapeHtml(cleanDesc)}" />
-  <meta property="og:image" content="${imageUrl}" />
-  <meta property="og:url" content="${canonicalUrl}" />
-  <meta property="og:type" content="article" />
-  <meta property="og:site_name" content="Akdeniz Yapı Dekorasyon" />
-  <meta property="og:locale" content="tr_TR" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="${escapeHtml(pageTitle)}" />
-  <meta name="twitter:description" content="${escapeHtml(cleanDesc)}" />
-  <meta name="twitter:image" content="${imageUrl}" />
-`;
-      html = html.replace('</head>', `${seoInjections}\n</head>`);
-    }
+    const shortHtml = service.short_desc
+      ? `<p style="font-size:1.05rem;color:var(--text2);margin-bottom:20px;line-height:1.7;">${escapeHtml(service.short_desc)}</p>`
+      : '';
+    const descHtml = toParagraphs(service.description, 'margin-bottom:12px;');
+    const ssrContent = `        <div class="detay-image">
+          <img src="${imageUrl}" alt="Antalya ${safeTitle} uygulaması - Akdeniz Yapı Dekorasyon" width="800" height="420" style="width:100%;height:100%;object-fit:cover;border-radius:16px;" />
+        </div>
+        <div class="detay-body">
+          <h2 class="detay-title" style="font-size:1.8rem;font-weight:700;margin-bottom:16px;color:var(--gold);">${safeTitle}</h2>
+          ${service.category_name ? `<span class="badge-gold" style="display:inline-block;margin-bottom:16px;">${escapeHtml(service.category_name)}</span>` : ''}
+          ${shortHtml}
+          <div class="detay-desc">${descHtml}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;">
+            <a href="tel:05309361017" class="btn btn-gold"><i class="fas fa-phone"></i> Bilgi Al</a>
+            <a href="https://wa.me/905309361017" target="_blank" rel="noopener" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+          </div>
+        </div>`;
+    html = injectSsrContent(html, ssrContent);
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-cache');
     res.send(html);
   } catch (err) {
     console.error('Hizmet detay SSR hatası:', err);
@@ -245,10 +423,104 @@ app.get('/hizmetler/:slug', async (req, res, next) => {
   }
 });
 
-// ── Statik dosyalar ──────────────────────────────────────────────────────────
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'), { maxAge: '7d' }));
-app.use(express.static(path.join(__dirname, '../frontend')));
-app.use('/admin', express.static(path.join(__dirname, '../admin')));
+// ── Clean URL Route (/referanslar/:slug) — SSR meta + gövde ──────────────────
+app.get('/referanslar/:slug', async (req, res, next) => {
+  try {
+    const val = req.params.slug;
+    const isNum = /^\d+$/.test(val);
+    let project = null;
+    try {
+      project = isNum
+        ? await db.getAsync('SELECT * FROM projects WHERE id = ?', [val])
+        : await db.getAsync('SELECT * FROM projects WHERE slug = ?', [val]);
+    } catch (_) { project = null; }
+
+    // Bilinmeyen slug → 404 (noindex sayfa)
+    if (!project) return send404(req, res);
+
+    // Sayısal id ile gelindiyse ve slug varsa → canonical URL'ye 301
+    if (isNum && project.slug) {
+      return res.redirect(301, `/referanslar/${encodeURIComponent(project.slug)}`);
+    }
+
+    const filePath = path.resolve(FRONTEND_DIR, 'referans-detay.html');
+    if (!fs.existsSync(filePath)) return next();
+
+    let html = fs.readFileSync(filePath, 'utf8');
+
+    const pageTitle = `${project.title} | Akdeniz Yapı Dekorasyon Referans Projesi`;
+    const cleanDesc = (project.description
+      ? project.description.replace(/\s+/g, ' ').trim()
+      : `${project.title} - Akdeniz Yapı Dekorasyon tarafından tamamlanan referans proje.`)
+      + (project.location ? ` (${project.location})` : '');
+    const canonicalUrl = `${SITE}/referanslar/${encodeURIComponent(project.slug || project.id)}`;
+    const imageUrl = project.image
+      ? (project.image.startsWith('http') ? project.image : `${SITE}${project.image}`)
+      : `${SITE}/images/og-banner.png`;
+
+    const breadcrumbLd = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        { '@type': 'ListItem', 'position': 1, 'name': 'Ana Sayfa',   'item': `${SITE}/` },
+        { '@type': 'ListItem', 'position': 2, 'name': 'Referanslar', 'item': `${SITE}/referanslar.html` },
+        { '@type': 'ListItem', 'position': 3, 'name': project.title, 'item': canonicalUrl },
+      ],
+    };
+    const extraHead = `  <script type="application/ld+json">${jsonLd(breadcrumbLd)}</script>`;
+
+    html = injectHeadMeta(html, {
+      pageTitle,
+      description: cleanDesc,
+      canonicalUrl,
+      imageUrl,
+      ogType: 'article',
+      extraHead,
+    });
+
+    // Gövde SSR: breadcrumb + h1 + alt başlık + içerik (JS yüklenince üstüne yazar)
+    const safeTitle = escapeHtml(project.title);
+    html = html.replace(/(<span id="breadTitle">)[\s\S]*?(<\/span>)/, (m, a, b) => `${a}${safeTitle}${b}`);
+    html = html.replace(/(<h1 id="heroTitle"[^>]*>)[\s\S]*?(<\/h1>)/, (m, a, b) => `${a}${safeTitle}${b}`);
+    if (project.location) {
+      const subHtml = `<i class="fas fa-map-marker-alt"></i> ${escapeHtml(project.location)}` +
+        (project.year ? ` &nbsp;·&nbsp; <i class="fas fa-calendar"></i> ${escapeHtml(String(project.year))}` : '');
+      html = html.replace(/(<p id="heroSub"[^>]*>)[\s\S]*?(<\/p>)/, (m, a, b) => `${a}${subHtml}${b}`);
+    }
+
+    const detailHtml = toParagraphs(project.detail_text);
+    const ssrContent = `            <img src="${imageUrl}" alt="${safeTitle} - Akdeniz Yapı Dekorasyon referans projesi" class="detay-hero-img" width="1200" height="675" />
+            <div style="margin-top:28px;">
+              <h2 style="font-family:'Montserrat',sans-serif;font-size:1.25rem;font-weight:800;margin-bottom:12px;">Proje Hakkında</h2>
+              ${project.description ? `<p style="color:var(--text2);line-height:1.8;font-size:.95rem;">${escapeHtml(project.description)}</p>` : ''}
+              ${detailHtml ? `<div style="color:var(--text2);line-height:1.8;font-size:.92rem;margin-top:12px;">${detailHtml}</div>` : ''}
+            </div>`;
+    html = injectSsrContent(html, ssrContent);
+
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.send(html);
+  } catch (err) {
+    console.error('Referans detay SSR hatası:', err);
+    next(err);
+  }
+});
+
+// ── Statik dosyalar (cache politikası: görsel/css/js/font 30 gün, HTML no-cache) ─
+const LONG_CACHE_RE = /\.(?:png|jpe?g|webp|gif|svg|ico|jfif|css|js|mjs|woff2?|ttf|otf|eot)$/i;
+function staticCacheHeaders(res, filePath) {
+  if (/\.html?$/i.test(filePath)) {
+    res.setHeader('Cache-Control', 'no-cache');
+  } else if (!LONG_CACHE_RE.test(filePath)) {
+    // txt, xml vb. — güncel kalsın
+    res.setHeader('Cache-Control', 'no-cache');
+  }
+  // LONG_CACHE_RE eşleşenler maxAge: '30d' ile gelir
+}
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'), { maxAge: '30d' }));
+app.use(express.static(FRONTEND_DIR, { maxAge: '30d', setHeaders: staticCacheHeaders }));
+app.use('/admin', express.static(path.join(__dirname, '../admin'), { setHeaders: staticCacheHeaders }));
 
 // ── API Route'ları ───────────────────────────────────────────────────────────
 app.use('/api/auth/login',       loginLimiter);
@@ -291,9 +563,15 @@ app.get('/admin/*', (req, res) => {
   }
 });
 
-// ── Frontend SPA fallback ─────────────────────────────────────────────────────
+// ── 404 — buraya düşen her istek statik dosyalarca karşılanamamıştır ─────────
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../frontend/index.html'));
+  // Uzantılı istekler (görsel/css/js vb.): dosya yoksa sade 404 döndür
+  if (/\.(png|jpe?g|webp|gif|svg|css|js|ico|txt|xml|jfif|woff2?)$/i.test(req.path)) {
+    return res.status(404).type('text/plain').send('404 Not Found');
+  }
+  // Bilinen HTML sayfaları express.static tarafından servis edilir;
+  // buraya düşen tüm diğer yollar → 404 sayfası
+  return send404(req, res);
 });
 
 // ── Genel hata yönetimi ───────────────────────────────────────────────────────

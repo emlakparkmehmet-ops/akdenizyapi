@@ -15,7 +15,9 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase();
-    cb(null, `project_${Date.now()}_${Math.random().toString(36).slice(2,7)}${ext}`);
+    // Slug tabanlı SEO dostu dosya adı: <slug>-antalya-<timestamp>-<rasgele><uzantı>
+    const base = makeSlug((req.body && req.body.title) || path.basename(file.originalname, ext)) || 'proje';
+    cb(null, `${base}-antalya-${Date.now()}-${Math.random().toString(36).slice(2,7)}${ext}`);
   }
 });
 const ALLOWED_MIMES = ['image/jpeg', 'image/png', 'image/webp'];

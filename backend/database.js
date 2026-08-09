@@ -65,6 +65,17 @@ const MOCK_SERVICES = [
   }
 ];
 
+// services sorguları için tek satırlık MOCK fallback.
+// Sorgu slug ile mi id ile mi arıyor — gerçek DB davranışını taklit et.
+// Bilinmeyen slug/id → null dön ki route 404 verebilsin (MOCK_SERVICES[0] DEĞİL)
+function mockServiceLookup(sql, params = []) {
+  if (!sql || !sql.includes('services')) return null;
+  if (/COUNT\s*\(/i.test(sql)) return { cnt: MOCK_SERVICES.length };
+  const key = params[0];
+  const bySlug = /\bslug\s*=/.test(sql);
+  return MOCK_SERVICES.find(s => bySlug ? s.slug === key : String(s.id) === String(key)) || null;
+}
+
 // SQLite ile aynı API'yi koruyoruz — route dosyaları değişmesin
 const db = {
   // Tek satır döner
@@ -72,13 +83,13 @@ const db = {
     try {
       const pgSql = toPostgres(sql);
       const { rows } = await pool.query(pgSql, params);
-      return rows[0] || null;
+      if (rows[0]) return rows[0];
+      // Tutarlılık: services tablosu boşken allAsync MOCK_SERVICES'e düşüyor
+      // (sitemap mock slug'ları listeler) — getAsync de aynı koşulda mock'tan
+      // slug/id eşleşmesiyle dönsün ki SSR 404 vermesin.
+      return mockServiceLookup(sql, params);
     } catch (err) {
-      if (sql && sql.includes('services')) {
-        const slug = params[0];
-        return MOCK_SERVICES.find(s => s.slug === slug) || MOCK_SERVICES[0];
-      }
-      return null;
+      return mockServiceLookup(sql, params);
     }
   },
 
@@ -87,11 +98,23 @@ const db = {
     try {
       const pgSql = toPostgres(sql);
       const { rows } = await pool.query(pgSql, params);
-      return rows && rows.length > 0 ? rows : MOCK_SERVICES;
+      if (rows && rows.length > 0) return rows;
+      // Boş sonuçta mock SADECE services sorguları için (kampanya/mesaj/ayar listesine mock sızmasın)
+      return (sql && sql.includes('services')) ? MOCK_SERVICES : [];
     } catch (err) {
       if (sql && sql.includes('services')) {
         return MOCK_SERVICES;
       }
+      return [];
+    }
+  },
+
+  // Çok satır döner — MOCK fallback YOK (sitemap/SSR gibi gerçek veri gereken yerler için)
+  allRowsAsync: async (sql, params = []) => {
+    try {
+      const { rows } = await pool.query(toPostgres(sql), params);
+      return rows || [];
+    } catch (err) {
       return [];
     }
   },
@@ -122,6 +145,17 @@ const db = {
 function toPostgres(sql) {
   let i = 0;
   return sql.replace(/\?/g, () => `$${++i}`);
+}
+
+// Başlıktan Türkçe karakter dönüşümlü URL slug'ı üretir
+// (frontend/referanslar.html'deki statik /referanslar/<slug> linkleriyle birebir aynı sonucu verir)
+function slugify(text) {
+  const map = { 'ç':'c','Ç':'c','ğ':'g','Ğ':'g','ı':'i','İ':'i','ö':'o','Ö':'o','ş':'s','Ş':'s','ü':'u','Ü':'u' };
+  return String(text || '')
+    .replace(/[çÇğĞıİöÖşŞüÜ]/g, ch => map[ch])
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }
 
 async function initDatabase() {
@@ -303,7 +337,7 @@ async function initDatabase() {
       ['Çatı Onarım & Yenileme', 'cati-onarim', 'cati',
         'Kiremit çatı, shingle ve termoizole çatı sistemleri; sızdırmazlık garantisiyle onarım ve yenileme.',
         'Çatı muayenesi, kiremit değişimi, mahya çimento yenileme ve çatı altı yalıtımı hizmetlerimiz kapsamındadır.', 0, 6],
-      ['Seramik & Mermer Döşeme', 'seramik-mermer', 'seramik-mermer',
+      ['Seramik & Mermer Döşeme', 'seramik-mermer-doseme', 'seramik-mermer',
         'Zemin ve duvar seramik, granit ve mermer kaplama uygulamaları; kesim, döşeme ve derz dahil.',
         'İç mekan zemin ve duvar kaplamalarında seramik, granit, mermer ve mozaik uygulamaları yapılmaktadır.', 0, 7],
       ['Komple Tadilat & Renovasyon', 'komple-tadilat', 'tadilat',
@@ -323,28 +357,57 @@ async function initDatabase() {
   }
 
   // Varsayılan referanslar
+  // NOT: slug'lar frontend/referanslar.html'deki statik /referanslar/<slug> linkleriyle
+  // BİREBİR aynıdır (başlıktan slugify() ile üretilip statik linklerle doğrulanmıştır).
   const { rows: projRows } = await pool.query('SELECT COUNT(*) AS cnt FROM projects');
   if (parseInt(projRows[0].cnt) === 0) {
     const projects = [
-      ['Bayındır Pınarlar Sitesi', 'Antalya', 'Dış cephe mantolama ve mineral sıva uygulaması', 1],
-      ['AYT Park Villa Sitesi',    'Antalya', 'Isı yalıtımı ve boya uygulaması', 1],
-      ['Ergin Sitesi',             'Antalya', 'Dış cephe yenileme ve mineral sıva', 0],
-      ['Özcağatay Apt.',           'Antalya', 'Tamiratlı boya ve dış cephe uygulaması', 0],
-      ['Varsak Güneş Konakları',   'Antalya', 'Tam cephe yenileme projesi', 1],
-      ['Bayram Yanık Apt.',        'Antalya', 'Mineral sıva ve boya', 0],
-      ['Anadolu Sitesi',           'Antalya', 'Dış cephe mantolama', 0],
-      ['Koza Sitesi',              'Antalya', 'Isı yalıtımı ve renklendirme', 0],
-      ['Bileydı Konakları',        'Antalya', 'Kapsamlı cephe yenileme', 0],
-      ['Sarı İsmail Apt.',         'Antalya', 'Boya ve onarım', 0],
-      ['Huzur Apt.',               'Antalya', 'Dış cephe boya uygulaması', 0],
-      ['Sarısu Klas Sitesi',       'Antalya', 'Mineral sıva ve boya sistemi', 1],
+      ['Bayındır Pınarlar Sitesi', 'Antalya', 'Dış cephe mantolama ve mineral sıva uygulaması', 1,
+        'Bayındır Pınarlar Sitesi\'nde dış cephe mantolama ve mineral sıva uygulaması gerçekleştirilmiştir. Antalya\'da yer alan sitenin dış cepheleri ısı yalıtımı ile kaplanmış, üzerine mineral sıva uygulanmıştır. Proje Akdeniz Yapı Dekorasyon ekibi tarafından tamamlanmıştır.'],
+      ['AYT Park Villa Sitesi',    'Antalya', 'Isı yalıtımı ve boya uygulaması', 1,
+        'AYT Park Villa Sitesi\'nde ısı yalıtımı ve boya uygulaması yapılmıştır. Antalya\'daki villa sitesinin dış cephelerinde yalıtım ve boya işleri bir arada yürütülmüştür. Uygulama Akdeniz Yapı Dekorasyon ekibi tarafından tamamlanmıştır.'],
+      ['Ergin Sitesi',             'Antalya', 'Dış cephe yenileme ve mineral sıva', 0,
+        'Ergin Sitesi\'nde dış cephe yenileme ve mineral sıva uygulaması gerçekleştirilmiştir. Antalya\'da bulunan sitenin cepheleri yenilenmiş ve mineral sıva ile kaplanmıştır.'],
+      ['Özcağatay Apt.',           'Antalya', 'Tamiratlı boya ve dış cephe uygulaması', 0,
+        'Özcağatay Apartmanı\'nda tamiratlı boya ve dış cephe uygulaması yapılmıştır. Antalya\'daki binanın cephe onarımları tamamlandıktan sonra boya uygulamasına geçilmiştir. Proje Akdeniz Yapı Dekorasyon ekibi tarafından teslim edilmiştir.'],
+      ['Varsak Güneş Konakları',   'Antalya', 'Tam cephe yenileme projesi', 1,
+        'Varsak Güneş Konakları\'nda tam cephe yenileme projesi gerçekleştirilmiştir. Antalya\'da yer alan konakların dış cepheleri kapsamlı bir yenileme çalışmasıyla elden geçirilmiştir. Uygulama Akdeniz Yapı Dekorasyon ekibi tarafından tamamlanmıştır.'],
+      ['Bayram Yanık Apt.',        'Antalya', 'Mineral sıva ve boya', 0,
+        'Bayram Yanık Apartmanı\'nda mineral sıva ve boya uygulaması yapılmıştır. Antalya\'daki binanın dış cephesi mineral sıva ile kaplanmış ve boya işleriyle tamamlanmıştır.'],
+      ['Anadolu Sitesi',           'Antalya', 'Dış cephe mantolama', 0,
+        'Anadolu Sitesi\'nde dış cephe mantolama uygulaması gerçekleştirilmiştir. Antalya\'da bulunan sitenin cephelerine ısı yalıtımı uygulanmıştır. Proje Akdeniz Yapı Dekorasyon ekibi tarafından tamamlanmıştır.'],
+      ['Koza Sitesi',              'Antalya', 'Isı yalıtımı ve renklendirme', 0,
+        'Koza Sitesi\'nde ısı yalıtımı ve renklendirme uygulaması yapılmıştır. Antalya\'daki sitenin dış cepheleri yalıtımın ardından renklendirme çalışmasıyla tamamlanmıştır.'],
+      ['Bileydı Konakları',        'Antalya', 'Kapsamlı cephe yenileme', 0,
+        'Bileydı Konakları\'nda kapsamlı cephe yenileme çalışması gerçekleştirilmiştir. Antalya\'da yer alan konakların dış cepheleri Akdeniz Yapı Dekorasyon ekibi tarafından yenilenmiştir.'],
+      ['Sarı İsmail Apt.',         'Antalya', 'Boya ve onarım', 0,
+        'Sarı İsmail Apartmanı\'nda boya ve onarım çalışması yapılmıştır. Antalya\'daki binanın cephe onarımları tamamlanmış ve ardından boya uygulaması gerçekleştirilmiştir.'],
+      ['Huzur Apt.',               'Antalya', 'Dış cephe boya uygulaması', 0,
+        'Huzur Apartmanı\'nda dış cephe boya uygulaması gerçekleştirilmiştir. Antalya\'da bulunan binanın dış cephesi Akdeniz Yapı Dekorasyon ekibi tarafından boyanarak yenilenmiştir.'],
+      ['Sarısu Klas Sitesi',       'Antalya', 'Mineral sıva ve boya sistemi', 1,
+        'Sarısu Klas Sitesi\'nde mineral sıva ve boya sistemi uygulanmıştır. Antalya\'da yer alan sitenin dış cepheleri mineral sıva ile kaplanmış ve boya uygulamasıyla tamamlanmıştır.'],
     ];
-    for (const [title, location, description, featured] of projects) {
+    for (const [title, location, description, featured, detail_text] of projects) {
       await pool.query(
-        'INSERT INTO projects (title, location, description, featured) VALUES ($1, $2, $3, $4)',
-        [title, location, description, featured]
+        'INSERT INTO projects (title, slug, location, description, detail_text, featured) VALUES ($1, $2, $3, $4, $5, $6)',
+        [title, slugify(title), location, description, detail_text, featured]
       );
     }
+  }
+
+  // Mevcut dolu DB'ler için: slug'ı NULL (veya boş) kalan referans kayıtlarına
+  // başlıktan slug backfill et — statik /referanslar/<slug> linkleri 404 vermesin.
+  const { rows: nullSlugRows } = await pool.query(
+    `SELECT id, title FROM projects WHERE slug IS NULL OR slug = ''`
+  );
+  for (const row of nullSlugRows) {
+    const slug = slugify(row.title);
+    if (slug) {
+      await pool.query('UPDATE projects SET slug = $1 WHERE id = $2', [slug, row.id]);
+    }
+  }
+  if (nullSlugRows.length > 0) {
+    console.log(`✅ ${nullSlugRows.length} referans kaydına slug backfill edildi.`);
   }
 
   console.log('✅ Veritabanı hazır (PostgreSQL)');

@@ -16,10 +16,7 @@ Tarayıcıda aç:
 
 ## 🔐 Admin Girişi
 
-| Alan | Değer |
-|------|-------|
-| Kullanıcı Adı | `admin` |
-| Şifre | `admin123` |
+Kullanıcı adı ve şifre `backend/.env` dosyasındaki `ADMIN_USERNAME` / `ADMIN_PASSWORD` değişkenlerinden okunur. Bu dosya git'e dahil edilmez; sunucuda (Railway) ortam değişkeni olarak tanımlayın.
 
 > ⚠️ İlk girişten sonra **Şifre Değiştir** sayfasından şifrenizi güncelleyin.
 
@@ -123,7 +120,7 @@ GET    /api/settings/stats      (admin)
 
 ```env
 PORT=3000
-JWT_SECRET=akdeniz_yapi_super_secret_key_2024
+JWT_SECRET=<rastgele-guclu-bir-anahtar-uretin>
 JWT_EXPIRES_IN=24h
 ```
 
