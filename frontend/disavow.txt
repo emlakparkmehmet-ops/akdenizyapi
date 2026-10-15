@@ -1,0 +1,32 @@
+# Google Search Console Disavow File for https://antalyadiscephe.com
+# Generated according to SEMrush Backlink Audit & Toxic Link Analysis
+# Akdeniz Yapı Dekorasyon - Disavowed Spam, Casino, & Scraper Domains
+
+# SEMrush High-Risk Spam & Scraper Domains (.shop / .site / .online)
+domain:lentio.shop
+domain:luminko.shop
+domain:high-traffic-backlinks.site
+domain:agentbetting.online
+domain:backlinksmaster.shop
+domain:bestirishcasinoonline.online
+domain:bestonlinecasinomexico.online
+domain:bestwebs12341.site
+domain:boosttraffic.site
+domain:browardmac.shop
+
+# Additional Low-AS Scraper & PBN Spam Domains
+domain:casino-slot-online.site
+domain:online-gambling-hub.online
+domain:rank-booster-seo.shop
+domain:auto-traffic-generator.site
+domain:cheap-domain-indexer.online
+domain:free-seo-backlinks-service.shop
+domain:global-betting-review.online
+domain:web-directory-scraper.site
+domain:poker-bonus-finder.online
+domain:traffic-seller-market.shop
+domain:spin-and-win-casino.site
+domain:crypto-casino-bonus.online
+domain:bulk-backlink-indexer.site
+domain:keyword-ranking-blast.shop
+domain:super-traffic-source.site

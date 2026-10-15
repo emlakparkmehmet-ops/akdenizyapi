@@ -1,10 +1,21 @@
-const { Pool } = require('pg');
+const path = require('path');
 const bcrypt = require('bcryptjs');
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
-});
+const isPostgres = Boolean(process.env.DATABASE_URL);
+let pool = null;
+let sqliteDb = null;
+
+if (isPostgres) {
+  const { Pool } = require('pg');
+  pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  });
+} else {
+  const { DatabaseSync } = require('node:sqlite');
+  const dbPath = path.join(__dirname, 'akdeniz_yapi.db');
+  sqliteDb = new DatabaseSync(dbPath);
+}
 
 const MOCK_SERVICES = [
   {
@@ -66,8 +77,6 @@ const MOCK_SERVICES = [
 ];
 
 // services sorguları için tek satırlık MOCK fallback.
-// Sorgu slug ile mi id ile mi arıyor — gerçek DB davranışını taklit et.
-// Bilinmeyen slug/id → null dön ki route 404 verebilsin (MOCK_SERVICES[0] DEĞİL)
 function mockServiceLookup(sql, params = []) {
   if (!sql || !sql.includes('services')) return null;
   if (/COUNT\s*\(/i.test(sql)) return { cnt: MOCK_SERVICES.length };
@@ -76,79 +85,131 @@ function mockServiceLookup(sql, params = []) {
   return MOCK_SERVICES.find(s => bySlug ? s.slug === key : String(s.id) === String(key)) || null;
 }
 
-// SQLite ile aynı API'yi koruyoruz — route dosyaları değişmesin
+function toSqlite(sql) {
+  if (!sql) return '';
+  return sql.replace(/\$\d+/g, '?');
+}
+
+// SQLite ? parametrelerini PostgreSQL $1, $2... formatına çevirir
+function toPostgres(sql) {
+  if (!sql) return '';
+  let i = 0;
+  return sql.replace(/\?/g, () => `$${++i}`);
+}
+
+// SQLite ile PostgreSQL için ortak API — route dosyaları değişmesin
 const db = {
   // Tek satır döner
   getAsync: async (sql, params = []) => {
-    try {
-      const pgSql = toPostgres(sql);
-      const { rows } = await pool.query(pgSql, params);
-      if (rows[0]) return rows[0];
-      // Tutarlılık: services tablosu boşken allAsync MOCK_SERVICES'e düşüyor
-      // (sitemap mock slug'ları listeler) — getAsync de aynı koşulda mock'tan
-      // slug/id eşleşmesiyle dönsün ki SSR 404 vermesin.
-      return mockServiceLookup(sql, params);
-    } catch (err) {
-      return mockServiceLookup(sql, params);
+    if (isPostgres) {
+      try {
+        const pgSql = toPostgres(sql);
+        const { rows } = await pool.query(pgSql, params);
+        if (rows[0]) return rows[0];
+        return mockServiceLookup(sql, params);
+      } catch (err) {
+        return mockServiceLookup(sql, params);
+      }
+    } else {
+      try {
+        const sSql = toSqlite(sql);
+        const row = sqliteDb.prepare(sSql).get(...params);
+        if (row) return row;
+        return mockServiceLookup(sql, params);
+      } catch (err) {
+        return mockServiceLookup(sql, params);
+      }
     }
   },
 
   // Çok satır döner
   allAsync: async (sql, params = []) => {
-    try {
-      const pgSql = toPostgres(sql);
-      const { rows } = await pool.query(pgSql, params);
-      if (rows && rows.length > 0) return rows;
-      // Boş sonuçta mock SADECE services sorguları için (kampanya/mesaj/ayar listesine mock sızmasın)
-      return (sql && sql.includes('services')) ? MOCK_SERVICES : [];
-    } catch (err) {
-      if (sql && sql.includes('services')) {
-        return MOCK_SERVICES;
+    if (isPostgres) {
+      try {
+        const pgSql = toPostgres(sql);
+        const { rows } = await pool.query(pgSql, params);
+        if (rows && rows.length > 0) return rows;
+        return (sql && sql.includes('services')) ? MOCK_SERVICES : [];
+      } catch (err) {
+        if (sql && sql.includes('services')) return MOCK_SERVICES;
+        return [];
       }
-      return [];
+    } else {
+      try {
+        const sSql = toSqlite(sql);
+        const rows = sqliteDb.prepare(sSql).all(...params);
+        if (rows && rows.length > 0) return rows;
+        return (sql && sql.includes('services')) ? MOCK_SERVICES : [];
+      } catch (err) {
+        if (sql && sql.includes('services')) return MOCK_SERVICES;
+        return [];
+      }
     }
   },
 
   // Çok satır döner — MOCK fallback YOK (sitemap/SSR gibi gerçek veri gereken yerler için)
   allRowsAsync: async (sql, params = []) => {
-    try {
-      const { rows } = await pool.query(toPostgres(sql), params);
-      return rows || [];
-    } catch (err) {
-      return [];
+    if (isPostgres) {
+      try {
+        const { rows } = await pool.query(toPostgres(sql), params);
+        return rows || [];
+      } catch (err) {
+        return [];
+      }
+    } else {
+      try {
+        const sSql = toSqlite(sql);
+        const rows = sqliteDb.prepare(sSql).all(...params);
+        return rows || [];
+      } catch (err) {
+        return [];
+      }
     }
   },
 
   // INSERT/UPDATE/DELETE — { lastID, changes } döner (SQLite compat)
   runAsync: async (sql, params = []) => {
-    try {
-      const pgSql = toPostgres(sql);
-      const { rows, rowCount } = await pool.query(pgSql, params);
-      return {
-        lastID: rows[0]?.id ?? null,
-        changes: rowCount,
-      };
-    } catch (err) {
-      return { lastID: null, changes: 0 };
+    if (isPostgres) {
+      try {
+        const pgSql = toPostgres(sql);
+        const { rows, rowCount } = await pool.query(pgSql, params);
+        return {
+          lastID: rows[0]?.id ?? null,
+          changes: rowCount,
+        };
+      } catch (err) {
+        return { lastID: null, changes: 0 };
+      }
+    } else {
+      try {
+        const sSql = toSqlite(sql);
+        const info = sqliteDb.prepare(sSql).run(...params);
+        return {
+          lastID: Number(info.lastInsertRowid),
+          changes: Number(info.changes),
+        };
+      } catch (err) {
+        console.error('[SQLite runAsync error]:', err.message);
+        return { lastID: null, changes: 0 };
+      }
     }
   },
 
   // Toplu SQL (init için)
   execAsync: async (sql) => {
-    try {
-      await pool.query(sql);
-    } catch (err) {}
+    if (isPostgres) {
+      try {
+        await pool.query(sql);
+      } catch (err) {}
+    } else {
+      try {
+        sqliteDb.exec(sql);
+      } catch (err) {}
+    }
   },
 };
 
-// SQLite ? parametrelerini PostgreSQL $1, $2... formatına çevirir
-function toPostgres(sql) {
-  let i = 0;
-  return sql.replace(/\?/g, () => `$${++i}`);
-}
-
 // Başlıktan Türkçe karakter dönüşümlü URL slug'ı üretir
-// (frontend/referanslar.html'deki statik /referanslar/<slug> linkleriyle birebir aynı sonucu verir)
 function slugify(text) {
   const map = { 'ç':'c','Ç':'c','ğ':'g','Ğ':'g','ı':'i','İ':'i','ö':'o','Ö':'o','ş':'s','Ş':'s','ü':'u','Ü':'u' };
   return String(text || '')
@@ -159,8 +220,28 @@ function slugify(text) {
 }
 
 async function initDatabase() {
+  if (!isPostgres) {
+    sqliteDb.exec(`
+      CREATE TABLE IF NOT EXISTS admin_users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT NOT NULL UNIQUE,
+        password_hash TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    const existingAdmin = sqliteDb.prepare('SELECT id FROM admin_users WHERE username = ?').get('admin');
+    if (!existingAdmin) {
+      const hash = await bcrypt.hash('admin123', 10);
+      sqliteDb.prepare('INSERT INTO admin_users (username, password_hash) VALUES (?, ?)').run('admin', hash);
+      console.log('✅ Varsayılan admin oluşturuldu: admin / admin123 (SQLite)');
+    }
+    console.log('✅ Veritabanı hazır (SQLite)');
+    return;
+  }
+
   // Kategoriler
   await pool.query(`
+
     CREATE TABLE IF NOT EXISTS categories (
       id         SERIAL PRIMARY KEY,
       name       TEXT NOT NULL,

@@ -228,18 +228,21 @@ app.get('/sitemap.xml', async (req, res) => {
     // Statik sayfalar — sabit lastmod (her istekte değişmez)
     const staticPages = [
       { loc: `${SITE}/`,                            priority: '1.0', changefreq: 'weekly'  },
+      { loc: `${SITE}/antalya-mantolama-fiyatlari.html`, priority: '0.9', changefreq: 'weekly' },
+      { loc: `${SITE}/antalya-boya-badana.html`,    priority: '0.9', changefreq: 'weekly'  },
+      { loc: `${SITE}/antalya-sove-kaplama.html`,   priority: '0.9', changefreq: 'weekly'  },
       { loc: `${SITE}/hizmetler.html`,              priority: '0.9', changefreq: 'monthly' },
       { loc: `${SITE}/referanslar.html`,            priority: '0.8', changefreq: 'monthly' },
       { loc: `${SITE}/kampanyalar.html`,            priority: '0.8', changefreq: 'weekly'  },
-      { loc: `${SITE}/iletisim.html`,               priority: '0.7', changefreq: 'monthly' },
-      { loc: `${SITE}/isi-yalitimi-antalya.html`,   priority: '0.9', changefreq: 'monthly' },
-      { loc: `${SITE}/kepez-isi-yalitimi.html`,     priority: '0.8', changefreq: 'monthly' },
-      { loc: `${SITE}/konyaalti-dis-cephe.html`,    priority: '0.8', changefreq: 'monthly' },
-      { loc: `${SITE}/lara-mantolama.html`,         priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/isi-yalitimi-antalya.html`,   priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/kepez-mantolama.html`,        priority: '0.8', changefreq: 'monthly' },
       { loc: `${SITE}/muratpasa-mantolama.html`,    priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/konyaalti-mantolama.html`,    priority: '0.8', changefreq: 'monthly' },
       { loc: `${SITE}/dosemealti-mantolama.html`,   priority: '0.8', changefreq: 'monthly' },
       { loc: `${SITE}/aksu-mantolama.html`,         priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/lara-mantolama.html`,         priority: '0.8', changefreq: 'monthly' },
       { loc: `${SITE}/serik-isi-yalitimi.html`,     priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/iletisim.html`,               priority: '0.7', changefreq: 'monthly' },
     ];
 
     for (const page of staticPages) {
@@ -347,11 +350,16 @@ app.get('/hizmetler/:slug', async (req, res, next) => {
 
     let html = fs.readFileSync(filePath, 'utf8');
 
-    const pageTitle = `Antalya ${service.title} | Akdeniz Yapı Dekorasyon`;
-    const cleanDesc = service.short_desc
-      ? service.short_desc.replace(/\s+/g, ' ').trim()
-      : `Antalya ${service.title} hizmeti. Akdeniz Yapı Dekorasyon güvencesiyle profesyonel uygulamalar ve kaliteli çözümler.`;
-    const canonicalUrl = `${SITE}/hizmetler/${service.slug}`;
+    const isDisCephe = service.slug === 'dis-cephe-isi-yalitimi';
+    const pageTitle = isDisCephe
+      ? 'Dış Cephe Isı Yalıtımı ve EPS Mantolama Teknik Şartnamesi | Akdeniz Yapı'
+      : `Antalya ${service.title} | Akdeniz Yapı Dekorasyon`;
+    const cleanDesc = isDisCephe
+      ? 'EPS ve taşyünü dış cephe ısı yalıtımı teknik uygulama şartnamesi, malzeme standartları, yapıştırma, dübel ve fileli sıva uygulama kuralları.'
+      : (service.short_desc
+        ? service.short_desc.replace(/\s+/g, ' ').trim()
+        : `Antalya ${service.title} hizmeti. Akdeniz Yapı Dekorasyon güvencesiyle profesyonel uygulamalar ve kaliteli çözümler.`);
+    const canonicalUrl = isDisCephe ? `${SITE}/` : `${SITE}/hizmetler/${service.slug}`;
     const imageUrl = service.image
       ? (service.image.startsWith('http') ? service.image : `${SITE}${service.image}`)
       : `${SITE}/images/og-banner.png`;
@@ -360,7 +368,7 @@ app.get('/hizmetler/:slug', async (req, res, next) => {
     const serviceLd = {
       '@context': 'https://schema.org',
       '@type': 'Service',
-      'name': `Antalya ${service.title}`,
+      'name': isDisCephe ? 'Dış Cephe Isı Yalıtımı Teknik Şartnamesi' : `Antalya ${service.title}`,
       'serviceType': service.title,
       'description': cleanDesc,
       'url': canonicalUrl,
@@ -374,7 +382,7 @@ app.get('/hizmetler/:slug', async (req, res, next) => {
       'itemListElement': [
         { '@type': 'ListItem', 'position': 1, 'name': 'Ana Sayfa',  'item': `${SITE}/` },
         { '@type': 'ListItem', 'position': 2, 'name': 'Hizmetler',  'item': `${SITE}/hizmetler.html` },
-        { '@type': 'ListItem', 'position': 3, 'name': `Antalya ${service.title}`, 'item': canonicalUrl },
+        { '@type': 'ListItem', 'position': 3, 'name': isDisCephe ? 'Teknik Şartname' : `Antalya ${service.title}`, 'item': `${SITE}/hizmetler/${service.slug}` },
       ],
     };
     const extraHead =
@@ -391,20 +399,26 @@ app.get('/hizmetler/:slug', async (req, res, next) => {
     });
 
     // Gövde SSR: breadcrumb + h1 + içerik konteyneri (JS yüklenince üstüne yazar)
-    const safeTitle = escapeHtml(service.title);
+    const safeTitle = isDisCephe ? 'Dış Cephe Isı Yalıtımı ve EPS Mantolama Teknik Şartnamesi' : escapeHtml(service.title);
     html = html.replace(/(<span id="breadcrumbTitle">)[\s\S]*?(<\/span>)/, (m, a, b) => `${a}${safeTitle}${b}`);
-    html = html.replace(/(<h1 id="pageHeroTitle">)[\s\S]*?(<\/h1>)/, (m, a, b) => `${a}Antalya ${safeTitle}${b}`);
+    html = html.replace(/(<h1 id="pageHeroTitle">)[\s\S]*?(<\/h1>)/, (m, a, b) => `${a}${isDisCephe ? safeTitle : 'Antalya ' + safeTitle}${b}`);
 
     const shortHtml = service.short_desc
       ? `<p style="font-size:1.05rem;color:var(--text2);margin-bottom:20px;line-height:1.7;">${escapeHtml(service.short_desc)}</p>`
       : '';
     const descHtml = toParagraphs(service.description, 'margin-bottom:12px;');
+    const pillarLinkHtml = isDisCephe
+      ? `<div style="background:#fdf8ee;border:1px solid rgba(201,162,39,.35);border-radius:12px;padding:16px 20px;margin-bottom:20px;font-size:.92rem;color:var(--text2);line-height:1.6;">
+          <strong>💡 Bilgilendirme:</strong> Bu sayfa dış cephe ısı yalıtımında uygulanan resmi teknik şartname ve uygulama adımlarını içermektedir. Antalya genelinde bina keşfi, anahtar teslim teklif ve garantili çözümlerimiz için lütfen <a href="/" style="color:var(--gold);font-weight:700;">Antalya mantolama</a> ve dış cephe yalıtımı ana sayfamızı ziyaret ediniz.
+        </div>`
+      : '';
     const ssrContent = `        <div class="detay-image">
           <img src="${imageUrl}" alt="Antalya ${safeTitle} uygulaması - Akdeniz Yapı Dekorasyon" width="800" height="420" style="width:100%;height:100%;object-fit:cover;border-radius:16px;" />
         </div>
         <div class="detay-body">
           <h2 class="detay-title" style="font-size:1.8rem;font-weight:700;margin-bottom:16px;color:var(--gold);">${safeTitle}</h2>
           ${service.category_name ? `<span class="badge-gold" style="display:inline-block;margin-bottom:16px;">${escapeHtml(service.category_name)}</span>` : ''}
+          ${pillarLinkHtml}
           ${shortHtml}
           <div class="detay-desc">${descHtml}</div>
           <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;">
@@ -517,6 +531,14 @@ function staticCacheHeaders(res, filePath) {
   }
   // LONG_CACHE_RE eşleşenler maxAge: '30d' ile gelir
 }
+
+// ── 301 Kalıcı Yönlendirmeler (SEO Canonical URL Konsolidasyonu) ─────────────
+app.get('/kepez-isi-yalitimi.html', (req, res) => {
+  return res.redirect(301, '/kepez-mantolama.html');
+});
+app.get('/konyaalti-dis-cephe.html', (req, res) => {
+  return res.redirect(301, '/konyaalti-mantolama.html');
+});
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), { maxAge: '30d' }));
 app.use(express.static(FRONTEND_DIR, { maxAge: '30d', setHeaders: staticCacheHeaders }));
