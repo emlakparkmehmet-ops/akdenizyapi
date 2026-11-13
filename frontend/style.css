@@ -13,4 +13,5 @@ body{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%
 .faq-item.active .faq-question i{transform:rotate(180deg);}
 .faq-answer{max-height:0;overflow:hidden;transition:max-height 0.35s ease,padding 0.35s ease;padding:0 24px;color:var(--text2);font-size:0.92rem;line-height:1.7;}
 .faq-item.active .faq-answer{padding:0 24px 20px 24px;}
+@media(min-width:769px) and (max-width:1180px){.nav-menu{gap:2px;}.nav-menu a{padding:6px 8px;font-size:.79rem;}.btn-call{padding:6px 10px;font-size:.79rem;}}
 

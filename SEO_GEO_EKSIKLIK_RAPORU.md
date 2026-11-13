@@ -126,7 +126,7 @@ Sunucu hizmet detaylarında yalnızca meta enjekte ediyor; **gövde içeriği fe
 - WebSite şeması yok (SERP site adı gösterimi için); areaServed düz metin (AdministrativeArea + containedInPlace biçimine getirin); şemadaki çalışma saatleri sayfada görünmüyor.
 - llms.txt `text/plain` servis ediliyor ama sayfalar `text/markdown` ilan ediyor (server.js:95).
 - Mahalle listeleri ilçeler arasında çakışıyor (Uncalı Konyaaltı'na ait, Şirinyalı/Fener iki sayfada birden).
-- Üçüncü telefon (0505 086 98 07) ve tam adres yalnızca iletişim sayfasında — ortak footer'a tam NAP bloğu ekleyin.
+- Üçüncü telefon (0531 977 31 13) ve tam adres yalnızca iletişim sayfasında — ortak footer'a tam NAP bloğu ekleyin.
 - style.css gereksiz preload; async font yüklemede `<noscript>` fallback yok.
 - Ana sayfa statik referans kartları API boş dönünce JS tarafından siliniyor (main.js:261).
 - Yüklenen görsel adları anahtar kelimesiz timestamp (services.js:17) — slug tabanlı adlandırın.

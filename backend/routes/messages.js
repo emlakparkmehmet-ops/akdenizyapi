@@ -7,7 +7,12 @@ const auth = require('../middleware/auth');
 // Rate limiting server.js'de contactLimiter ile uygulanıyor
 router.post('/', async (req, res) => {
   try {
-    const { name, phone, email, subject, message } = req.body;
+    const { name, phone, email, subject, message, kvkk_consent } = req.body;
+
+    // ✅ KVKK aydınlatma onayı kontrolü
+    if (kvkk_consent === false) {
+      return res.status(400).json({ error: 'Lütfen KVKK Aydınlatma Metni onay kutusunu işaretleyin.' });
+    }
 
     // ✅ Temel doğrulama
     if (!name || !message) {

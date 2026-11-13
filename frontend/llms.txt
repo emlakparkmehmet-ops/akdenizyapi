@@ -1,51 +1,67 @@
 # Akdeniz Yapı Dekorasyon (Antalya Dış Cephe & Mantolama)
 
-> Akdeniz Yapı Dekorasyon, Antalya genelinde dış cephe ısı yalıtımı, EPS ve taşyünü mantolama, mineral sıva, dış cephe boya, çatı yenileme ve komple bina tadilatı hizmetleri sunan kurumsal inşaat ve yalıtım firmasıdır. 500+ tamamlanan proje, 10 yıl iş garantisi ve %100 müşteri memnuniyeti ile hizmet verir.
+> Akdeniz Yapı Dekorasyon, Antalya ve tüm ilçelerinde apartman, site, villa ve oteller için anahtar teslim dış cephe mantolama (EPS ve taşyünü ısı yalıtımı), dış cephe boyama, dekoratif söve kaplama, mineral sıva ve çatı izolasyonu hizmetleri sunan kurumsal yapı firmasıdır. 500+ tamamlanan proje, 10 yıl yazılı iş garantisi, ücretsiz 3D cephe renk tasarımı ve ücretsiz Enerji Kimlik Belgesi (EKB) ile hizmet verir.
 
-## Ana Sayfalar
+## Ana Hizmet ve Fiyat Sayfaları
 
-- [Ana Sayfa](https://antalyadiscephe.com/): Akdeniz Yapı Dekorasyon genel tanıtım, hizmet özetleri, canlı renk simülatörü ve ücretsiz keşif formu.
-- [Hizmetlerimiz](https://antalyadiscephe.com/hizmetler.html): Dış cephe mantolama, ısı yalıtımı, mineral sıva uygulamaları ve cephe yenileme hizmet detayları.
-- [Antalya Isı Yalıtımı (Kapsamlı Rehber)](https://antalyadiscephe.com/isi-yalitimi-antalya.html): Antalya geneli ısı yalıtımı ve mantolama ana rehber sayfası.
-- [Referanslarımız ve Projeler](https://antalyadiscephe.com/referanslar.html): Antalya genelinde başarıyla tamamlanan bina mantolama ve dış cephe yenileme projeleri.
-- [Kampanyalar ve Teklifler](https://antalyadiscephe.com/kampanyalar.html): Sezonluk mantolama kampanyaları ve avantajlı teklifler.
-- [İletişim ve Keşif Talebi](https://antalyadiscephe.com/iletisim.html): Adres, telefon, çalışma saatleri ve online keşif başvuru formu.
+- [Ana Sayfa](https://antalyadiscephe.com/): Akdeniz Yapı Dekorasyon kurumsal tanıtım, canlı cephe renk simülatörü, referanslar ve ücretsiz keşif başvurusu.
+- [2026 Antalya Mantolama m² Fiyatları ve Maliyet Hesaplama](https://antalyadiscephe.com/antalya-mantolama-fiyatlari.html): Güncel 2026 EPS ve taşyünü mantolama m² birim fiyatları tablosu ve interaktif bina maliyet hesaplama aracı.
+- [Antalya Dış Cephe Boya ve Bina Yenileme](https://antalyadiscephe.com/antalya-boya-badana.html): Apartman, site ve villa dış cephe boyama, iskeleli sıva tamiratı, ücretsiz 3D cephe renk tasarımı ve m² fiyatları.
+- [Antalya Dış Cephe Renk Kartelası ve Canlı Bina Simülatörü](https://antalyadiscephe.com/dis-cephe-renkleri.html): 30+ UV dayanımlı dış cephe boya rengi, 5 katlı söveli apartman ve müstakil villa üzerinde canlı cephe renk ve söve kombinasyonu deneme aracı.
+- [Antalya Dış Cephe Söve, Kat Silmesi ve Fuga Kaplama](https://antalyadiscephe.com/antalya-sove-kaplama.html): Villa ve apartmanlar için pencere sövesi, kat silmesi, yalıbaskı, köşe taşı ve 3D cephe tasarım çözümleri.
+- [Antalya Çatı ve Teras Su Yalıtımı](https://antalyadiscephe.com/antalya-cati-izolasyonu.html): Teras, çatı aktarma, poliüretan köpük ve membran su izolasyonu uygulamaları.
+- [Antalya Isı Yalıtımı Ana Rehberi](https://antalyadiscephe.com/isi-yalitimi-antalya.html): EPS ve taşyünü karşılaştırması, uygulama aşamaları ve teknik yalıtım rehberi.
+- [Tüm Hizmetlerimiz](https://antalyadiscephe.com/hizmetler.html): 8 ana kategori altında 20+ dış cephe ve yapı yenileme hizmeti.
+- [Referanslarımız ve Tamamlanan Projeler](https://antalyadiscephe.com/referanslar.html): Antalya genelinde tamamlanan apartman, site ve villa dış cephe projeleri.
+- [Kampanyalar](https://antalyadiscephe.com/kampanyalar.html): Güncel mantolama + dış cephe boya kombine indirimleri ve taksit avantajları.
+- [İletişim ve Ücretsiz Keşif](https://antalyadiscephe.com/iletisim.html): Adres, telefon numaraları, konum ve aynı gün keşif talep formu.
 
-## Ana Hizmetler
+## Teknik Hizmet Detay Sayfaları
 
-- [Dış Cephe Isı Yalıtımı (Mantolama)](https://antalyadiscephe.com/hizmetler/dis-cephe-isi-yalitimi): EPS ve taşyünü levhalarla komple dış cephe ısı yalıtımı.
-- [Mineral Sıva](https://antalyadiscephe.com/hizmetler/mineral-siva): Dekoratif mineral sıva ve dış cephe kaplama uygulamaları.
-- [Su Yalıtımı ve Termal İzolasyon](https://antalyadiscephe.com/hizmetler/su-yalitimi-termal): Temel, teras ve cephe su yalıtımı çözümleri.
-- [İç ve Dış Cephe Boyası](https://antalyadiscephe.com/hizmetler/ic-dis-cephe-boyasi): Silikon esaslı dış cephe boyaları ve iç mekan boya uygulamaları.
-- [Alçı ve Kartonpiyer](https://antalyadiscephe.com/hizmetler/alci-kartonpiyer): Alçı sıva, kartonpiyer ve dekoratif tavan işleri.
-- [Çatı Onarım](https://antalyadiscephe.com/hizmetler/cati-onarim): Çatı aktarma, onarım ve çatı su yalıtımı.
-- [Seramik ve Mermer Döşeme](https://antalyadiscephe.com/hizmetler/seramik-mermer-doseme): Seramik, fayans ve mermer döşeme uygulamaları.
-- [Komple Tadilat](https://antalyadiscephe.com/hizmetler/komple-tadilat): Anahtar teslim bina ve daire tadilatı.
+- [Dış Cephe Isı Yalıtımı (Mantolama)](https://antalyadiscephe.com/hizmetler/dis-cephe-isi-yalitimi): Karbonlu EPS ve A1 sınıfı yanmaz taşyünü mantolama teknik şartnamesi.
+- [Mineral Sıva](https://antalyadiscephe.com/hizmetler/mineral-siva): Nefes alabilen dekoratif mineral ve silikonlu dış cephe kaplamaları.
+- [İç ve Dış Cephe Boyası](https://antalyadiscephe.com/hizmetler/ic-dis-cephe-boyasi): UV güneş ışınlarına ve deniz nemine dayanıklı silikonlu cephe boyaları (Jotun, Filli Boya, Weber, Marshall, DYO).
+- [Su Yalıtımı ve Termal İzolasyon](https://antalyadiscephe.com/hizmetler/su-yalitimi-termal): Teras, temel ve ıslak hacim su izolasyonu, termal kaçak tespiti.
+- [Çatı Onarım](https://antalyadiscephe.com/hizmetler/cati-onarim): Çatı aktarma, dere/oluk yenileme ve çatı su yalıtımı.
+- [Alçı ve Kartonpiyer](https://antalyadiscephe.com/hizmetler/alci-kartonpiyer): Alçı sıva, saten alçı ve asma tavan uygulamaları.
+- [Seramik ve Mermer Döşeme](https://antalyadiscephe.com/hizmetler/seramik-mermer-doseme): İç ve dış mekan zemin seramik, granit ve mermer kaplama.
+- [Komple Tadilat](https://antalyadiscephe.com/hizmetler/komple-tadilat): Anahtar teslim bina, villa ve daire yenileme.
 
-## Bölge Sayfaları
+## Antalya İlçe ve Bölge Sayfaları (Yerel Hizmet Ağı)
 
-- [Muratpaşa Dış Cephe Mantolama](https://antalyadiscephe.com/muratpasa-mantolama.html): Muratpaşa ilçesinde bina yalıtımı ve kaliteli cephe kaplama çözümleri.
-- [Konyaaltı Dış Cephe Yalıtımı](https://antalyadiscephe.com/konyaalti-dis-cephe.html): Konyaaltı bölgesinde neme ve tuza dayanıklı dış cephe yalıtım sistemleri.
-- [Kepez Isı Yalıtımı](https://antalyadiscephe.com/kepez-isi-yalitimi.html): Kepez ilçesindeki binalara özel yüksek tasarruflu EPS ve taşyünü mantolama.
-- [Lara Mantolama](https://antalyadiscephe.com/lara-mantolama.html): Lara bölgesindeki konut ve rezidanslar için modern dış cephe kaplama.
-- [Döşemealtı Mantolama](https://antalyadiscephe.com/dosemealti-mantolama.html): Döşemealtı bölgesinde ısı yalıtımı ve mantolama hizmetleri.
-- [Aksu Mantolama](https://antalyadiscephe.com/aksu-mantolama.html): Aksu ilçesinde dış cephe mantolama ve yalıtım uygulamaları.
-- [Serik Isı Yalıtımı](https://antalyadiscephe.com/serik-isi-yalitimi.html): Serik, Kadriye ve Belek bölgesinde ısı yalıtımı ve mantolama.
+- [Kepez Mantolama ve Isı Yalıtımı](https://antalyadiscephe.com/kepez-mantolama.html): Şafak, Varsak, Dokuma, Kültür ve Sütçüler başta olmak üzere Kepez apartman/site projeleri.
+- [Muratpaşa Mantolama ve Dış Cephe](https://antalyadiscephe.com/muratpasa-mantolama.html): Fener, Meltem, Şirinyalı, Kızıltoprak ve Bayındır mahallelerinde şehir merkezi apartman yalıtımı.
+- [Konyaaltı Mantolama ve Cephe Boya](https://antalyadiscephe.com/konyaalti-mantolama.html): Liman, Hurma, Uncalı, Gürsu ve Sarısu'da deniz nemine ve tuz korozyonuna dayanıklı cephe sistemleri.
+- [Döşemealtı Villa Dış Cephe, Mantolama ve Söve](https://antalyadiscephe.com/dosemealti-mantolama.html): Yeşilbayır, Altınkale, Yeniköy ve Düzlerçamı'nda müstakil villa ısı yalıtımı, boya ve söve kaplama.
+- [Lara Mantolama ve Dış Cephe Yenileme](https://antalyadiscephe.com/lara-mantolama.html): Güzeloba, Çağlayan ve Kundu bölgesindeki rezidans ve sitelere özel modern dış cephe çözümleri.
+- [Aksu ve Altıntaş Mantolama](https://antalyadiscephe.com/aksu-mantolama.html): Altıntaş, Macun ve Çalkaya'daki yeni konut ve site projelerine blok bazlı uygulama.
+- [Serik, Belek ve Kadriye Isı Yalıtımı](https://antalyadiscephe.com/serik-isi-yalitimi.html): Turizm tesisleri, oteller ve yazlık villa siteleri için dış cephe yalıtımı ve boya.
+- [Kemer Villa ve Otel Dış Cephe Mantolama](https://antalyadiscephe.com/kemer-mantolama.html): Kemer Merkez, Göynük, Beldibi, Çamyuva ve Tekirova'da neme/tuza dayanıklı villa ve otel cephe yenileme.
+- [Manavgat ve Side Dış Cephe Mantolama](https://antalyadiscephe.com/manavgat-mantolama.html): Manavgat, Side, Sorgun, Ilıca ve Evrenseki'de apartman, site ve otel dış cephe yalıtımı.
+
+## 2026 Referans m² Birim Fiyatları (İskele, Malzeme ve İşçilik Dahil)
+
+- **4 cm Standart Karbonlu EPS Mantolama (16 Dansite):** 550 – 650 ₺ / m²
+- **5 cm Konfor Karbonlu EPS Mantolama (16–20 Dansite, Önerilen):** 650 – 750 ₺ / m²
+- **5 cm Premium Taşyünü Mantolama (150 kg/m³, A1 Yanmaz):** 850 – 1.050 ₺ / m²
+- **7 cm Kalın Taşyünü Mantolama Sistemi:** 1.050 – 1.250 ₺ / m²
+- **Dış Cephe Silikonlu Boya Uygulaması:** 220 – 320 ₺ / m²
+- **İskeleli Sıva/Çatlak Tamiratı + Dış Cephe Boya:** 320 – 450 ₺ / m²
+- **Çatı ve Teras Su/Isı İzolasyonu:** 450 – 750 ₺ / m²
+- *Not: Fiyatlara TSE onaylı çelik iskele, malzeme, işçilik, son kat silikonlu dış cephe boyası ve apartmanlarda ücretsiz Enerji Kimlik Belgesi (EKB) dahildir. Kesin teklif aynı gün ücretsiz yerinde keşif sonrası yazılı olarak sunulur.*
 
 ## Şirket ve İletişim Bilgileri
 
 - **Firma Adı:** Akdeniz Yapı Dekorasyon
 - **Adres:** Şafak Mah. 4258. Sk. No:12, 07090 Kepez/Antalya
-- **Telefon 1 (Birincil + WhatsApp):** 0530 936 10 17 (Yunus Demirel) — WhatsApp: +90 530 936 10 17
-- **Telefon 2:** 0505 086 98 07 (Serhat Sincar)
-- **Instagram:** https://instagram.com/akdeniz.yapidekorasyon
+- **Koordinatlar / Harita:** 36.9136919, 30.6436956 — https://www.google.com/maps/search/?api=1&query=36.9136919,30.6436956
+- **Telefon 1 (Birincil + WhatsApp):** 0530 936 10 17 (Yunus Demirel) — https://wa.me/905309361017
+- **Telefon 2:** 0531 977 31 13 (Mehmet Çetin - Pazarlama Mühendisi)
 - **Web Sitesi:** https://antalyadiscephe.com
-- **Hizmet Bölgeleri:** Muratpaşa, Konyaaltı, Kepez, Lara, Döşemealtı, Aksu, Serik ve tüm Antalya
+- **Instagram:** https://instagram.com/akdeniz.yapidekorasyon
 - **Çalışma Saatleri:** Pazartesi - Cumartesi: 08:00 - 19:00
-- **Öne Çıkanlar:** 500+ Tamamlanan Proje, 12+ Referans Proje, 10 Yıl İş Garantisi, %100 Müşteri Memnuniyeti, 20+ Hizmet Çeşidi
-- **20+ Hizmet Çeşidi Açılımı:** 8 ana kategori altında EPS/karbonlu EPS/taşyünü mantolama, mineral/silikonlu/akrilik sıva, iç-dış cephe boyası, alçı sıva/saten alçı/kartonpiyer/asma tavan, çatı aktarma ve çatı su yalıtımı, seramik/fayans/granit/mermer döşeme, su-ısı-ses yalıtımı ve anahtar teslim komple tadilat uygulamalarını kapsar.
-- **Fiyatlandırma:** Kesin fiyat ücretsiz keşifle belirlenir; fiyatı etkileyen faktörler cephe metrekaresi, yalıtım levhası tipi ve kalınlığı, iskele kurulumu ve bina yüksekliğidir.
+- **Garanti ve Ödeme:** 10 Yıl Yazılı İşçilik ve Malzeme Garantisi, daire başı senet/taksit imkanı, ücretsiz keşif ve 3D cephe önizleme.
 
 ## Optional
 
-- [Tüm Şirket ve Hizmet Detayları (llms-full.txt)](https://antalyadiscephe.com/llms-full.txt): Sıkça sorulan sorular, teknik yalıtım standartları, kullanılan malzemeler ve detaylı rehber.
+- [Kapsamlı Şirket, Fiyat ve Teknik Rehber (llms-full.txt)](https://antalyadiscephe.com/llms-full.txt): Detaylı 2026 fiyat kırılımları, kullanılan boya/yalıtım markaları, ilçe bazlı iklim analizleri ve sıkça sorulan sorular.

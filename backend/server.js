@@ -24,8 +24,19 @@ const PORT = process.env.PORT || 3000;
 
 const SITE           = 'https://antalyadiscephe.com';
 const ORG_ID         = 'https://antalyadiscephe.com/#organization';
-const STATIC_LASTMOD = '2026-08-07'; // Statik sayfalar için sabit lastmod — her istekte new Date() ÜRETME
+const STATIC_LASTMOD = '2026-11-12'; // Statik sayfalar için varsayılan lastmod
 const FRONTEND_DIR   = path.resolve(__dirname, '../frontend');
+
+function getStaticLastMod(locUrl) {
+  try {
+    const rel = locUrl === `${SITE}/` ? 'index.html' : locUrl.replace(`${SITE}/`, '');
+    const fp = path.resolve(FRONTEND_DIR, rel);
+    if (fs.existsSync(fp)) {
+      return fs.statSync(fp).mtime.toISOString().split('T')[0];
+    }
+  } catch (_) {}
+  return STATIC_LASTMOD;
+}
 const NOT_FOUND_PAGE = path.resolve(FRONTEND_DIR, '404.html');
 
 // ── Canonical host middleware (EN BAŞTA) ─────────────────────────────────────
@@ -49,13 +60,13 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc    : ["'self'"],
-      scriptSrc     : ["'self'", "'unsafe-inline'"],   // inline <script> blokları için
+      scriptSrc     : ["'self'", "'unsafe-inline'", 'https://www.googletagmanager.com'],
       scriptSrcAttr : ["'unsafe-inline'"],             // onclick, onsubmit vb. inline event handler'lar için
       styleSrc      : ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com', 'https://cdnjs.cloudflare.com'],
       fontSrc       : ["'self'", 'https://fonts.gstatic.com', 'https://cdnjs.cloudflare.com'],
-      imgSrc        : ["'self'", 'data:', 'blob:', 'https://www.instagram.com', '*.cdninstagram.com', '*.fbcdn.net', 'https://images.unsplash.com', 'https://placehold.co'],
-      connectSrc    : ["'self'"],
-      frameSrc      : ["https://www.google.com", "https://maps.google.com", "https://www.google.com/maps/"],
+      imgSrc        : ["'self'", 'data:', 'blob:', 'https://www.instagram.com', '*.cdninstagram.com', '*.fbcdn.net', 'https://images.unsplash.com', 'https://placehold.co', 'https://www.googletagmanager.com', 'https://*.google-analytics.com', 'https://www.google.com', 'https://www.google.com.tr', 'https://*.g.doubleclick.net', 'https://pagead2.googlesyndication.com'],
+      connectSrc    : ["'self'", 'https://www.googletagmanager.com', 'https://*.google-analytics.com', 'https://*.analytics.google.com', 'https://www.google.com', 'https://www.google.com.tr', 'https://*.g.doubleclick.net', 'https://pagead2.googlesyndication.com'],
+      frameSrc      : ["https://www.google.com", "https://maps.google.com", "https://www.google.com/maps/", 'https://www.googletagmanager.com'],
       objectSrc     : ["'none'"],
     },
   },
@@ -229,7 +240,9 @@ app.get('/sitemap.xml', async (req, res) => {
     const staticPages = [
       { loc: `${SITE}/`,                            priority: '1.0', changefreq: 'weekly'  },
       { loc: `${SITE}/antalya-mantolama-fiyatlari.html`, priority: '0.9', changefreq: 'weekly' },
+      { loc: `${SITE}/antalya-cati-izolasyonu.html`,   priority: '0.9', changefreq: 'weekly'  },
       { loc: `${SITE}/antalya-boya-badana.html`,    priority: '0.9', changefreq: 'weekly'  },
+      { loc: `${SITE}/dis-cephe-renkleri.html`,     priority: '0.9', changefreq: 'weekly'  },
       { loc: `${SITE}/antalya-sove-kaplama.html`,   priority: '0.9', changefreq: 'weekly'  },
       { loc: `${SITE}/hizmetler.html`,              priority: '0.9', changefreq: 'monthly' },
       { loc: `${SITE}/referanslar.html`,            priority: '0.8', changefreq: 'monthly' },
@@ -242,13 +255,15 @@ app.get('/sitemap.xml', async (req, res) => {
       { loc: `${SITE}/aksu-mantolama.html`,         priority: '0.8', changefreq: 'monthly' },
       { loc: `${SITE}/lara-mantolama.html`,         priority: '0.8', changefreq: 'monthly' },
       { loc: `${SITE}/serik-isi-yalitimi.html`,     priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/kemer-mantolama.html`,        priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/manavgat-mantolama.html`,     priority: '0.8', changefreq: 'monthly' },
       { loc: `${SITE}/iletisim.html`,               priority: '0.7', changefreq: 'monthly' },
     ];
 
     for (const page of staticPages) {
       xml += `  <url>\n`;
       xml += `    <loc>${page.loc}</loc>\n`;
-      xml += `    <lastmod>${STATIC_LASTMOD}</lastmod>\n`;
+      xml += `    <lastmod>${getStaticLastMod(page.loc)}</lastmod>\n`;
       xml += `    <changefreq>${page.changefreq}</changefreq>\n`;
       xml += `    <priority>${page.priority}</priority>\n`;
       xml += `  </url>\n`;
@@ -359,7 +374,7 @@ app.get('/hizmetler/:slug', async (req, res, next) => {
       : (service.short_desc
         ? service.short_desc.replace(/\s+/g, ' ').trim()
         : `Antalya ${service.title} hizmeti. Akdeniz Yapı Dekorasyon güvencesiyle profesyonel uygulamalar ve kaliteli çözümler.`);
-    const canonicalUrl = isDisCephe ? `${SITE}/` : `${SITE}/hizmetler/${service.slug}`;
+    const canonicalUrl = `${SITE}/hizmetler/${service.slug}`;
     const imageUrl = service.image
       ? (service.image.startsWith('http') ? service.image : `${SITE}${service.image}`)
       : `${SITE}/images/og-banner.png`;

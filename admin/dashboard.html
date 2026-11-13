@@ -88,6 +88,20 @@
             <span class="stat-lbl">Kampanya</span>
           </div>
         </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(37,99,235,.15);color:#2563eb"><i class="fas fa-phone-alt"></i></div>
+          <div class="stat-info">
+            <span class="stat-num" id="statPhoneClicks">0</span>
+            <span class="stat-lbl">Telefon Tıklaması</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(37,211,102,.15);color:#16a34a"><i class="fab fa-whatsapp"></i></div>
+          <div class="stat-info">
+            <span class="stat-num" id="statWaClicks">0</span>
+            <span class="stat-lbl">WhatsApp Tıklaması</span>
+          </div>
+        </div>
       </div>
 
       <!-- Hızlı Erişim -->
@@ -170,6 +184,8 @@
           document.getElementById('statProjects').textContent = s.projects;
           document.getElementById('statMessages').textContent = s.messages;
           document.getElementById('statUnread').textContent = s.unread_messages;
+          if (document.getElementById('statPhoneClicks')) document.getElementById('statPhoneClicks').textContent = s.phone_clicks ?? 0;
+          if (document.getElementById('statWaClicks')) document.getElementById('statWaClicks').textContent = s.whatsapp_clicks ?? 0;
           if (s.unread_messages > 0) {
             const b = document.getElementById('unreadBadge');
             if (b) { b.textContent = s.unread_messages; b.style.display = 'inline-block'; }

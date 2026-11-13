@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>2026 Antalya Mantolama m² Fiyatları &amp; Hesaplama | Akdeniz Yapı</title>
+  <title>Antalya Mantolama Fiyatları 2026 | m² Maliyet Hesaplama</title>
   <meta name="description" content="2026 Antalya dış cephe mantolama m² fiyatları, apartman ve villa maliyet tablosu. İnteraktif m² hesaplama aracı ile anında tahmini bütçe çıkarın ve ücretsiz keşif alın!" />
   <meta name="keywords" content="antalya mantolama fiyatları, mantolama m2 fiyatı antalya, dış cephe mantolama fiyatları 2026, bina mantolama maliyeti hesaplama, antalya ısı yalıtım fiyatı" />
   <meta name="robots" content="index, follow" />
@@ -45,8 +45,9 @@
     "image": "https://antalyadiscephe.com/images/og-banner.png",
     "logo": "https://antalyadiscephe.com/apple-touch-icon.png",
     "url": "https://antalyadiscephe.com/antalya-mantolama-fiyatlari.html",
-    "telephone": ["+90-530-936-1017", "+90-505-086-9807"],
+    "telephone": ["+90-530-936-1017", "+90-531-977-3113"],
     "priceRange": "$$",
+    "hasMap": "https://www.google.com/maps/search/?api=1&query=36.9136919,30.6436956",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Şafak Mah. 4258. Sk. No:12",
@@ -185,7 +186,20 @@
     .benefit-card h4{font-family:'Montserrat',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--text);}
     .benefit-card p{font-size:.85rem;color:var(--text-muted);line-height:1.6;}
 
+    .hero-price-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:20px 0 24px;max-width:780px;}
+    .hero-price-pill{background:rgba(255,255,255,.08);border:1px solid rgba(201,162,39,.45);border-radius:12px;padding:12px 16px;backdrop-filter:blur(6px);}
+    .hero-price-pill.featured{background:rgba(201,162,39,.18);border:1.5px solid var(--gold);}
+    .hero-price-pill .hpp-name{font-size:.78rem;color:rgba(255,255,255,.8);font-weight:700;display:block;margin-bottom:4px;}
+    .hero-price-pill .hpp-val{font-family:'Montserrat',sans-serif;font-size:1.2rem;font-weight:900;color:var(--gold);}
+    .hero-fast-note{background:rgba(37,211,102,.14);border-left:4px solid #25d366;padding:10px 14px;border-radius:8px;font-size:.88rem;color:#fff;max-width:780px;margin-bottom:22px;line-height:1.5;}
     @media(max-width:850px){.calc-grid{grid-template-columns:1fr;}}
+    @media(max-width:720px){
+      table.price-table{min-width:100%;}
+      table.price-table thead{display:none;}
+      table.price-table tr{display:block;border-bottom:2px solid var(--border);padding:14px 16px;}
+      table.price-table td{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border:none;font-size:.88rem;text-align:right;}
+      table.price-table td::before{content:attr(data-label);font-weight:700;color:var(--text);text-align:left;margin-right:12px;}
+    }
   </style>
 </head>
 <body data-page="mantolama-fiyatlari">
@@ -204,7 +218,9 @@
         <li><a href="/">Ana Sayfa</a></li>
         <li><a href="/hizmetler.html">Hizmetler</a></li>
         <li><a href="/antalya-mantolama-fiyatlari.html" class="active">Mantolama Fiyatları</a></li>
+        <li><a href="/antalya-cati-izolasyonu.html">Çatı İzolasyonu</a></li>
         <li><a href="/antalya-boya-badana.html">Boya &amp; Badana</a></li>
+        <li><a href="/dis-cephe-renkleri.html">Renk Kartelası</a></li>
         <li><a href="/antalya-sove-kaplama.html">Söve Kaplama</a></li>
         <li><a href="/referanslar.html">Referanslar</a></li>
         <li><a href="/iletisim.html">İletişim</a></li>
@@ -214,33 +230,44 @@
   </nav>
 
   <!-- PAGE HERO -->
-  <section class="page-hero" style="padding-top:calc(var(--navbar-h) + 40px);background:linear-gradient(135deg,#0a101d 0%,#192338 50%,#2c2411 100%);color:#fff;padding-bottom:50px;">
+  <section class="page-hero" style="padding-top:calc(var(--navbar-h) + 32px);background:linear-gradient(135deg,#0a101d 0%,#192338 50%,#2c2411 100%);color:#fff;padding-bottom:42px;">
     <div class="container">
-      <div class="breadcrumb" style="margin-bottom:16px;">
-        <a href="/" style="color:var(--gold);"><i class="fas fa-home"></i> Ana Sayfa</a>
-        <span style="color:rgba(255,255,255,.4);margin:0 8px;">›</span>
-        <span style="color:rgba(255,255,255,.8);">2026 Antalya Mantolama Fiyatları</span>
+      <div style="display:inline-flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+        <span style="background:rgba(201,162,39,.2);border:1px solid rgba(201,162,39,.4);color:var(--gold);padding:4px 12px;border-radius:50px;font-size:.75rem;font-weight:700;"><i class="fas fa-calculator"></i> 2026 Güncel Fiyatlar</span>
+        <span style="background:rgba(37,211,102,.2);border:1px solid rgba(37,211,102,.4);color:#25d366;padding:4px 12px;border-radius:50px;font-size:.75rem;font-weight:700;"><i class="fas fa-gift"></i> Ücretsiz EKB &amp; Keşif</span>
       </div>
 
-      <div style="display:inline-flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
-        <span style="background:rgba(201,162,39,.2);border:1px solid rgba(201,162,39,.4);color:var(--gold);padding:4px 12px;border-radius:50px;font-size:.75rem;font-weight:700;"><i class="fas fa-calculator"></i> 2026 Güncel m² Rehberi</span>
-        <span style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:4px 12px;border-radius:50px;font-size:.75rem;font-weight:700;"><i class="fas fa-file-invoice-dollar"></i> Sıfır Gizli Maliyet</span>
-        <span style="background:rgba(37,211,102,.2);border:1px solid rgba(37,211,102,.4);color:#25d366;padding:4px 12px;border-radius:50px;font-size:.75rem;font-weight:700;"><i class="fas fa-gift"></i> Ücretsiz EKB Belgesi</span>
-      </div>
-
-      <h1 style="font-family:'Montserrat',sans-serif;font-size:clamp(1.8rem,4vw,2.7rem);font-weight:900;line-height:1.2;margin-bottom:14px;color:#fff;">
+      <h1 style="font-family:'Montserrat',sans-serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:900;line-height:1.2;margin-bottom:10px;color:#fff;">
         2026 Antalya Mantolama m² Fiyatları &amp; <span class="gold">Maliyet Hesaplama</span>
       </h1>
-      <p style="font-size:1.05rem;color:rgba(255,255,255,.85);max-width:700px;line-height:1.7;margin-bottom:28px;">
-        Bina ve müstakil eviniz için en güncel m² birim maliyetleri, malzeme dahil paket karşılaştırmaları ve interaktif hesaplama motoruyla anında tahmini bütçenizi öğrenin.
+      <p style="font-size:.98rem;color:rgba(255,255,255,.85);max-width:640px;line-height:1.5;margin-bottom:18px;">
+        İskele, malzeme ve silikonlu dış cephe boyası dahil anahtar teslim birim fiyatlarımız:
       </p>
 
+      <div class="hero-price-strip" style="margin-bottom:22px;">
+        <div class="hero-price-pill">
+          <span class="hpp-name">4 cm Karbonlu EPS</span>
+          <span class="hpp-val">550 – 650 ₺ / m²</span>
+        </div>
+        <div class="hero-price-pill featured">
+          <span class="hpp-name">⭐ 5 cm Karbonlu EPS</span>
+          <span class="hpp-val">650 – 750 ₺ / m²</span>
+        </div>
+        <div class="hero-price-pill">
+          <span class="hpp-name">5 cm Taşyünü (Yanmaz)</span>
+          <span class="hpp-val">850 – 1.050 ₺ / m²</span>
+        </div>
+      </div>
+
       <div style="display:flex;gap:12px;flex-wrap:wrap;">
-        <a href="#hesaplayici" class="btn btn-primary btn-lg">
-          <i class="fas fa-calculator"></i> Hemen m² Hesapla
+        <a href="tel:05309361017" class="btn btn-primary btn-lg">
+          <i class="fas fa-phone-alt"></i> 0530 936 10 17
         </a>
-        <a href="https://wa.me/905309361017?text=Merhaba%2C%202026%20mantolama%20m2%20fiyatlar%C4%B1%20ve%20ke%C5%9Fif%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum." target="_blank" rel="noopener" class="btn btn-wa btn-lg">
-          <i class="fab fa-whatsapp"></i> Keşif &amp; Fiyat İste
+        <a href="https://wa.me/905309361017?text=Merhaba%2C%20binam%C4%B1z%20i%C3%A7in%202026%20mantolama%20m2%20fiyat%C4%B1%20ve%20%C3%BCcretsiz%20ke%C5%9Fif%20istiyorum." target="_blank" rel="noopener" class="btn btn-wa btn-lg">
+          <i class="fab fa-whatsapp"></i> WhatsApp Fiyat Al
+        </a>
+        <a href="#hesaplayici" class="btn btn-outline btn-lg" style="border-color:rgba(255,255,255,.5);color:#fff;">
+          <i class="fas fa-calculator"></i> m² Hesapla
         </a>
       </div>
     </div>
@@ -252,9 +279,8 @@
 
       <!-- FİYAT TABLOSU -->
       <div class="section-header">
-        <span class="section-label">2026 GÜNCEL FİYAT LİSTESİ</span>
-        <h2 class="section-title">Antalya Dış Cephe Mantolama <span class="gold">m² Birim Fiyatları</span></h2>
-        <p class="section-desc">Malzeme markası, iskele kurulumu, yapıştırıcı, sıva filesi, astar ve silikonlu dış cephe boyası dahil anahtar teslim paketlerimiz.</p>
+        <span class="section-label">2026 FİYAT LİSTESİ</span>
+        <h2 class="section-title">Anahtar Teslim <span class="gold">m² Birim Fiyatları</span></h2>
       </div>
 
       <div class="price-table-wrap">
@@ -264,61 +290,64 @@
               <th>Paket / Malzeme Türü</th>
               <th>Kalınlık &amp; Yoğunluk</th>
               <th>Kullanılan Markalar</th>
-              <th>Özellik &amp; Avantaj</th>
               <th>Tahmini m² Fiyatı</th>
+              <th>Hızlı Teklif</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Standart Karbonlu EPS Paketi</strong></td>
-              <td>4 cm / 16 Dansite</td>
-              <td>Filli Boya / Knauf / Weber</td>
-              <td>Ekonomik, hafif, %40 enerji tasarrufu</td>
-              <td><span class="m2-val">550 – 650 ₺ / m²</span></td>
+              <td data-label="Paket"><strong>Standart Karbonlu EPS</strong></td>
+              <td data-label="Kalınlık">4 cm / 16 Dansite</td>
+              <td data-label="Markalar">Filli Boya / Knauf / Weber</td>
+              <td data-label="m² Fiyatı"><span class="m2-val">550 – 650 ₺ / m²</span></td>
+              <td data-label="Teklif"><a href="https://wa.me/905309361017?text=Merhaba%2C%204%20cm%20Karbonlu%20EPS%20mantolama%20paketi%20(550-650%20TL%2Fm2)%20i%C3%A7in%20teklif%20almak%20istiyorum." target="_blank" rel="noopener" class="btn btn-wa" style="padding:7px 14px;font-size:.8rem;"><i class="fab fa-whatsapp"></i> Teklif Al</a></td>
             </tr>
             <tr style="background:#fdfcf6;">
-              <td><strong>Konfor Karbonlu EPS Paketi ⭐</strong></td>
-              <td>5 cm / 16-20 Dansite</td>
-              <td>Filli Boya Capatect / Weber</td>
-              <td>Antalya sıcağında maksimum klima tasarrufu</td>
-              <td><span class="m2-val">650 – 750 ₺ / m²</span></td>
+              <td data-label="Paket"><strong>Konfor Karbonlu EPS ⭐</strong></td>
+              <td data-label="Kalınlık">5 cm / 16-20 Dansite</td>
+              <td data-label="Markalar">Filli Boya Capatect / Weber</td>
+              <td data-label="m² Fiyatı"><span class="m2-val">650 – 750 ₺ / m²</span></td>
+              <td data-label="Teklif"><a href="https://wa.me/905309361017?text=Merhaba%2C%205%20cm%20Konfor%20Karbonlu%20EPS%20mantolama%20paketi%20(650-750%20TL%2Fm2)%20i%C3%A7in%20teklif%20almak%20istiyorum." target="_blank" rel="noopener" class="btn btn-primary" style="padding:7px 14px;font-size:.8rem;"><i class="fab fa-whatsapp"></i> Teklif Al</a></td>
             </tr>
             <tr>
-              <td><strong>Premium Taşyünü Paketi</strong></td>
-              <td>5 cm / 150 kg/m³</td>
-              <td>Knauf Mineral / İzocam / Weber</td>
-              <td>A1 yanmaz sınıfı, üstün ses ve ısı yalıtımı</td>
-              <td><span class="m2-val">850 – 1.050 ₺ / m²</span></td>
+              <td data-label="Paket"><strong>Premium Taşyünü</strong></td>
+              <td data-label="Kalınlık">5 cm / 150 kg/m³ (Yanmaz)</td>
+              <td data-label="Markalar">Knauf Mineral / İzocam</td>
+              <td data-label="m² Fiyatı"><span class="m2-val">850 – 1.050 ₺ / m²</span></td>
+              <td data-label="Teklif"><a href="https://wa.me/905309361017?text=Merhaba%2C%205%20cm%20Ta%C5%9Fy%C3%BCn%C3%BC%20mantolama%20paketi%20(850-1050%20TL%2Fm2)%20i%C3%A7in%20teklif%20almak%20istiyorum." target="_blank" rel="noopener" class="btn btn-wa" style="padding:7px 14px;font-size:.8rem;"><i class="fab fa-whatsapp"></i> Teklif Al</a></td>
             </tr>
             <tr>
-              <td><strong>Kalın Taşyünü Sistem</strong></td>
-              <td>7 cm / 150 kg/m³</td>
-              <td>Knauf / Weber / Filli Boya</td>
-              <td>Yüksek katlı binalar ve villa projeleri için</td>
-              <td><span class="m2-val">1.050 – 1.250 ₺ / m²</span></td>
+              <td data-label="Paket"><strong>Kalın Taşyünü Sistem</strong></td>
+              <td data-label="Kalınlık">7 cm / 150 kg/m³</td>
+              <td data-label="Markalar">Knauf / Weber / Filli Boya</td>
+              <td data-label="m² Fiyatı"><span class="m2-val">1.050 – 1.250 ₺ / m²</span></td>
+              <td data-label="Teklif"><a href="https://wa.me/905309361017?text=Merhaba%2C%207%20cm%20Kal%C4%B1n%20Ta%C5%9Fy%C3%BCn%C3%BC%20mantolama%20paketi%20i%C3%A7in%20teklif%20almak%20istiyorum." target="_blank" rel="noopener" class="btn btn-wa" style="padding:7px 14px;font-size:.8rem;"><i class="fab fa-whatsapp"></i> Teklif Al</a></td>
+            </tr>
+            <tr style="background:#f5f9ff;">
+              <td data-label="Paket"><strong>Çatı &amp; Teras İzolasyonu 🏠</strong></td>
+              <td data-label="Kalınlık">Poliüretan / Membran / Taşyünü</td>
+              <td data-label="Markalar">Sika / Köster / İzocam</td>
+              <td data-label="m² Fiyatı"><span class="m2-val">450 – 750 ₺ / m²</span></td>
+              <td data-label="Teklif"><a href="/antalya-cati-izolasyonu.html" class="btn btn-outline" style="padding:7px 14px;font-size:.8rem;"><i class="fas fa-arrow-right"></i> Çatı Paketleri</a></td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:40px;text-align:right;">
-        * Fiyatlar döviz ve hammadde koşullarına göre değişkenlik gösterebilir. Kesin ve net fiyat teklifi adreste yapılan ücretsiz keşif sonrası verilir.
+      <p style="font-size:.8rem;color:var(--text-muted);margin-bottom:36px;text-align:right;">
+        * Kesin fiyat ücretsiz yerinde keşif sonrası belirlenir.
       </p>
 
       <!-- İNTERAKTİF HESAPLAMA ARACI -->
       <div class="calc-box" id="hesaplayici">
-        <div style="text-align:center;margin-bottom:32px;">
-          <span class="section-label">CANLI HESAPLAMA MOTORU</span>
-          <h2 style="font-family:'Montserrat',sans-serif;font-size:1.8rem;font-weight:900;color:var(--text);">
-            Bina Mantolama <span class="gold">Maliyetinizi Hesaplayın</span>
+        <div style="text-align:center;margin-bottom:24px;">
+          <span class="section-label">CANLI HESAPLAMA</span>
+          <h2 style="font-family:'Montserrat',sans-serif;font-size:1.7rem;font-weight:900;color:var(--text);">
+            Bina Mantolama <span class="gold">Maliyet Hesaplama</span>
           </h2>
-          <p style="color:var(--text-muted);font-size:.92rem;max-width:600px;margin:8px auto 0;">
-            Cephe metrekarenizi veya bina ölçülerinizi seçerek malzeme dahil tahmini toplam yatırım tutarını ve yıllık tasarrufunuzu hemen görün.
-          </p>
         </div>
 
         <div class="calc-grid">
-          <!-- Sol Form -->
           <div class="calc-form">
             <div class="calc-field">
               <label for="calcMethod">Hesaplama Yöntemi:</label>
@@ -328,14 +357,11 @@
               </select>
             </div>
 
-            <!-- Metrekare ile giriş -->
             <div id="m2InputWrap" class="calc-field">
               <label for="facadeM2">Toplam Cephe Alanı (m²):</label>
               <input type="number" id="facadeM2" value="600" min="50" max="10000" step="10" oninput="calculateBudget()" />
-              <div class="calc-helper">Tahmini olarak 4 katlı standart bir apartman 600 - 900 m² arasındadır.</div>
             </div>
 
-            <!-- Bina boyutuyla giriş (gizli başlar) -->
             <div id="buildingInputWrap" style="display:none;">
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
                 <div class="calc-field">
@@ -350,7 +376,7 @@
             </div>
 
             <div class="calc-field">
-              <label for="matType">Tercih Edilen Yalıtım Paketi:</label>
+              <label for="matType">Yalıtım Paketi:</label>
               <select id="matType" onchange="calculateBudget()">
                 <option value="600">4 cm Karbonlu EPS (Ort. 600 ₺/m²)</option>
                 <option value="700" selected>5 cm Karbonlu EPS - Önerilen (Ort. 700 ₺/m²)</option>
@@ -360,100 +386,101 @@
             </div>
 
             <div class="calc-field">
-              <label for="extraDecor">Cephe Dekorasyon Detayları:</label>
+              <label for="extraDecor">Cephe Detayı:</label>
               <select id="extraDecor" onchange="calculateBudget()">
                 <option value="1">Standart Düz Mantolama</option>
-                <option value="1.12">Pencere Sövesi &amp; Kat Silmesi Dahil (+%12)</option>
-                <option value="1.20">Özel Fugalı &amp; Taş Kaplama Tasarımı (+%20)</option>
+                <option value="1.12">Pencere Sövesi &amp; Kat Silmesi (+%12)</option>
+                <option value="1.20">Özel Fugalı &amp; Taş Tasarım (+%20)</option>
+                <option value="1.15">Çatı &amp; Teras İzolasyonu Dahil (+%15)</option>
               </select>
             </div>
 
             <div class="calc-field">
-              <label for="flatCount">Binadaki Toplam Daire Sayısı (İsteğe Bağlı):</label>
+              <label for="flatCount">Toplam Daire Sayısı:</label>
               <input type="number" id="flatCount" value="8" min="1" max="100" oninput="calculateBudget()" />
-              <div class="calc-helper">Daire başı tahmini maliyeti görmek için giriniz.</div>
             </div>
           </div>
 
-          <!-- Sağ Sonuç Kartı -->
           <div class="calc-result-card">
             <div class="res-label">Tahmini Toplam Proje Tutarı</div>
             <div class="res-price" id="totalEstimate">₺420.000 – ₺450.000</div>
 
             <div class="res-details">
               <div class="res-row">
-                <span>Hesaplanan Net Cephe:</span>
+                <span>Net Cephe Alanı:</span>
                 <strong id="calcFacadeArea">600 m²</strong>
               </div>
               <div class="res-row">
-                <span>Ortalama m² Birim Maliyet:</span>
+                <span>Ortalama Birim Fiyat:</span>
                 <strong id="calcUnitRate">700 ₺ / m²</strong>
               </div>
               <div class="res-row highlight">
-                <span>Daire Başına Tahmini Maliyet:</span>
+                <span>Daire Başına Düşen:</span>
                 <strong id="calcPerFlat">₺52.500</strong>
               </div>
               <div class="res-row highlight">
-                <span>Yıllık Tahmini Enerji Tasarrufu:</span>
+                <span>Yıllık Enerji Tasarrufu:</span>
                 <strong id="calcSavings">%45 - %50 Tasarruf</strong>
-              </div>
-              <div class="res-row">
-                <span>Yatırım Amortisman Süresi:</span>
-                <strong>Ortalama 2.5 - 3 Yıl</strong>
               </div>
             </div>
 
-            <p style="font-size:.78rem;color:#bbb;margin-bottom:16px;line-height:1.5;">
-              ✓ İskele, Filli Boya/Jotun silikonlu boya, fileli harç ve işçilik fiyata dahildir. Çevre Bakanlığı onaylı Enerji Kimlik Belgesi (EKB) ücretsizdir.
+            <p style="font-size:.78rem;color:#bbb;margin-bottom:14px;">
+              ✓ İskele, silikonlu boya, işçilik ve EKB belgesi dahildir.
             </p>
 
             <a id="btnWaEstimate" href="#" target="_blank" rel="noopener" class="btn btn-wa res-cta">
-              <i class="fab fa-whatsapp"></i> Bu Hesap İçin Ücretsiz Keşif İste
+              <i class="fab fa-whatsapp"></i> Ücretsiz Keşif İste
             </a>
           </div>
         </div>
       </div>
 
-      <!-- Bilgi & İç Linkleme Kartı -->
-      <div style="background:#fdf8ee;border:1.5px solid rgba(201,162,39,.35);border-radius:var(--radius);padding:24px 28px;margin:32px 0;line-height:1.7;">
-        <h3 style="font-family:'Montserrat',sans-serif;font-size:1.15rem;font-weight:800;color:var(--text);margin-bottom:8px;">
-          💡 Antalya İkliminde Doğru Yalıtım Yatırımı
-        </h3>
-        <p style="color:var(--text2);font-size:.95rem;">
-          Antalya sıcağında klimaya harcanan elektrik enerjisi, kış aylarındaki ısınma giderlerinden 2 kat daha fazladır. Kaliteli bir dış cephe mantolaması ile binanızı hem sıcaktan hem de Akdeniz neminden koruyabilirsiniz. 15+ yıllık saha tecrübemiz ve tamamlanan 500+ proje referansımız için <a href="/" style="color:var(--gold);font-weight:700;text-decoration:underline;">Antalya mantolama</a> merkezimizi inceleyebilir, bina cephenize estetik bir dokunuş katmak isterseniz <a href="/antalya-sove-kaplama.html" style="color:var(--gold);font-weight:700;text-decoration:underline;">Antalya söve modelleri</a> sayfamızı inceleyebilirsiniz.
-        </p>
+      <!-- APARTMAN YÖNETİCİLERİNE ÖZEL KOMPAKT BANNER -->
+      <div style="background:linear-gradient(135deg,#1a1a1a 0%,#2d2612 100%);border:2px solid var(--gold);border-radius:18px;padding:22px 26px;margin:28px 0;color:#fff;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px;">
+        <div style="flex:1 1 380px;">
+          <h3 style="font-family:'Montserrat',sans-serif;font-size:1.2rem;font-weight:900;color:#fff;margin-bottom:6px;">
+            🏢 Apartman Yöneticilerine Özel: <span style="color:var(--gold-light);">Ücretsiz 3D Tasarım &amp; Teklif Dosyası</span>
+          </h3>
+          <p style="color:#d6d6d6;font-size:.88rem;margin:0;">
+            Bina toplantısı için 3 farklı 3D renk simülasyonu ve daire başı taksit tablosunu ücretsiz hazırlıyoruz.
+          </p>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <a href="https://wa.me/905309361017?text=Merhaba%2C%20apartman%20toplant%C4%B1m%C4%B1z%20i%C3%A7in%20%C3%BCcretsiz%203D%20bina%20tasar%C4%B1m%C4%B1%20ve%20resmi%20mantolama%20teklif%20dosyas%C4%B1%20istiyorum." target="_blank" rel="noopener" class="btn btn-wa" style="padding:11px 18px;font-size:.88rem;">
+            <i class="fab fa-whatsapp"></i> Teklif Dosyası İste
+          </a>
+        </div>
       </div>
 
       <!-- BİNA YÖNETİCİLERİNE AVANTAJLAR -->
-      <div class="section-header" style="margin-top:60px;">
-        <span class="section-label">YÖNETİM KOLAYLIĞI</span>
-        <h2 class="section-title">Apartman Yöneticileri İçin <span class="gold">Ödeme Kolaylıkları</span></h2>
-        <p class="section-desc">Bina kararlarını kolaylaştıran finansal modellerimiz ve resmi sözleşme güvencemiz.</p>
+      <div class="section-header" style="margin-top:44px;">
+        <span class="section-label">ÖDEME &amp; GÜVENCE</span>
+        <h2 class="section-title">Yönetim ve <span class="gold">Ödeme Kolaylıkları</span></h2>
       </div>
 
       <div class="benefit-grid">
         <div class="benefit-card">
           <i class="fas fa-file-signature"></i>
-          <h4>Daire Sakinlerine Özel Senet</h4>
-          <p>Yöneticinin komşularından para toplama stresini bitiriyoruz. Her daire sakini ile ayrı senetli sözleşme yapıyor, tahsilatı doğrudan firmamız yürütüyor.</p>
+          <h4>Daire Başı Senet</h4>
+          <p>Her daireyle ayrı sözleşme yapılır, yönetici tahsilatla uğraşmaz.</p>
         </div>
 
         <div class="benefit-card">
           <i class="fas fa-credit-card"></i>
           <h4>Kredi Kartına Taksit</h4>
-          <p>Tüm bonus ve world özellikli kartlara anlaşmalı banka oranlarıyla vade farksız veya düşük vadeli taksit imkanı sunuyoruz.</p>
+          <p>Tüm kredi kartlarına uygun taksit seçenekleri.</p>
         </div>
 
         <div class="benefit-card">
           <i class="fas fa-certificate"></i>
           <h4>Ücretsiz EKB Belgesi</h4>
-          <p>Yasal zorunluluk olan Enerji Kimlik Belgesi (EKB), mantolama teslimatının ardından binanıza ücretsiz olarak tescil edilir.</p>
+          <p>Bakanlık onaylı Enerji Kimlik Belgesi hediyemizdir.</p>
         </div>
 
         <div class="benefit-card">
           <i class="fas fa-shield-alt"></i>
-          <h4>10 Yıl Resmi Garanti</h4>
-          <p>Kullanılan TSE'li yalıtım levhaları ve silikonlu boyalar için bina yönetimine 10 yıl geçerli yazılı garanti belgesi teslim ediyoruz.</p>
+          <h4>10 Yıl Yazılı Garanti</h4>
+          <p>TSE belgeli malzeme ve sözleşmeli işçilik güvencesi.</p>
         </div>
       </div>
 
@@ -464,58 +491,37 @@
   <section class="faq-section" id="faq">
     <div class="container">
       <div class="section-header">
-        <span class="section-label">MERAK EDİLENLER</span>
-        <h2 class="section-title">Mantolama Fiyatları <span class="gold">Sıkça Sorulan Sorular</span></h2>
-        <p class="section-desc">Maliyetler, iskele masrafları ve ödeme süreçleri hakkında en çok sorulan sorular.</p>
+        <span class="section-label">SIK SORULANLAR</span>
+        <h2 class="section-title">Kısa <span class="gold">Sorular &amp; Cevaplar</span></h2>
       </div>
       <div class="faq-container">
         <div class="faq-item">
           <div class="faq-question">
-            <span>2026 yılında Antalya'da dış cephe mantolama m² fiyatları ne kadar?</span>
+            <span>Mantolama m² fiyatına iskele ve boya dahil mi?</span>
             <i class="fas fa-chevron-down"></i>
           </div>
           <div class="faq-answer">
-            <p>2026 yılı itibarıyla Antalya'da anahtar teslim dış cephe mantolama m² fiyatları malzeme türüne göre değişmektedir: 4 cm Karbonlu EPS strafor sistemleri 550 - 650 TL/m², 5 cm Karbonlu EPS sistemleri 650 - 750 TL/m², A1 sınıfı yanmaz Taşyünü sistemleri ise 850 - 1.050 TL/m² aralığındadır. Fiyatlara iskele, işçilik, yapıştırıcı, file, sıva ve silikonlu son kat dış cephe boyası dahildir.</p>
+            <p>Evet; çelik iskele, yapıştırıcı, fileli sıva, işçilik ve Filli Boya/Jotun silikonlu son kat dış cephe boyası fiyata dahildir.</p>
           </div>
         </div>
 
         <div class="faq-item">
           <div class="faq-question">
-            <span>Mantolama fiyatına iskele kurulumu ve boya dahil midir?</span>
+            <span>Apartman yönetimlerine taksit veya senet var mı?</span>
             <i class="fas fa-chevron-down"></i>
           </div>
           <div class="faq-answer">
-            <p>Evet. Akdeniz Yapı Dekorasyon'un sunduğu tekliflerde hiçbir gizli maliyet bulunmaz. TSE onaylı güvenlikli çelik iskele kurulumu, nakliye, harç/file/dübel sarfiyatı ve Filli Boya/Jotun silikonlu dış cephe boyası fiyata dahildir.</p>
+            <p>Evet; daire başı elden senet, kredi kartına taksit ve yöneticiyi yormayan bireysel tahsilat imkanı sunuyoruz.</p>
           </div>
         </div>
 
         <div class="faq-item">
           <div class="faq-question">
-            <span>Yaptırılan mantolama maliyetini ne kadar sürede amorti eder?</span>
+            <span>Enerji Kimlik Belgesi (EKB) ücretsiz mi?</span>
             <i class="fas fa-chevron-down"></i>
           </div>
           <div class="faq-answer">
-            <p>Antalya'da yaz aylarında çalışan klimaların ve kış aylarındaki ısınma giderlerinin %45 ile %50 oranında azalmasıyla, mantolama yatırımı ortalama 2.5 ile 3 yıl içerisinde elektrik ve yakıt tasarrufu ile kendi kendini tamamen amorti eder.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question">
-            <span>Apartman yönetimlerine taksit veya senet imkanı var mı?</span>
-            <i class="fas fa-chevron-down"></i>
-          </div>
-          <div class="faq-answer">
-            <p>Evet. Apartman yönetimlerine özel daire başı senetle taksitlendirme, kredi kartına komisyonsuz taksit ve banka yalıtım kredisi protokolleri sunmaktayız. Daire sakinleri ödemelerini doğrudan firmamıza yapabilir, yönetici tahsilat yükü yaşamaz.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question">
-            <span>Enerji Kimlik Belgesi (EKB) veriyor musunuz?</span>
-            <i class="fas fa-chevron-down"></i>
-          </div>
-          <div class="faq-answer">
-            <p>Evet. Firmamızca mantolaması tamamlanan tüm apartman ve binalara, Çevre ve Şehircilik Bakanlığı onaylı resmi Enerji Kimlik Belgesi (EKB) ücretsiz olarak düzenlenip bina yönetimine teslim edilir.</p>
+            <p>Evet, mantolaması tamamlanan tüm binalara resmi Enerji Kimlik Belgesi ücretsiz teslim edilir.</p>
           </div>
         </div>
       </div>
@@ -525,13 +531,8 @@
   <!-- CTA BANNER -->
   <section class="cta-banner">
     <div class="container" style="text-align:center;">
-      <div style="display:inline-flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:20px;">
-        <span class="cta-trust-chip" style="background:rgba(255,255,255,.2);padding:6px 14px;border-radius:50px;font-size:.8rem;font-weight:700;"><i class="fas fa-calculator"></i> Anında Keşif</span>
-        <span class="cta-trust-chip" style="background:rgba(255,255,255,.2);padding:6px 14px;border-radius:50px;font-size:.8rem;font-weight:700;"><i class="fas fa-handshake"></i> Sözleşmeli Garanti</span>
-        <span class="cta-trust-chip" style="background:rgba(255,255,255,.2);padding:6px 14px;border-radius:50px;font-size:.8rem;font-weight:700;"><i class="fas fa-tags"></i> En İyi Fiyat</span>
-      </div>
-      <h2>Binanız İçin Ücretsiz Keşif ve Net Teklif Alın</h2>
-      <p>Teknik ekibimiz binanızı yerinde incelesin, detaylı metraj ve fiyat dökümünü aynı gün bina yönetimine sunsun.</p>
+      <h2>Ücretsiz Keşif ve Net Teklif Alın</h2>
+      <p>Aynı gün yerinde ölçüm ve yazılı fiyat teklifi için hemen ulaşın.</p>
       <div class="cta-buttons">
         <a href="tel:05309361017" class="cta-btn-white"><i class="fas fa-phone"></i> 0530 936 10 17</a>
         <a href="https://wa.me/905309361017?text=Merhaba%2C%20binam%C4%B1z%20i%C3%A7in%20%C3%BCcretsiz%20ke%C5%9Fif%20ve%20fiyat%20teklifi%20istiyoruz." target="_blank" class="cta-btn-outline-white">
@@ -590,7 +591,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>&copy; 2026 Akdeniz Yapı Dekorasyon. Tüm hakları saklıdır.</span>
+      <span>&copy; 2026 Akdeniz Yapı Dekorasyon. Tüm hakları saklıdır. &bull; <a href="/kvkk.html" style="color:inherit;text-decoration:underline;">KVKK ve Çerez Politikası</a></span>
       <span>🏆 Antalya Mantolama m² Fiyatları &amp; Maliyet Rehberi</span>
     </div>
   </footer>
@@ -602,7 +603,7 @@
     </a>
   </div>
 
-  <script src="/js/main.js?v=20260807" defer></script>
+  <script src="/js/main.js?v=20261104" defer></script>
   <script>
     function toggleCalcMethod() {
       const method = document.getElementById('calcMethod').value;

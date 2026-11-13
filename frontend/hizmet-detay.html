@@ -143,8 +143,8 @@
         <h4>Hizmet Bölgeleri</h4>
         <ul>
           <li><a href="/muratpasa-mantolama.html"><i class="fas fa-chevron-right"></i> Muratpaşa Mantolama</a></li>
-          <li><a href="/konyaalti-dis-cephe.html"><i class="fas fa-chevron-right"></i> Konyaaltı Dış Cephe</a></li>
-          <li><a href="/kepez-isi-yalitimi.html"><i class="fas fa-chevron-right"></i> Kepez Isı Yalıtımı</a></li>
+          <li><a href="/konyaalti-mantolama.html"><i class="fas fa-chevron-right"></i> Konyaaltı Mantolama</a></li>
+          <li><a href="/kepez-mantolama.html"><i class="fas fa-chevron-right"></i> Kepez Mantolama</a></li>
           <li><a href="/lara-mantolama.html"><i class="fas fa-chevron-right"></i> Lara Mantolama</a></li>
           <li><a href="/dosemealti-mantolama.html"><i class="fas fa-chevron-right"></i> Döşemealtı Mantolama</a></li>
           <li><a href="/aksu-mantolama.html"><i class="fas fa-chevron-right"></i> Aksu Mantolama</a></li>
@@ -159,7 +159,7 @@
             <li><strong style="color:#ddd;">Akdeniz Yapı Dekorasyon</strong></li>
             <li><i class="fas fa-map-marker-alt" style="color:var(--gold);"></i> <span style="color:#aaa;">Şafak Mah. 4258. Sk. No:12, 07090 Kepez/Antalya</span></li>
             <li><i class="fas fa-phone" style="color:var(--gold);"></i> <a href="tel:+905309361017">0530 936 10 17</a> <span style="color:#aaa;">(Yunus Demirel)</span></li>
-            <li><i class="fas fa-phone" style="color:var(--gold);"></i> <a href="tel:+905050869807">0505 086 98 07</a> <span style="color:#aaa;">(Serhat Sincar)</span></li>
+            <li><i class="fas fa-phone" style="color:var(--gold);"></i> <a href="tel:+905319773113">0531 977 31 13</a> <span style="color:#aaa;">(Mehmet Çetin - Pazarlama Mühendisi)</span></li>
             <li><i class="fab fa-whatsapp" style="color:var(--gold);"></i> <a href="https://wa.me/905309361017" target="_blank" rel="noopener">WhatsApp</a></li>
             <li><i class="fab fa-instagram" style="color:var(--gold);"></i> <a href="https://instagram.com/akdeniz.yapidekorasyon" target="_blank" rel="noopener">@akdeniz.yapidekorasyon</a></li>
             <li><i class="fas fa-directions" style="color:var(--gold);"></i> <a href="https://www.google.com/maps/dir/?api=1&amp;destination=36.9136919,30.6436956" target="_blank" rel="noopener">Yol Tarifi Al</a></li>
@@ -179,7 +179,8 @@
     </a>
   </div>
 
-  <script src="/js/main.js?v=20260807" defer></script>
+  <script src="/js/measurement.js?v=20261104" defer></script>
+  <script src="/js/main.js?v=20261104" defer></script>
   <script>
     // Navbar hamburger toggle
     const navToggle = document.getElementById('navToggle');
@@ -218,9 +219,13 @@
         const title = svc.title || svc.name || 'Hizmet';
 
         // Başlık güncelle
-        document.title = `Antalya ${title} | Akdeniz Yapı Dekorasyon`;
-        document.getElementById('breadcrumbTitle').textContent = title;
-        document.getElementById('pageHeroTitle').textContent   = `Antalya ${title}`;
+        const isDisCephe = svc.slug === 'dis-cephe-isi-yalitimi';
+        const displayTitle = isDisCephe ? 'Dış Cephe Isı Yalıtımı ve EPS Mantolama Teknik Şartnamesi' : title;
+        document.title = isDisCephe
+          ? 'Dış Cephe Isı Yalıtımı ve EPS Mantolama Teknik Şartnamesi | Akdeniz Yapı'
+          : `Antalya ${title} | Akdeniz Yapı Dekorasyon`;
+        document.getElementById('breadcrumbTitle').textContent = displayTitle;
+        document.getElementById('pageHeroTitle').textContent   = isDisCephe ? displayTitle : `Antalya ${title}`;
 
         const imgSrc = svc.image || '/images/hero-hizmetler.webp';
 

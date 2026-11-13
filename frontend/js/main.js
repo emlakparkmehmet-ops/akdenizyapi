@@ -1,5 +1,11 @@
 const API = '/api';
 
+// Shared public-page measurement; the module waits for the visitor's consent.
+const measurementScript = document.createElement('script');
+measurementScript.src = '/js/measurement.js?v=20261104';
+measurementScript.async = true;
+document.head.appendChild(measurementScript);
+
 // ── XSS koruması — kullanıcı/API verisini HTML'e basmadan önce escape et ─────
 function escapeHtml(str) {
   if (str == null) return '';
@@ -498,6 +504,11 @@ async function initIletisim() {
 
   form.addEventListener('submit', async e => {
     e.preventDefault();
+    const kvkkBox = form.querySelector('#kvkkConsent');
+    if (kvkkBox && !kvkkBox.checked) {
+      showAlert('error', 'Lütfen KVKK Aydınlatma Metni onay kutusunu işaretleyin.');
+      return;
+    }
     const btn = form.querySelector('[type=submit]');
     btn.disabled = true;
     btn.textContent = 'Gönderiliyor...';
@@ -506,7 +517,8 @@ async function initIletisim() {
       phone: form.phone.value.trim(),
       email: form.email.value.trim(),
       subject: form.subject.value.trim(),
-      message: form.message.value.trim()
+      message: form.message.value.trim(),
+      kvkk_consent: kvkkBox ? kvkkBox.checked : true
     };
     try {
       const res = await fetch(`${API}/messages`, {
@@ -517,6 +529,7 @@ async function initIletisim() {
       const result = await res.json();
       if (res.ok) {
         showAlert('success', result.message || 'Mesajınız iletildi!');
+        window.AkdenizAnalytics?.trackLead();
         form.reset();
       } else {
         showAlert('error', result.error || 'Bir hata oluştu.');

@@ -9,6 +9,11 @@ SCOPES = ["https://www.googleapis.com/auth/indexing"]
 
 urls_to_index = [
     "https://antalyadiscephe.com/",
+    "https://antalyadiscephe.com/antalya-mantolama-fiyatlari.html",
+    "https://antalyadiscephe.com/antalya-cati-izolasyonu.html",
+    "https://antalyadiscephe.com/antalya-boya-badana.html",
+    "https://antalyadiscephe.com/dis-cephe-renkleri.html",
+    "https://antalyadiscephe.com/antalya-sove-kaplama.html",
     "https://antalyadiscephe.com/hizmetler.html",
     "https://antalyadiscephe.com/referanslar.html",
     "https://antalyadiscephe.com/kampanyalar.html",

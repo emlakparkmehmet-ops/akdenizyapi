@@ -111,7 +111,7 @@ GET    /api/settings/stats      (admin)
 |------|-------|---------|
 | Yunus Demirel | Firma Yetkilisi | 0530 936 10 17 |
 | Adem Demirel | Firma Yetkilisi | 0535 876 35 04 |
-| Serhat Sincar | İnşaat Mühendisi | 0505 086 98 07 |
+| Mehmet Çetin | Pazarlama Mühendisi | 0531 977 31 13 |
 
 - **Instagram:** @akdeniz.yapidekorasyon
 - **WhatsApp:** 905309361017

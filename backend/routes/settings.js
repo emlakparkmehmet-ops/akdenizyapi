@@ -3,6 +3,28 @@ const router = express.Router();
 const db = require('../database');
 const auth = require('../middleware/auth');
 
+// POST /api/settings/track-click - Telefon & WhatsApp tıklama kaydı (public)
+router.post('/track-click', async (req, res) => {
+  try {
+    const { event_type, page_path, target_href, has_gclid } = req.body || {};
+    if (!['phone_click', 'whatsapp_click'].includes(event_type)) {
+      return res.status(400).json({ error: 'Geçersiz etkinlik.' });
+    }
+    await db.runAsync(
+      'INSERT INTO click_events (event_type, page_path, target_href, has_gclid) VALUES (?, ?, ?, ?)',
+      [
+        event_type,
+        String(page_path || '/').slice(0, 200),
+        String(target_href || '').slice(0, 200),
+        has_gclid ? 1 : 0,
+      ]
+    );
+    res.status(201).json({ ok: true });
+  } catch (err) {
+    res.status(200).json({ ok: false });
+  }
+});
+
 // GET /api/settings/stats - dashboard istatistikleri (admin) — önce tanımlanmalı
 router.get('/stats', auth, async (req, res) => {
   try {
@@ -11,12 +33,21 @@ router.get('/stats', auth, async (req, res) => {
     const projects   = await db.getAsync('SELECT COUNT(*) as cnt FROM projects');
     const messages   = await db.getAsync('SELECT COUNT(*) as cnt FROM messages');
     const unread     = await db.getAsync('SELECT COUNT(*) as cnt FROM messages WHERE is_read = 0');
+    let phoneClicks = { cnt: 0 }, waClicks = { cnt: 0 }, recentClicks = [];
+    try {
+      phoneClicks  = await db.getAsync("SELECT COUNT(*) as cnt FROM click_events WHERE event_type = 'phone_click'") || { cnt: 0 };
+      waClicks     = await db.getAsync("SELECT COUNT(*) as cnt FROM click_events WHERE event_type = 'whatsapp_click'") || { cnt: 0 };
+      recentClicks = await db.allRowsAsync('SELECT id, event_type, page_path, target_href, has_gclid, created_at FROM click_events ORDER BY id DESC LIMIT 10');
+    } catch (_) {}
     res.json({
       services:        services.cnt,
       categories:      categories.cnt,
       projects:        projects.cnt,
       messages:        messages.cnt,
-      unread_messages: unread.cnt
+      unread_messages: unread.cnt,
+      phone_clicks:    phoneClicks.cnt || 0,
+      whatsapp_clicks: waClicks.cnt || 0,
+      recent_clicks:   recentClicks || []
     });
   } catch (err) {
     res.status(500).json({ error: 'Sunucu hatası: ' + err.message });
