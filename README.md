@@ -110,7 +110,6 @@ GET    /api/settings/stats      (admin)
 | Kişi | Görev | Telefon |
 |------|-------|---------|
 | Yunus Demirel | Firma Yetkilisi | 0530 936 10 17 |
-| Adem Demirel | Firma Yetkilisi | 0535 876 35 04 |
 | Mehmet Çetin | Pazarlama Mühendisi | 0531 977 31 13 |
 
 - **Instagram:** @akdeniz.yapidekorasyon
