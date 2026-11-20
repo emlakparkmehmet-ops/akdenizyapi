@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../database');
 const auth = require('../middleware/auth');
+const { sendContactNotification } = require('../utils/mailer');
 
 // POST /api/messages - iletişim formu (public)
 // Rate limiting server.js'de contactLimiter ile uygulanıyor
@@ -33,6 +34,11 @@ router.post('/', async (req, res) => {
         String(message).slice(0, 3000),
       ]
     );
+    try {
+      await sendContactNotification({ name, phone, email, subject, message });
+    } catch (mailErr) {
+      console.error('[Messages] E-posta gonderim hatasi:', mailErr.message);
+    }
     res.status(201).json({ message: 'Mesajınız iletildi. En kısa sürede dönüş yapılacaktır.' });
   } catch (err) {
     console.error('[Messages] Kayıt hatası:', err.message);
