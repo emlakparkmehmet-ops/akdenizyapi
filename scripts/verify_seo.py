@@ -147,7 +147,7 @@ def main() -> int:
         if p.bad_imgs:
             errors.append(f"{fname}: alt eksik gorseller: {p.bad_imgs}")
 
-        if fname in GEO_TLDR_PAGES and 'class="geo-tldr"' not in raw:
+        if fname in GEO_TLDR_PAGES and 'class="geo-tldr' not in raw:
             errors.append(f"{fname}: GEO .geo-tldr (Kisa Ozet) blogu eksik")
 
         if fname in SKIP_META_FILES:

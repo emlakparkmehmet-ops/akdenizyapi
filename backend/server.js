@@ -447,8 +447,8 @@ app.get('/hizmetler/:slug', async (req, res, next) => {
       `${service.title} uygulaması Antalya genelinde Akdeniz Yapı Dekorasyon tarafından TSE onaylı çelik iskele, 10 yıl sözleşmeli garanti ve ücretsiz yerinde keşif ile sunulur.`
     );
     const ssrTldrBlock = `
-  <section class="geo-tldr" aria-label="Kısa Özet">
-    <div class="geo-tldr-badge"><i class="fas fa-bolt"></i> Kısa Özet (TL;DR)</div>
+  <section class="geo-tldr" aria-label="Hizmet Özeti">
+    <div class="geo-tldr-badge"><i class="fas fa-bolt"></i> Hizmet Özeti</div>
     <p>${tldrSummary}</p>
     <div class="geo-tldr-grid">
       <div class="geo-tldr-item"><strong>Hizmet Kategorisi</strong>${escapeHtml(service.category_name || 'Dış Cephe & Yapı')}</div>

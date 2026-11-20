@@ -22,6 +22,11 @@ body{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%
 .geo-tldr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;padding-top:10px;border-top:1px solid rgba(201,162,39,.2);}
 .geo-tldr-item{font-size:.83rem;color:var(--text);line-height:1.45;}
 .geo-tldr-item strong{color:var(--gold-dark);display:block;font-size:.76rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
+.geo-tldr--subtle{background:#faf9f6;border-color:rgba(201,162,39,.18);border-left-width:2px;box-shadow:none;opacity:.86;margin:20px auto;padding:16px 20px;}
+.geo-tldr--subtle .geo-tldr-badge{color:var(--text-muted);font-size:.7rem;}
+.geo-tldr--subtle p{font-size:.84rem;color:var(--text-muted);margin-bottom:10px;}
+.geo-tldr--subtle .geo-tldr-item{font-size:.78rem;color:var(--text-muted);}
+.geo-tldr--subtle .geo-tldr-item strong{color:var(--text2);font-size:.72rem;}
 @media(max-width:768px){.geo-tldr{padding:16px;margin:20px 16px 0;}.geo-tldr-grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:480px){.geo-tldr-grid{grid-template-columns:1fr;}}
 
