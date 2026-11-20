@@ -26,6 +26,20 @@ const SITE           = 'https://antalyadiscephe.com';
 const ORG_ID         = 'https://antalyadiscephe.com/#organization';
 const STATIC_LASTMOD = '2026-11-12'; // Statik sayfalar için varsayılan lastmod
 const FRONTEND_DIR   = path.resolve(__dirname, '../frontend');
+const INDEXNOW_KEY   = (process.env.INDEXNOW_KEY || 'a8f3d92c4e71b605f29a8c3d7e10b452').trim();
+const GOOGLE_SITE_VERIFICATION = (process.env.GOOGLE_SITE_VERIFICATION || '').trim();
+const BING_SITE_VERIFICATION   = (process.env.BING_SITE_VERIFICATION || '').trim();
+
+function injectVerificationMeta(html) {
+  let tags = '';
+  if (GOOGLE_SITE_VERIFICATION && !/name=["']google-site-verification["']/i.test(html)) {
+    tags += `  <meta name="google-site-verification" content="${GOOGLE_SITE_VERIFICATION.replace(/"/g, '&quot;')}" />\n`;
+  }
+  if (BING_SITE_VERIFICATION && !/name=["']msvalidate\.01["']/i.test(html)) {
+    tags += `  <meta name="msvalidate.01" content="${BING_SITE_VERIFICATION.replace(/"/g, '&quot;')}" />\n`;
+  }
+  return tags ? html.replace('</head>', `${tags}</head>`) : html;
+}
 
 function getStaticLastMod(locUrl) {
   try {
@@ -188,7 +202,7 @@ function injectHeadMeta(html, { pageTitle, description, canonicalUrl, imageUrl, 
   <meta name="twitter:image" content="${imageUrl}" />
 ${extraHead || ''}`;
 
-  return html.replace('</head>', `${seoBlock}\n</head>`);
+  return injectVerificationMeta(html.replace('</head>', `${seoBlock}\n</head>`));
 }
 
 // <!-- SSR:CONTENT --> ... <!-- /SSR:CONTENT --> arasını sunucu içeriğiyle değiştirir
@@ -216,6 +230,16 @@ app.get('/llms-full.txt', (req, res) => {
     return res.sendFile(filePath);
   }
   res.status(404).send('Not Found');
+});
+
+// ── IndexNow API Anahtar Doğrulama Dosyası ──────────────────────────────────
+app.get('/:key.txt', (req, res, next) => {
+  if (INDEXNOW_KEY && req.params.key === INDEXNOW_KEY) {
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    return res.send(INDEXNOW_KEY);
+  }
+  return next();
 });
 
 // ── Dinamik Sitemap (XML) ───────────────────────────────────────────────────
@@ -553,6 +577,24 @@ app.get('/kepez-isi-yalitimi.html', (req, res) => {
 });
 app.get('/konyaalti-dis-cephe.html', (req, res) => {
   return res.redirect(301, '/konyaalti-mantolama.html');
+});
+
+// ── Ortam değişkeni tabanlı Search Console / Bing doğrulama meta enjeksiyonu ─
+app.use((req, res, next) => {
+  if ((!GOOGLE_SITE_VERIFICATION && !BING_SITE_VERIFICATION) || req.method !== 'GET') {
+    return next();
+  }
+  const reqPath = req.path === '/' ? '/index.html' : req.path;
+  if (!reqPath.endsWith('.html')) return next();
+  const rel = reqPath.replace(/^\/+/, '');
+  const filePath = path.resolve(FRONTEND_DIR, rel);
+  if (!filePath.startsWith(FRONTEND_DIR + path.sep) || !fs.existsSync(filePath)) {
+    return next();
+  }
+  const html = fs.readFileSync(filePath, 'utf8');
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-cache');
+  return res.send(injectVerificationMeta(html));
 });
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), { maxAge: '30d' }));

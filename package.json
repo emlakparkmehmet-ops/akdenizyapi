@@ -5,7 +5,9 @@
   "main": "backend/server.js",
   "scripts": {
     "start": "node backend/server.js",
-    "dev": "nodemon backend/server.js"
+    "dev": "nodemon backend/server.js",
+    "verify:seo": "node --check backend/server.js && python scripts/verify_seo.py",
+    "indexnow": "python scripts/submit_indexing.py --indexnow"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

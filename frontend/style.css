@@ -15,3 +15,13 @@ body{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%
 .faq-item.active .faq-answer{padding:0 24px 20px 24px;}
 @media(min-width:769px) and (max-width:1180px){.nav-menu{gap:2px;}.nav-menu a{padding:6px 8px;font-size:.79rem;}.btn-call{padding:6px 10px;font-size:.79rem;}}
 
+/* ── GEO ANSWER-FIRST / KISA ÖZET (TL;DR) BLOCK ── */
+.geo-tldr{background:#fdf8ee;border:1px solid rgba(201,162,39,.35);border-left:4px solid var(--gold);border-radius:var(--radius);padding:20px 24px;margin:28px auto 0;max-width:1168px;box-shadow:var(--shadow);}
+.geo-tldr-badge{display:inline-flex;align-items:center;gap:6px;font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px;}
+.geo-tldr p{font-size:.93rem;color:var(--text2);line-height:1.65;margin-bottom:12px;}
+.geo-tldr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;padding-top:10px;border-top:1px solid rgba(201,162,39,.2);}
+.geo-tldr-item{font-size:.83rem;color:var(--text);line-height:1.45;}
+.geo-tldr-item strong{color:var(--gold-dark);display:block;font-size:.76rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
+@media(max-width:768px){.geo-tldr{padding:16px;margin:20px 16px 0;}.geo-tldr-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.geo-tldr-grid{grid-template-columns:1fr;}}
+
