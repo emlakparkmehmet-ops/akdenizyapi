@@ -421,7 +421,7 @@ async function initDatabase() {
     ['site_title',   'Akdeniz Yapı Dekorasyon'],
     ['site_slogan',  'Yapınıza Değer Katıyoruz'],
     ['phone1',       '0530 936 10 17'],
-    ['phone2',       '0535 876 35 04'],
+    ['phone2',       ''],
     ['phone3',       '0531 977 31 13'],
     ['whatsapp',     '905309361017'],
     ['instagram',    'akdeniz.yapidekorasyon'],
