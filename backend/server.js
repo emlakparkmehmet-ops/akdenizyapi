@@ -442,6 +442,26 @@ app.get('/hizmetler/:slug', async (req, res, next) => {
     html = html.replace(/(<span id="breadcrumbTitle">)[\s\S]*?(<\/span>)/, (m, a, b) => `${a}${safeTitle}${b}`);
     html = html.replace(/(<h1 id="pageHeroTitle">)[\s\S]*?(<\/h1>)/, (m, a, b) => `${a}${isDisCephe ? safeTitle : 'Antalya ' + safeTitle}${b}`);
 
+    const tldrSummary = escapeHtml(
+      service.short_desc ||
+      `${service.title} uygulaması Antalya genelinde Akdeniz Yapı Dekorasyon tarafından TSE onaylı çelik iskele, 10 yıl sözleşmeli garanti ve ücretsiz yerinde keşif ile sunulur.`
+    );
+    const ssrTldrBlock = `
+  <section class="geo-tldr" aria-label="Kısa Özet">
+    <div class="geo-tldr-badge"><i class="fas fa-bolt"></i> Kısa Özet (TL;DR)</div>
+    <p>${tldrSummary}</p>
+    <div class="geo-tldr-grid">
+      <div class="geo-tldr-item"><strong>Hizmet Kategorisi</strong>${escapeHtml(service.category_name || 'Dış Cephe & Yapı')}</div>
+      <div class="geo-tldr-item"><strong>Hizmet Bölgesi</strong>Kepez, Muratpaşa, Konyaaltı, Lara, Döşemealtı, Aksu, Serik, Kemer</div>
+      <div class="geo-tldr-item"><strong>Garanti &amp; Sunum</strong>10 Yıl Sözleşmeli Garanti + Ücretsiz 3D Cephe Tasarımı</div>
+      <div class="geo-tldr-item"><strong>Ücretsiz Keşif Hattı</strong>0530 936 10 17 (Aynı Gün Ölçüm)</div>
+    </div>
+  </section>`;
+    html = html.replace(
+      /(<section\b[^>]*class="[^"]*page-hero[^"]*"[^>]*>[\s\S]*?<\/section>)/,
+      (m) => `${m}${ssrTldrBlock}`
+    );
+
     const shortHtml = service.short_desc
       ? `<p style="font-size:1.05rem;color:var(--text2);margin-bottom:20px;line-height:1.7;">${escapeHtml(service.short_desc)}</p>`
       : '';
