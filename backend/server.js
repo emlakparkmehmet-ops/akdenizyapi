@@ -272,6 +272,8 @@ app.get('/sitemap.xml', async (req, res) => {
       { loc: `${SITE}/referanslar.html`,            priority: '0.8', changefreq: 'monthly' },
       { loc: `${SITE}/kampanyalar.html`,            priority: '0.8', changefreq: 'weekly'  },
       { loc: `${SITE}/isi-yalitimi-antalya.html`,   priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/dis-cephe-boya-sarfiyati.html`, priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/apartman-dis-cephe-dukkana-katilir-mi.html`, priority: '0.8', changefreq: 'monthly' },
       { loc: `${SITE}/kepez-mantolama.html`,        priority: '0.8', changefreq: 'monthly' },
       { loc: `${SITE}/muratpasa-mantolama.html`,    priority: '0.8', changefreq: 'monthly' },
       { loc: `${SITE}/konyaalti-mantolama.html`,    priority: '0.8', changefreq: 'monthly' },

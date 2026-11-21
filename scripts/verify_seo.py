@@ -29,6 +29,8 @@ GEO_TLDR_PAGES = {
     "antalya-sove-kaplama.html",
     "dis-cephe-renkleri.html",
     "isi-yalitimi-antalya.html",
+    "dis-cephe-boya-sarfiyati.html",
+    "apartman-dis-cephe-dukkana-katilir-mi.html",
     "hizmetler.html",
     "kepez-mantolama.html",
     "muratpasa-mantolama.html",
