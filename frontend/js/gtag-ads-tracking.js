@@ -1,19 +1,18 @@
 /**
- * 2026 Google Ads Gelişmiş Dönüşüm İzleme Modülü (Enhanced Conversions)
+ * 2026 Google Ads & GA4 Dönüşüm İzleme Modülü
  * Hedef Alan Adı: https://antalyadiscephe.com/ (Akdeniz Yapı Dekorasyon)
+ * Google Ads Kimliği: AW-18544431674
  *
- * Kurulum: Google Ads hesabınızdan aldığınız AW-XXXXXXXXXX kimliğini
- * aşağıdaki ADS_CONVERSION_ID alanına yazmanız yeterlidir.
- * Telefon (tel:05309361017), WhatsApp (wa.me/905309361017) ve
- * m² Maliyet Hesaplama Aracı tıklamalarını otomatik olarak Google Ads'e bildirir.
+ * Telefon (tel:), WhatsApp (wa.me/), iletişim formu ve m² hesaplama
+ * etkileşimlerini otomatik olarak generate_lead dönüşümü olarak bildirir.
  */
 (function () {
-  const ADS_CONVERSION_ID = window.GOOGLE_ADS_ID || 'AW-XXXXXXXXXX';
+  const ADS_CONVERSION_ID = window.GOOGLE_ADS_ID || 'AW-18544431674';
   const LABELS = {
-    whatsapp_click: 'WHATSAPP_KESIF_LABEL',
-    phone_click: 'TELEFON_ARAMA_LABEL',
-    calculator_lead: 'M2_HESAPLAMA_LABEL',
-    contact_form: 'ILETISIM_FORM_LABEL'
+    whatsapp_click: '',
+    phone_click: '',
+    calculator_lead: '',
+    contact_form: ''
   };
 
   window.dataLayer = window.dataLayer || [];
@@ -21,17 +20,30 @@
   window.gtag = window.gtag || gtag;
 
   function fireAdsConversion(type, valueTL) {
+    const val = Number(valueTL) || 250.0;
     if (typeof window.gtag === 'function' && !ADS_CONVERSION_ID.includes('XXXX')) {
-      window.gtag('event', 'conversion', {
-        send_to: `${ADS_CONVERSION_ID}/${LABELS[type] || ''}`,
-        value: valueTL || 250.0,
-        currency: 'TRY'
+      // GA4 / Google Ads birincil hedefi: generate_lead
+      window.gtag('event', 'generate_lead', {
+        event_category: 'lead',
+        event_label: type,
+        value: val,
+        currency: 'TRY',
+        page_path: window.location.pathname
       });
+
+      const label = LABELS[type];
+      if (label && !label.endsWith('_LABEL')) {
+        window.gtag('event', 'conversion', {
+          send_to: `${ADS_CONVERSION_ID}/${label}`,
+          value: val,
+          currency: 'TRY'
+        });
+      }
     }
     window.dataLayer.push({
       event: `ads_lead_${type}`,
       lead_type: type,
-      lead_value: valueTL || 250.0,
+      lead_value: val,
       currency: 'TRY',
       page_path: window.location.pathname
     });
@@ -46,6 +58,13 @@
       fireAdsConversion('whatsapp_click', 300.0);
     } else if (href.startsWith('tel:')) {
       fireAdsConversion('phone_click', 400.0);
+    }
+  });
+
+  document.addEventListener('submit', function (e) {
+    const form = e.target;
+    if (form && form.matches && form.matches('form')) {
+      fireAdsConversion('contact_form', 500.0);
     }
   });
 
