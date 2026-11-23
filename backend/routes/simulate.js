@@ -129,7 +129,7 @@ function detectImageType(buf) {
 }
 
 function sanitizeText(val, fallback = '', maxLen = 120) {
-  const clean = String(val || '').replace(/[^\p{L}\p{N}\s\-().&,+/:]/gu, '').trim();
+  const clean = String(val || '').replace(/[^\p{L}\p{N}\s\-–—().&,+/:%]/gu, '').trim();
   return (clean || fallback).slice(0, maxLen);
 }
 
