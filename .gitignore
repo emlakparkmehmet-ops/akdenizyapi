@@ -9,6 +9,7 @@ backend/ig_cache.json
 # Uploads (sadece .gitkeep tutuluyor)
 backend/uploads/*
 !backend/uploads/.gitkeep
+backend/storage/
 
 # Ortam değişkenleri
 .env
