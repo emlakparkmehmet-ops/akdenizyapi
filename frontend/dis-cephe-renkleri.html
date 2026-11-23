@@ -84,7 +84,7 @@
         "name": "Antalya güneşinde hangi dış cephe renkleri solmaya karşı daha dayanıklıdır?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Antalya'nın yüksek UV ışınlarında inorganik pigmentli açık krem, kum beji, İztuzu, Alaçatı grisi, vizon ve toprak tonları en yüksek solmazlık direncini gösterir. Uygulamalarımızda %100 saf akrilik ve silikon katkılı UV kalkanlı dış cephe boyaları kullanıyoruz."
+          "text": "Antalya'nın yüksek UV ışınlarında inorganik pigmentli Patara Kumu, Kaleiçi Kremi, Konyaaltı Çakılı, Döşemealtı Vizon ve doğal toprak tonları en yüksek solmazlık direncini gösterir. Uygulamalarımızda %100 saf akrilik ve silikon katkılı UV kalkanlı son kat boyalar kullanıyoruz."
         }
       },
       {
@@ -92,7 +92,7 @@
         "name": "Karteladan seçtiğimiz rengi boyamadan önce kendi binamızda görebilir miyiz?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Evet. Bina fotoğrafınızı WhatsApp hattımıza gönderdiğinizde seçtiğiniz kartela kodlarıyla 3 farklı 3D dijital cephe tasarımını ücretsiz hazırlıyoruz. Ayrıca keşif ekibimiz DYO, Filli Boya, Jotun ve Marshall basılı kartelalarını adresinize getirir."
+          "text": "Evet! Bina fotoğrafınızı WhatsApp hattımıza gönderdiğinizde seçtiğiniz kartela kodlarıyla 3 farklı 3D dijital cephe tasarımını ücretsiz hazırlıyoruz. Ayrıca keşif ekibimiz DYO, Filli Boya, Jotun ve Marshall basılı renk kartelalarını bina yönetiminize getirir."
         }
       },
       {
@@ -100,7 +100,7 @@
         "name": "Apartman dış cephesinde ana renk ile söve rengi nasıl kombinlenmelidir?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Koyu veya orta tonlu cephelerde (Yeni Göreme, Vizon, Alüvyon, Balat) kırık beyaz veya açık krem söveler pencereleri öne çıkarır. Açık krem ve bej cephelerde ise antrasit veya koyu vizon söve ve kat silmeleri modern bir kontrast sağlar."
+          "text": "Koyu veya orta tonlu cephelerde (Kızılkule Kiremit, Döşemealtı Vizon, Tahtalı Kayası, Kaş Esintisi) kırık beyaz veya açık krem söveler pencereleri ferahlatır ve öne çıkarır. Açık krem ve bej cephelerde ise antrasit veya koyu vizon kat silmeleri modern mimari kontrast oluşturur."
         }
       }
     ]
@@ -255,7 +255,8 @@
       display: flex;
       align-items: center;
     }
-    .sim-canvas-wrap svg {
+    .sim-canvas-wrap svg,
+    .sim-canvas-wrap canvas {
       width: 100%;
       height: auto;
       display: block;
@@ -575,7 +576,8 @@
       .kartela-hero-boxes .k-hbox:last-child { display: none; }
       .sim-top-controls { padding: 7px 10px; }
       .bina-toggle { padding: 5px 10px; font-size: .76rem; }
-      .sim-canvas-wrap svg { max-height: 168px; }
+      .sim-canvas-wrap svg,
+      .sim-canvas-wrap canvas { max-height: 215px; object-fit: cover; }
       .sim-controls-pane { padding: 10px 12px; gap: 10px; }
       .sim-cat-scroll { margin-bottom: 8px; }
       .quick-palette-grid {
@@ -713,82 +715,9 @@
           </div>
 
           <div class="sim-canvas-wrap">
-            <!-- 5 Katlı Söveli Apartman SVG -->
-            <svg id="svgAptFull" viewBox="0 0 520 250" role="img" aria-label="5 katlı söveli apartman dış cephe renk önizlemesi">
-              <defs>
-                <linearGradient id="skyFull" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#7eb8e2"/>
-                  <stop offset="70%" stop-color="#dbeaf6"/>
-                  <stop offset="100%" stop-color="#f5eadc"/>
-                </linearGradient>
-              </defs>
-              <rect width="520" height="218" fill="url(#skyFull)"/>
-              <ellipse cx="95" cy="38" rx="54" ry="13" fill="#fff" opacity="0.45"/>
-              <ellipse cx="415" cy="30" rx="64" ry="14" fill="#fff" opacity="0.38"/>
-              <rect y="216" width="520" height="34" fill="#63686e"/>
-              <rect y="207" width="520" height="10" fill="#4c6e2f"/>
-              <!-- Çevre Binalar -->
-              <rect x="24" y="72" width="82" height="136" fill="#c9d1d8" opacity="0.65"/>
-              <rect x="414" y="62" width="82" height="146" fill="#c9d1d8" opacity="0.65"/>
-              <!-- Ana Apartman Gövdesi -->
-              <rect id="fullAptWall" class="wall-transition" x="130" y="20" width="260" height="190" fill="#8A452B"/>
-              <rect x="330" y="20" width="60" height="190" fill="#000" opacity="0.12"/>
-              <!-- Dinamik Söveler & Kat Silmeleri -->
-              <g id="fullAptTrims" fill="#F5F3EE">
-                <rect x="122" y="12" width="276" height="9" rx="2"/>
-                <rect x="128" y="66" width="264" height="3.5"/>
-                <rect x="128" y="114" width="264" height="3.5"/>
-                <rect x="128" y="162" width="264" height="3.5"/>
-                <rect x="130" y="25" width="9" height="36"/><rect x="130" y="73" width="9" height="36"/><rect x="130" y="121" width="9" height="36"/>
-                <rect x="381" y="25" width="9" height="36"/><rect x="381" y="73" width="9" height="36"/><rect x="381" y="121" width="9" height="36"/>
-                <rect x="156" y="30" width="44" height="28"/><rect x="232" y="28" width="56" height="32"/><rect x="320" y="30" width="44" height="28"/>
-                <rect x="156" y="78" width="44" height="28"/><rect x="232" y="76" width="56" height="32"/><rect x="320" y="78" width="44" height="28"/>
-                <rect x="156" y="126" width="44" height="28"/><rect x="232" y="124" width="56" height="32"/><rect x="320" y="126" width="44" height="28"/>
-                <rect x="156" y="172" width="44" height="24"/><rect x="320" y="172" width="44" height="24"/>
-              </g>
-              <!-- Camlar -->
-              <g fill="#2b3a4a">
-                <rect x="160" y="34" width="36" height="20"/><rect x="236" y="32" width="48" height="24"/><rect x="324" y="34" width="36" height="20"/>
-                <rect x="160" y="82" width="36" height="20"/><rect x="236" y="80" width="48" height="24"/><rect x="324" y="82" width="36" height="20"/>
-                <rect x="160" y="130" width="36" height="20"/><rect x="236" y="128" width="48" height="24"/><rect x="324" y="130" width="36" height="20"/>
-                <rect x="160" y="176" width="36" height="16"/><rect x="324" y="176" width="36" height="16"/>
-              </g>
-              <!-- Balkon Korkulukları -->
-              <g fill="#383d45" opacity="0.9">
-                <rect x="226" y="54" width="68" height="8" rx="1"/>
-                <rect x="226" y="102" width="68" height="8" rx="1"/>
-                <rect x="226" y="150" width="68" height="8" rx="1"/>
-              </g>
-              <!-- Bina Girişi -->
-              <rect x="238" y="170" width="44" height="40" fill="#262a30"/>
-              <rect x="244" y="175" width="32" height="35" fill="#c9a227" opacity="0.42"/>
-              <circle cx="106" cy="192" r="18" fill="#3b6829"/><rect x="103" y="202" width="5" height="9" fill="#5d4037"/>
-              <circle cx="414" cy="192" r="18" fill="#3b6829"/><rect x="411" y="202" width="5" height="9" fill="#5d4037"/>
-            </svg>
-
-            <!-- Müstakil Villa SVG -->
-            <svg id="svgVillaFull" viewBox="0 0 520 250" style="display:none;" role="img" aria-label="Müstakil villa dış cephe renk önizlemesi">
-              <rect width="520" height="196" fill="url(#skyFull)"/>
-              <rect y="192" width="520" height="58" fill="#4c6e2f"/>
-              <polygon points="195,194 338,194 400,250 135,250" fill="#959390"/>
-              <line x1="199" y1="194" x2="144" y2="250" stroke="#ecebe8" stroke-width="2.5"/>
-              <line x1="334" y1="194" x2="390" y2="250" stroke="#ecebe8" stroke-width="2.5"/>
-              <rect x="352" y="42" width="34" height="62" fill="#52565e"/>
-              <rect x="348" y="38" width="42" height="5" fill="#32363d"/>
-              <!-- Boyanan Villa Duvarı -->
-              <polygon id="fullVillaWall" class="wall-transition" points="54,118 216,36 378,118 378,196 54,196" fill="#8A452B"/>
-              <polygon points="216,36 378,118 378,196 310,196 310,95 216,44" fill="#000" opacity="0.1"/>
-              <polyline points="44,124 216,32 388,124" fill="none" stroke="#2d3138" stroke-width="10" stroke-linecap="round"/>
-              <rect x="288" y="98" width="184" height="98" fill="#4b4f57"/>
-              <rect x="286" y="94" width="188" height="5" fill="#2d3138"/>
-              <rect x="354" y="122" width="98" height="74" fill="#383c44" stroke="#2b2e35" stroke-width="1.5"/>
-              <rect x="310" y="128" width="28" height="68" fill="#2b2e35"/>
-              <rect id="fullVillaTrim" x="98" y="114" width="76" height="48" fill="#F5F3EE"/>
-              <rect x="104" y="120" width="64" height="36" fill="#262b33"/>
-              <rect x="108" y="124" width="26" height="28" fill="#f3c65f" opacity="0.78"/>
-            </svg>
-
-            <div class="sim-live-badge" id="liveBadge">8554 • YENİ GÖREME</div>
+            <!-- Fotogerçekçi Canlı Apartman & Villa Cephe Simülatörü -->
+            <canvas id="simCanvas" width="1040" height="580" role="img" aria-label="Gerçekçi 5 katlı söveli apartman ve müstakil villa dış cephe renk simülatörü"></canvas>
+            <div class="sim-live-badge" id="liveBadge">AKD-301 • KIZILKULE KİREMİT</div>
           </div>
         </div>
 
@@ -813,7 +742,7 @@
             <div class="sim-sel-meta">
               <div class="sim-sel-box" id="simColorSwatch" style="background:#8A452B;"></div>
               <div style="min-width:0;">
-                <div class="sim-sel-code" id="simColorTitle">8554 - YENİ GÖREME</div>
+                <div class="sim-sel-code" id="simColorTitle">AKD-301 - KIZILKULE KİREMİT</div>
                 <div class="sim-sel-note" id="simColorSub">Kırık Beyaz Söve • Apartman</div>
               </div>
             </div>
@@ -841,7 +770,7 @@
         </div>
         <div class="search-bar">
           <i class="fas fa-search"></i>
-          <input type="text" id="chartSearch" placeholder="Renk kodu veya adı ara (ör: 6780, Alaçatı)..." aria-label="Renk kodu veya adı ara" />
+          <input type="text" id="chartSearch" placeholder="Renk kodu veya adı ara (ör: AKD-104, Patara, Falez)..." aria-label="Renk kodu veya adı ara" />
         </div>
       </div>
 
@@ -947,7 +876,7 @@
             <i class="fas fa-chevron-down"></i>
           </div>
           <div class="faq-answer">
-            <p>Antalya'nın yüksek UV ışınlarında inorganik pigmentli açık krem, kum beji, İztuzu, Alaçatı grisi, vizon ve doğal toprak tonları en yüksek solmazlık direncini gösterir. Uygulamalarımızda %100 saf akrilik ve silikon katkılı UV kalkanlı son kat boyalar kullanıyoruz.</p>
+            <p>Antalya'nın yüksek UV ışınlarında inorganik pigmentli Patara Kumu, Kaleiçi Kremi, Konyaaltı Çakılı, Döşemealtı Vizon ve doğal toprak tonları en yüksek solmazlık direncini gösterir. Uygulamalarımızda %100 saf akrilik ve silikon katkılı UV kalkanlı son kat boyalar kullanıyoruz.</p>
           </div>
         </div>
 
@@ -967,7 +896,7 @@
             <i class="fas fa-chevron-down"></i>
           </div>
           <div class="faq-answer">
-            <p>Koyu veya orta tonlu cephelerde (Yeni Göreme, Vizon, Alüvyon, Balat) kırık beyaz veya açık krem söveler pencereleri ferahlatır ve öne çıkarır. Açık krem ve bej cephelerde ise antrasit veya koyu vizon kat silmeleri modern mimari kontrast oluşturur.</p>
+            <p>Koyu veya orta tonlu cephelerde (Kızılkule Kiremit, Döşemealtı Vizon, Tahtalı Kayası, Kaş Esintisi) kırık beyaz veya açık krem söveler pencereleri ferahlatır ve öne çıkarır. Açık krem ve bej cephelerde ise antrasit veya koyu vizon kat silmeleri modern mimari kontrast oluşturur.</p>
           </div>
         </div>
 
@@ -1064,44 +993,157 @@
   <script>
     (function () {
       const COLORS = [
-        { code: '0164', name: 'İZTUZU', hex: '#EFECE4', cat: 'krem', light: true },
-        { code: '1066', name: 'KİRLİ BEYAZ', hex: '#EFEAD8', cat: 'krem', light: true },
-        { code: '0142', name: 'KARTEPE', hex: '#F4F4EA', cat: 'krem', light: true },
-        { code: '1082', name: 'AÇIK KREM', hex: '#F5EED7', cat: 'krem', light: true },
-        { code: '7111', name: 'KREM', hex: '#EBD8A5', cat: 'krem', light: true },
-        { code: '2058', name: 'KOYU KREM', hex: '#DBCDA0', cat: 'krem', light: true },
-        { code: '4060', name: 'AÇIK SOMON', hex: '#FAD6BA', cat: 'krem', light: true },
-        { code: '1221', name: 'ÇÖL BEJİ', hex: '#BCA179', cat: 'krem', light: false },
-        { code: '5124', name: 'SALDA', hex: '#DFE1DB', cat: 'gri', light: true },
-        { code: '6281', name: 'AYLİZ', hex: '#E3E8EE', cat: 'gri', light: true },
-        { code: '7202', name: 'ALAÇATI', hex: '#C6C2BA', cat: 'gri', light: true },
-        { code: '7601', name: 'HARELİ', hex: '#9E9B95', cat: 'gri', light: false },
-        { code: '7602', name: 'ALÜVYON', hex: '#838689', cat: 'gri', light: false },
-        { code: '7810', name: 'ANTRASİT', hex: '#484C52', cat: 'gri', light: false },
-        { code: '8554', name: 'YENİ GÖREME', hex: '#8A452B', cat: 'toprak', light: false },
-        { code: '4853', name: 'BAROK KIRMIZI', hex: '#6B1D1D', cat: 'toprak', light: false },
-        { code: '4228', name: 'PASTEL AŞI', hex: '#A46257', cat: 'toprak', light: false },
-        { code: '4447', name: 'PARİS PEMBESİ', hex: '#E29E90', cat: 'toprak', light: true },
-        { code: '4165', name: 'GÜZ PEMBESİ', hex: '#F8DFD8', cat: 'toprak', light: true },
-        { code: '4731', name: 'ÇÖMLEK', hex: '#AF8B79', cat: 'toprak', light: false },
-        { code: '5579', name: 'VİZON', hex: '#988F82', cat: 'toprak', light: false },
-        { code: '5432', name: 'IHLARA', hex: '#7B5E40', cat: 'toprak', light: false },
-        { code: '5110', name: 'ANDIZ', hex: '#5D3A28', cat: 'toprak', light: false },
-        { code: '5380', name: 'AĞAÇ KABUĞU', hex: '#463A32', cat: 'toprak', light: false },
-        { code: '6780', name: 'BALAT', hex: '#CBE0E8', cat: 'akdeniz', light: true },
-        { code: '6251', name: 'DERİNSU', hex: '#B5C6D4', cat: 'akdeniz', light: true },
-        { code: '6237', name: 'KAPTANI DERYA', hex: '#7D8B9B', cat: 'akdeniz', light: false },
-        { code: '5584', name: 'ILGIM', hex: '#A59290', cat: 'akdeniz', light: false },
-        { code: '3412', name: 'ZEYTİN DALI', hex: '#AAB9A0', cat: 'akdeniz', light: true },
-        { code: '3280', name: 'ADAÇAYI', hex: '#8FA287', cat: 'akdeniz', light: false }
+        { code: 'AKD-101', name: 'PATARA KUMU', hex: '#EFECE4', cat: 'krem', light: true },
+        { code: 'AKD-102', name: 'ASPENDOS FİLDİŞİ', hex: '#EFEAD8', cat: 'krem', light: true },
+        { code: 'AKD-103', name: 'TOROS KARI', hex: '#F4F4EA', cat: 'krem', light: true },
+        { code: 'AKD-104', name: 'KALEİÇİ KREMİ', hex: '#F5EED7', cat: 'krem', light: true },
+        { code: 'AKD-105', name: 'LARA GÜNEŞİ', hex: '#EBD8A5', cat: 'krem', light: true },
+        { code: 'AKD-106', name: 'PERGE TRAVERTENİ', hex: '#DBCDA0', cat: 'krem', light: true },
+        { code: 'AKD-107', name: 'ÇIRALI ŞAFAĞI', hex: '#FAD6BA', cat: 'krem', light: true },
+        { code: 'AKD-108', name: 'SİDE KUMTAŞI', hex: '#BCA179', cat: 'krem', light: false },
+        { code: 'AKD-201', name: 'DÜDEN SİSİ', hex: '#DFE1DB', cat: 'gri', light: true },
+        { code: 'AKD-202', name: 'BEYDAĞI BULUTU', hex: '#E3E8EE', cat: 'gri', light: true },
+        { code: 'AKD-203', name: 'KONYAALTI ÇAKILI', hex: '#C6C2BA', cat: 'gri', light: true },
+        { code: 'AKD-204', name: 'FALEZ GRİSİ', hex: '#9E9B95', cat: 'gri', light: false },
+        { code: 'AKD-205', name: 'TAHTALI KAYASI', hex: '#838689', cat: 'gri', light: false },
+        { code: 'AKD-206', name: 'KURŞUNLU ANTRASİT', hex: '#484C52', cat: 'gri', light: false },
+        { code: 'AKD-301', name: 'KIZILKULE KİREMİT', hex: '#8A452B', cat: 'toprak', light: false },
+        { code: 'AKD-302', name: 'LİKYA BORDO', hex: '#6B1D1D', cat: 'toprak', light: false },
+        { code: 'AKD-303', name: 'TERMESSOS TOPRAĞI', hex: '#A46257', cat: 'toprak', light: false },
+        { code: 'AKD-304', name: 'BEGONYA GÜLÜ', hex: '#E29E90', cat: 'toprak', light: true },
+        { code: 'AKD-305', name: 'PORTAKAL ÇİÇEĞİ', hex: '#F8DFD8', cat: 'toprak', light: true },
+        { code: 'AKD-306', name: 'ANTİK KİL', hex: '#AF8B79', cat: 'toprak', light: false },
+        { code: 'AKD-307', name: 'DÖŞEMEALTI VİZON', hex: '#988F82', cat: 'toprak', light: false },
+        { code: 'AKD-308', name: 'KÖPRÜLÜ KANYON', hex: '#7B5E40', cat: 'toprak', light: false },
+        { code: 'AKD-309', name: 'SEDİR KAHVE', hex: '#5D3A28', cat: 'toprak', light: false },
+        { code: 'AKD-310', name: 'KEÇİBOYNUZU KOYU', hex: '#463A32', cat: 'toprak', light: false },
+        { code: 'AKD-401', name: 'KAŞ ESİNTİSİ', hex: '#CBE0E8', cat: 'akdeniz', light: true },
+        { code: 'AKD-402', name: 'KEKOVA MAVİSİ', hex: '#B5C6D4', cat: 'akdeniz', light: true },
+        { code: 'AKD-403', name: 'ADRASAN KOYU', hex: '#7D8B9B', cat: 'akdeniz', light: false },
+        { code: 'AKD-404', name: 'PHASELİS LİLA', hex: '#A59290', cat: 'akdeniz', light: false },
+        { code: 'AKD-405', name: 'OLYMPOS ZEYTİNİ', hex: '#AAB9A0', cat: 'akdeniz', light: true },
+        { code: 'AKD-406', name: 'ÇAMDAĞI YEŞİLİ', hex: '#8FA287', cat: 'akdeniz', light: false }
       ];
 
       let simCat = 'all';
       let tableCat = 'all';
       let searchQ = '';
-      let selected = COLORS[14]; // 8554 Yeni Göreme
+      let selected = COLORS[14]; // AKD-301 Kızılkule Kiremit
+      let trimHex = '#F5F3EE';
       let trimName = 'Kırık Beyaz Söve';
       let buildingType = 'Apartman';
+
+      const simCanvas = document.getElementById('simCanvas');
+      const simCtx = simCanvas.getContext('2d', { willReadFrequently: true });
+      const SIM_W = 1040, SIM_H = 580;
+
+      const SCENES = {
+        Apartman: {
+          baseSrc: '/images/sim-apartman-base.webp?v=20261123',
+          wallSrc: '/images/sim-apartman-wall-mask.png?v=20261123',
+          trimSrc: '/images/sim-apartman-trim-mask.png?v=20261123',
+          loaded: false, baseData: null, wallAlpha: null, trimAlpha: null
+        },
+        Villa: {
+          baseSrc: '/images/sim-villa-base.webp?v=20261123',
+          wallSrc: '/images/sim-villa-wall-mask.png?v=20261123',
+          trimSrc: '/images/sim-villa-trim-mask.png?v=20261123',
+          loaded: false, baseData: null, wallAlpha: null, trimAlpha: null
+        }
+      };
+
+      function hexToRgbArr(hex) {
+        const h = hex.replace('#', '');
+        return [
+          parseInt(h.slice(0, 2), 16) / 255,
+          parseInt(h.slice(2, 4), 16) / 255,
+          parseInt(h.slice(4, 6), 16) / 255
+        ];
+      }
+
+      function loadImg(src) {
+        return new Promise((resolve, reject) => {
+          const im = new Image();
+          im.onload = () => resolve(im);
+          im.onerror = reject;
+          im.src = src;
+        });
+      }
+
+      function extractPixels(img) {
+        const oc = document.createElement('canvas');
+        oc.width = SIM_W; oc.height = SIM_H;
+        const ox = oc.getContext('2d', { willReadFrequently: true });
+        ox.drawImage(img, 0, 0, SIM_W, SIM_H);
+        return ox.getImageData(0, 0, SIM_W, SIM_H).data;
+      }
+
+      function ensureScene(key) {
+        const s = SCENES[key];
+        if (s.loaded || s.loading) return;
+        s.loading = true;
+        Promise.all([loadImg(s.baseSrc), loadImg(s.wallSrc), loadImg(s.trimSrc)]).then(([bImg, wImg, tImg]) => {
+          s.baseData = extractPixels(bImg);
+          const wPx = extractPixels(wImg);
+          const tPx = extractPixels(tImg);
+          const n = SIM_W * SIM_H;
+          s.wallAlpha = new Uint8Array(n);
+          s.trimAlpha = new Uint8Array(n);
+          for (let i = 0; i < n; i++) {
+            s.wallAlpha[i] = wPx[i * 4 + 3];
+            s.trimAlpha[i] = tPx[i * 4 + 3];
+          }
+          s.loaded = true;
+          if (buildingType === key) renderSim();
+        }).catch(() => { s.loading = false; });
+      }
+
+      function renderSim() {
+        const s = SCENES[buildingType];
+        if (!s.loaded) { ensureScene(buildingType); return; }
+        const [wr, wg, wb] = hexToRgbArr(selected.hex);
+        const [tr, tg, tb] = hexToRgbArr(trimHex);
+        const src = s.baseData;
+        const wa = s.wallAlpha;
+        const ta = s.trimAlpha;
+        const outImg = simCtx.createImageData(SIM_W, SIM_H);
+        const dst = outImg.data;
+        const n = SIM_W * SIM_H;
+
+        for (let i = 0; i < n; i++) {
+          const p = i * 4;
+          let r = src[p], g = src[p + 1], b = src[p + 2];
+          const wm = wa[i];
+          if (wm > 0) {
+            const m = wm / 255;
+            const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 234.6;
+            const shade = lum > 1.08 ? 1.08 : lum;
+            const pr = Math.min(255, wr * 255 * shade);
+            const pg = Math.min(255, wg * 255 * shade);
+            const pb = Math.min(255, wb * 255 * shade);
+            r = r * (1 - m) + pr * m;
+            g = g * (1 - m) + pg * m;
+            b = b * (1 - m) + pb * m;
+          }
+          const tm = ta[i];
+          if (tm > 0) {
+            const m = tm / 255;
+            const lum = (0.299 * src[p] + 0.587 * src[p + 1] + 0.114 * src[p + 2]) / 234.6;
+            const shade = lum > 1.08 ? 1.08 : lum;
+            const pr = Math.min(255, tr * 255 * shade);
+            const pg = Math.min(255, tg * 255 * shade);
+            const pb = Math.min(255, tb * 255 * shade);
+            r = r * (1 - m) + pr * m;
+            g = g * (1 - m) + pg * m;
+            b = b * (1 - m) + pb * m;
+          }
+          dst[p] = r;
+          dst[p + 1] = g;
+          dst[p + 2] = b;
+          dst[p + 3] = 255;
+        }
+        simCtx.putImageData(outImg, 0, 0);
+      }
 
       const quickGrid = document.getElementById('quickGrid');
       const chartGrid = document.getElementById('chartGrid');
@@ -1134,7 +1176,7 @@
       function renderChart() {
         const list = COLORS.filter(c => {
           const okCat = tableCat === 'all' || c.cat === tableCat;
-          const okQ = !searchQ || c.name.toLowerCase().includes(searchQ) || c.code.includes(searchQ);
+          const okQ = !searchQ || c.name.toLowerCase().includes(searchQ) || c.code.toLowerCase().includes(searchQ);
           return okCat && okQ;
         });
         chartGrid.innerHTML = '';
@@ -1159,8 +1201,7 @@
 
       function applyColor(c) {
         selected = c;
-        document.getElementById('fullAptWall').setAttribute('fill', c.hex);
-        document.getElementById('fullVillaWall').setAttribute('fill', c.hex);
+        renderSim();
         document.getElementById('simColorSwatch').style.background = c.hex;
         document.getElementById('simColorTitle').textContent = `${c.code} - ${c.name}`;
         document.getElementById('liveBadge').textContent = `${c.code} • ${c.name}`;
@@ -1193,38 +1234,36 @@
       document.getElementById('soveBtns').addEventListener('click', e => {
         const b = e.target.closest('.sove-circle');
         if (!b) return;
-        const hex = b.dataset.trim;
+        trimHex = b.dataset.trim || '#F5F3EE';
         trimName = b.dataset.trimName || 'Kırık Beyaz Söve';
-        document.getElementById('fullAptTrims').setAttribute('fill', hex);
-        document.getElementById('fullVillaTrim').setAttribute('fill', hex);
+        renderSim();
         document.querySelectorAll('.sove-circle').forEach(x => x.classList.toggle('active', x === b));
         updateWaLinks();
       });
 
       const btnApt = document.getElementById('btnShowApt');
       const btnVilla = document.getElementById('btnShowVilla');
-      const svgApt = document.getElementById('svgAptFull');
-      const svgVilla = document.getElementById('svgVillaFull');
 
       btnApt.onclick = () => {
         buildingType = 'Apartman';
-        svgApt.style.display = 'block';
-        svgVilla.style.display = 'none';
         btnApt.classList.add('active');
         btnVilla.classList.remove('active');
+        renderSim();
         updateWaLinks();
       };
 
       btnVilla.onclick = () => {
         buildingType = 'Villa';
-        svgVilla.style.display = 'block';
-        svgApt.style.display = 'none';
         btnVilla.classList.add('active');
         btnApt.classList.remove('active');
+        ensureScene('Villa');
+        renderSim();
         updateWaLinks();
       };
 
       window.addEventListener('resize', renderQuick);
+      ensureScene('Apartman');
+      setTimeout(() => ensureScene('Villa'), 600);
       applyColor(selected);
     })();
   </script>
