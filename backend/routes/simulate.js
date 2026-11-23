@@ -11,6 +11,7 @@ const { sendContactNotification } = require('../utils/mailer');
 
 // ── Yapılandırma ────────────────────────────────────────────────────────────
 const GEMINI_VISION_MODEL = (process.env.GEMINI_VISION_MODEL || 'gemini-2.5-flash').trim();
+const FACADE_AI_URL = (process.env.FACADE_AI_URL || 'http://127.0.0.1:5055').trim();
 const STORAGE_DIR = path.resolve(__dirname, '../storage/simulator');
 fs.mkdirSync(STORAGE_DIR, { recursive: true });
 
@@ -271,24 +272,63 @@ async function runGeminiFacadeAnalysis(apiKey, base64Img, mimeType) {
   };
 }
 
+// ── Yerel VPS SegFormer-B2 + OpenCV Duvar Maskesi Servisi (0 TL) ────────────
+async function runLocalSegformerMask(imgBuffer) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 28000);
+  try {
+    const res = await fetch(`${FACADE_AI_URL}/mask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/octet-stream' },
+      body: imgBuffer,
+      signal: controller.signal,
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) {
+      return { ok: false, isBuilding: data.isBuilding, error: data.error || `HTTP ${res.status}` };
+    }
+    return {
+      ok: true,
+      wallMaskDataUrl: data.wallMaskDataUrl,
+      width: data.width,
+      height: data.height,
+      facadePct: data.facadePct,
+      wallPct: data.wallPct,
+      processingMs: data.processingMs,
+    };
+  } catch (err) {
+    console.error('[Simulate/SegFormer] Yerel servis erişim hatası:', err.message);
+    return { ok: false, error: err.message };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 // ── GET /api/simulate/status ────────────────────────────────────────────────
 router.get('/status', async (req, res) => {
   let savedCount = 0;
+  let segformerOnline = false;
   try {
     const row = await db.getAsync('SELECT COUNT(*) as cnt FROM simulator_uploads');
     savedCount = Number(row?.cnt || 0);
   } catch (_) {}
+  try {
+    const hRes = await fetch(`${FACADE_AI_URL}/health`, { signal: AbortSignal.timeout(2000) });
+    const hJson = await hRes.json().catch(() => ({}));
+    segformerOnline = Boolean(hRes.ok && hJson.ok);
+  } catch (_) {}
 
   res.json({
     ok: true,
-    mode: 'ai-facade-analysis-and-3d-request',
+    mode: 'local-segformer-paint-and-gemini-analysis',
+    segformerOnline,
     geminiConnected: Boolean(getGeminiKey()),
     model: GEMINI_VISION_MODEL,
     originalStorage: { enabled: true, savedCount },
   });
 });
 
-// ── POST /api/simulate/analyze (Orijinal Fotoğraf Kayıt + Ücretsiz AI Rapor) ─
+// ── POST /api/simulate/analyze (Yerel SegFormer Maske + Ücretsiz AI Rapor) ──
 router.post('/analyze', analyzeLimiter, (req, res) => {
   upload.single('photo')(req, res, async (uploadErr) => {
     if (uploadErr) {
@@ -302,7 +342,7 @@ router.post('/analyze', analyzeLimiter, (req, res) => {
     const ip = getClientIp(req);
     const isSample = String(req.body.isSample || '') === '1';
 
-    // Orijinal fotoğrafı gerçek müşteri yüklemelerinde sunucu diskine + SQLite'a kaydet
+    // 1) Orijinal fotoğrafı sunucu diskine + SQLite'a kaydet
     let uploadId = null;
     let savedOrigFile = null;
     if (!isSample) {
@@ -313,8 +353,8 @@ router.post('/analyze', analyzeLimiter, (req, res) => {
           [
             sanitizeText(req.file.originalname, 'bina.' + imgInfo.ext, 120),
             savedOrigFile,
-            'ai-analiz',
-            'gemini-2.5-flash',
+            'segformer-canli',
+            'segformer-b2+gemini',
             ip.slice(0, 64),
             String(req.headers['user-agent'] || '').slice(0, 220),
           ]
@@ -326,77 +366,61 @@ router.post('/analyze', analyzeLimiter, (req, res) => {
     }
 
     const apiKey = getGeminiKey();
-    if (!apiKey) {
-      return res.json({
-        ok: true,
-        uploadId,
-        savedOriginal: Boolean(savedOrigFile),
-        aiUsed: false,
-        analysis: {
-          isBuilding: true,
-          buildingType: 'Antalya Konut / Apartman Cephesi',
-          estimatedFloors: 4,
-          currentColor: 'Standart Cephe',
-          currentCondition: 'Fotoğrafınız güvenle alındı. Uzman ekibimiz seçtiğiniz AKD renkleriyle ücretsiz 3D cephe tasarımınızı hazırlayacaktır.',
-          hasSove: false,
-          soveAssessment: 'Pencere sövesi ve kat silmesi uygulamasıyla cephenizde modern bir görünüm elde edilebilir.',
-          recommendedService: 'Dış Cephe Mantolama / Silikonlu Cephe Boya',
-          estimatedAreaRange: 'Ücretsiz lazer metraj keşfi ile belirlenir',
-          uvNote: 'Antalya ikliminde açık krem, taş grisi ve doğal vizon tonları yüksek güneş yansıtma sağlar.',
-          recommendations: normalizeRecommendations([]),
-        },
-      });
-    }
+    const base64Img = req.file.buffer.toString('base64');
 
-    try {
-      const base64Img = req.file.buffer.toString('base64');
-      const analysis = await runGeminiFacadeAnalysis(apiKey, base64Img, imgInfo.mime);
+    // 2) Yerel SegFormer-B2 maskeleme + Gemini 2.5 Flash cephe analizini PARALEL çalıştır!
+    const [segResult, geminiResult] = await Promise.all([
+      runLocalSegformerMask(req.file.buffer),
+      apiKey
+        ? runGeminiFacadeAnalysis(apiKey, base64Img, imgInfo.mime).catch((e) => {
+            console.error('[Simulate/Analyze] Gemini analiz hatası:', e.message);
+            return null;
+          })
+        : Promise.resolve(null),
+    ]);
 
-      if (!analysis.isBuilding) {
-        if (uploadId) {
-          await db.runAsync('UPDATE simulator_uploads SET pipeline = ? WHERE id = ?', ['rejected-non-building', uploadId]).catch(() => {});
-        }
-        return res.status(422).json({
-          error: 'Yüklenen fotoğrafta bina dış cephesi tespit edilemedi. Lütfen apartman veya villanızın dış cephe fotoğrafını yükleyin.',
-        });
-      }
-
+    if (geminiResult && geminiResult.isBuilding === false) {
       if (uploadId) {
-        await db.runAsync(
-          'UPDATE simulator_uploads SET analysis_json = ? WHERE id = ?',
-          [JSON.stringify(analysis).slice(0, 6000), uploadId]
-        ).catch(() => {});
+        await db.runAsync('UPDATE simulator_uploads SET pipeline = ? WHERE id = ?', ['rejected-non-building', uploadId]).catch(() => {});
       }
-
-      return res.json({
-        ok: true,
-        uploadId,
-        savedOriginal: Boolean(savedOrigFile),
-        aiUsed: true,
-        analysis,
-      });
-    } catch (err) {
-      console.error('[Simulate/Analyze] Gemini analiz hatası:', err.message);
-      return res.json({
-        ok: true,
-        uploadId,
-        savedOriginal: Boolean(savedOrigFile),
-        aiUsed: false,
-        analysis: {
-          isBuilding: true,
-          buildingType: 'Antalya Konut / Apartman Cephesi',
-          estimatedFloors: 4,
-          currentColor: 'Mevcut Dış Cephe',
-          currentCondition: 'Fotoğrafınız orijinal haliyle kaydedildi. Aşağıdan 3D tasarım için beğendiğiniz renkleri seçip WhatsApp numaranızı bırakabilirsiniz.',
-          hasSove: false,
-          soveAssessment: 'Keşif sırasında pencere sövesi ve kat silmesi alternatifleri de 3D tasarıma eklenebilir.',
-          recommendedService: 'İskeleli Sıva Tamiratı + Silikonlu Boya / Mantolama',
-          estimatedAreaRange: 'Ücretsiz yerinde keşif ile netleşir',
-          uvNote: 'Antalya güneşine dayanıklı tam silikonlu ve UV kalkanlı boya sistemleri önerilir.',
-          recommendations: normalizeRecommendations([]),
-        },
+      return res.status(422).json({
+        error: 'Yüklenen fotoğrafta bina dış cephesi tespit edilemedi. Lütfen apartman veya villanızın dış cephe fotoğrafını yükleyin.',
       });
     }
+
+    const analysis = geminiResult || {
+      isBuilding: true,
+      buildingType: 'Antalya Konut / Apartman Cephesi',
+      estimatedFloors: 4,
+      currentColor: 'Mevcut Dış Cephe',
+      currentCondition: 'Fotoğrafınız orijinal haliyle kaydedildi ve yerel yapay zeka ile boyamaya hazırlandı.',
+      hasSove: false,
+      soveAssessment: 'Keşif sırasında pencere sövesi ve kat silmesi alternatifleri de 3D tasarıma eklenebilir.',
+      recommendedService: 'İskeleli Sıva Tamiratı + UV Silikonlu Boya / Mantolama',
+      estimatedAreaRange: 'Ücretsiz yerinde keşif ile netleşir',
+      uvNote: 'Antalya güneşine dayanıklı tam silikonlu ve UV kalkanlı boya sistemleri önerilir.',
+      recommendations: normalizeRecommendations([]),
+    };
+
+    if (uploadId) {
+      await db.runAsync(
+        'UPDATE simulator_uploads SET analysis_json = ? WHERE id = ?',
+        [JSON.stringify(analysis).slice(0, 6000), uploadId]
+      ).catch(() => {});
+    }
+
+    return res.json({
+      ok: true,
+      uploadId,
+      savedOriginal: Boolean(savedOrigFile),
+      aiUsed: Boolean(geminiResult),
+      paintReady: Boolean(segResult.ok && segResult.wallMaskDataUrl),
+      wallMaskDataUrl: segResult.ok ? segResult.wallMaskDataUrl : null,
+      maskMeta: segResult.ok
+        ? { facadePct: segResult.facadePct, wallPct: segResult.wallPct, processingMs: segResult.processingMs }
+        : null,
+      analysis,
+    });
   });
 });
 

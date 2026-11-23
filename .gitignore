@@ -10,6 +10,7 @@ backend/ig_cache.json
 backend/uploads/*
 !backend/uploads/.gitkeep
 backend/storage/
+backend/facade_ai/.venv/
 
 # Ortam değişkenleri
 .env
