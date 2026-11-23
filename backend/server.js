@@ -74,13 +74,13 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc    : ["'self'"],
-      scriptSrc     : ["'self'", "'unsafe-inline'", 'https://www.googletagmanager.com'],
+      scriptSrc     : ["'self'", "'unsafe-inline'", 'https://www.googletagmanager.com', 'https://googleads.g.doubleclick.net', 'https://www.googleadservices.com'],
       scriptSrcAttr : ["'unsafe-inline'"],             // onclick, onsubmit vb. inline event handler'lar için
       styleSrc      : ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com', 'https://cdnjs.cloudflare.com'],
       fontSrc       : ["'self'", 'https://fonts.gstatic.com', 'https://cdnjs.cloudflare.com'],
-      imgSrc        : ["'self'", 'data:', 'blob:', 'https://www.instagram.com', '*.cdninstagram.com', '*.fbcdn.net', 'https://images.unsplash.com', 'https://placehold.co', 'https://www.googletagmanager.com', 'https://*.google-analytics.com', 'https://www.google.com', 'https://www.google.com.tr', 'https://*.g.doubleclick.net', 'https://pagead2.googlesyndication.com'],
-      connectSrc    : ["'self'", 'https://www.googletagmanager.com', 'https://*.google-analytics.com', 'https://*.analytics.google.com', 'https://www.google.com', 'https://www.google.com.tr', 'https://*.g.doubleclick.net', 'https://pagead2.googlesyndication.com'],
-      frameSrc      : ["https://www.google.com", "https://maps.google.com", "https://www.google.com/maps/", 'https://www.googletagmanager.com'],
+      imgSrc        : ["'self'", 'data:', 'blob:', 'https://www.instagram.com', '*.cdninstagram.com', '*.fbcdn.net', 'https://images.unsplash.com', 'https://placehold.co', 'https://www.googletagmanager.com', 'https://*.google-analytics.com', 'https://analytics.google.com', 'https://*.analytics.google.com', 'https://www.google.com', 'https://www.google.com.tr', 'https://*.g.doubleclick.net', 'https://*.doubleclick.net', 'https://www.googleadservices.com', 'https://pagead2.googlesyndication.com'],
+      connectSrc    : ["'self'", 'https://www.googletagmanager.com', 'https://*.google-analytics.com', 'https://analytics.google.com', 'https://*.analytics.google.com', 'https://www.google.com', 'https://www.google.com.tr', 'https://*.g.doubleclick.net', 'https://*.doubleclick.net', 'https://www.googleadservices.com', 'https://pagead2.googlesyndication.com'],
+      frameSrc      : ["https://www.google.com", "https://maps.google.com", "https://www.google.com/maps/", 'https://www.googletagmanager.com', 'https://*.doubleclick.net'],
       objectSrc     : ["'none'"],
     },
   },
