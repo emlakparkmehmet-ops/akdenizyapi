@@ -96,6 +96,55 @@ function sanitizeText(val, fallback, maxLen = 60) {
   return (clean || fallback).slice(0, maxLen);
 }
 
+// Gemini 2.5 Flash ile bina duvar tohumları ve pencere/gökyüzü hariç kutularını çıkarır (Ücretsiz katmanda çalışır)
+async function fetchGeminiWallHints(apiKey, base64Img, mimeType) {
+  const prompt = [
+    'Analyze this building exterior photograph and return ONLY valid JSON with normalized coordinates from 0 to 1000 (0=left/top, 1000=right/bottom):',
+    '{',
+    '  "isBuilding": true,',
+    '  "buildingBox": [ymin, xmin, ymax, xmax],',
+    '  "wallSeeds": [[x, y], ...],',
+    '  "excludeBoxes": [[ymin, xmin, ymax, xmax], ...]',
+    '}',
+    'Rules:',
+    '- isBuilding: false only if there is clearly no building exterior in the image.',
+    '- wallSeeds: 6 to 10 points strictly on the main exterior painted plaster/stucco walls (avoid windows, sky, roof, trees, signs).',
+    '- excludeBoxes: bounding boxes of windows, doors, roof, sky regions, shop signs, and large trees/bushes overlapping the building.',
+    '- Output raw JSON only, no markdown fences.',
+  ].join('\n');
+
+  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_VISION_MODEL)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+  const apiRes = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [
+        {
+          parts: [
+            { text: prompt },
+            { inline_data: { mime_type: mimeType, data: base64Img } },
+          ],
+        },
+      ],
+      generationConfig: {
+        responseMimeType: 'application/json',
+      },
+    }),
+  });
+  if (!apiRes.ok) return null;
+  const payload = await apiRes.json().catch(() => ({}));
+  const rawText = payload?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  const cleaned = rawText.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
+  const parsed = JSON.parse(cleaned);
+  if (!parsed) return null;
+  return {
+    isBuilding: parsed.isBuilding !== false,
+    buildingBox: Array.isArray(parsed.buildingBox) ? parsed.buildingBox : [100, 100, 900, 900],
+    wallSeeds: Array.isArray(parsed.wallSeeds) ? parsed.wallSeeds.slice(0, 12) : [],
+    excludeBoxes: Array.isArray(parsed.excludeBoxes) ? parsed.excludeBoxes.slice(0, 40) : [],
+  };
+}
+
 // ── GET /api/simulate/status ────────────────────────────────────────────────
 router.get('/status', (req, res) => {
   const ip = getClientIp(req);
@@ -227,7 +276,24 @@ router.post('/ai-edit', simulateRateLimiter, (req, res) => {
       const payload = await apiRes.json().catch(() => ({}));
       if (!apiRes.ok) {
         const msg = payload?.error?.message || `Gemini API hatası (${apiRes.status})`;
-        console.error('[Simulate/ModA] Gemini error:', msg);
+        console.error('[Simulate/ModA] Gemini error:', apiRes.status, msg.slice(0, 260));
+        if (apiRes.status === 429) {
+          // Free Tier limit:0 veya geçici kota durumunda ziyaretçiye hata yerine AI Vision destekli hızlı önizleme sun
+          let visionHints = null;
+          try {
+            visionHints = await fetchGeminiWallHints(apiKey, base64Img, mimeType);
+          } catch (_) {}
+          return res.json({
+            ok: true,
+            mode: 'a',
+            demoMode: true,
+            quotaFallback: true,
+            hints: visionHints,
+            notice: 'Gemini API bağlı; ancak görsel üretim modeli (gemini-2.5-flash-image) için Google AI Studio faturalandırması henüz aktif değil (Free Tier limit: 0). Şu an Gemini Vision destekli hızlı önizleme gösteriliyor; faturalandırma açıldığı anda tam fotogerçekçi AI otomatik devreye girer.',
+            applied: { wallHex, wallCode, wallName, trimHex, trimName, style },
+            remainingFree: remaining,
+          });
+        }
         return res.status(502).json({ error: 'Yapay zeka servisi şu an yanıt veremedi. Lütfen biraz sonra tekrar deneyin.' });
       }
 
@@ -335,55 +401,20 @@ router.post('/auto-mask', simulateRateLimiter, (req, res) => {
       try {
         const base64Img = req.file.buffer.toString('base64');
         const mimeType = req.file.mimetype === 'image/jpg' ? 'image/jpeg' : req.file.mimetype;
-        const prompt = [
-          'Analyze this building exterior photograph and return ONLY valid JSON with normalized coordinates from 0 to 1000 (0=left/top, 1000=right/bottom):',
-          '{',
-          '  "isBuilding": true/false,',
-          '  "buildingBox": [ymin, xmin, ymax, xmax],',
-          '  "wallSeeds": [[x, y], ...],',
-          '  "excludeBoxes": [[ymin, xmin, ymax, xmax], ...]',
-          '}',
-          'Rules:',
-          '- wallSeeds: 6 to 10 points strictly on the main exterior painted plaster/stucco walls (avoid windows, sky, roof, trees, signs).',
-          '- excludeBoxes: bounding boxes of windows, doors, roof, sky regions, shop signs, and large trees/bushes overlapping the building.',
-          '- Output raw JSON only, no markdown fences.',
-        ].join('\n');
-
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_VISION_MODEL)}:generateContent?key=${encodeURIComponent(geminiKey)}`;
-        const apiRes = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [
-              {
-                parts: [
-                  { text: prompt },
-                  { inline_data: { mime_type: mimeType, data: base64Img } },
-                ],
-              },
-            ],
-            generationConfig: {
-              responseMimeType: 'application/json',
-            },
-          }),
-        });
-        const payload = await apiRes.json().catch(() => ({}));
-        const rawText = payload?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-        const cleaned = rawText.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
-        const parsed = JSON.parse(cleaned);
+        const parsed = await fetchGeminiWallHints(geminiKey, base64Img, mimeType);
         if (parsed && parsed.isBuilding === false) {
           return res.status(422).json({ error: 'Yüklenen görselde dış cephe binası tespit edilemedi. Lütfen bina cephe fotoğrafı yükleyin.' });
         }
-        if (parsed && Array.isArray(parsed.wallSeeds) && parsed.wallSeeds.length > 0) {
+        if (parsed && parsed.wallSeeds.length > 0) {
           return res.json({
             ok: true,
             mode: 'b',
             provider: 'gemini-vision',
             apiConnected: true,
             hints: {
-              buildingBox: parsed.buildingBox || [100, 100, 900, 900],
-              wallSeeds: parsed.wallSeeds.slice(0, 12),
-              excludeBoxes: Array.isArray(parsed.excludeBoxes) ? parsed.excludeBoxes.slice(0, 40) : [],
+              buildingBox: parsed.buildingBox,
+              wallSeeds: parsed.wallSeeds,
+              excludeBoxes: parsed.excludeBoxes,
             },
           });
         }

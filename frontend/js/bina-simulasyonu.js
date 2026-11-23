@@ -457,11 +457,20 @@
       }
 
       if (data.demoMode) {
+        if (data.hints && Array.isArray(data.hints.wallSeeds) && data.hints.wallSeeds.length > 0 && !hasAnyMaskPixels()) {
+          state.mask.fill(0);
+          for (const seed of data.hints.wallSeeds) {
+            const sx = Math.round((seed[0] / 1000) * state.imgW);
+            const sy = Math.round((seed[1] / 1000) * state.imgH);
+            floodFillWall(sx, sy, Math.max(30, state.tolerance), true, data.hints.buildingBox, data.hints.excludeBoxes);
+          }
+          softenMask(state.mask, state.imgW, state.imgH);
+        }
         generateClientDemoModeA();
         setStatusBanner(
           'warn',
-          '<i class="fas fa-flask"></i> <span><strong>Demo Önizleme Modu:</strong> ' +
-          (data.notice || 'Gemini API anahtarı bağlandığında gerçek fotogerçekçi yapay zeka dönüşümü aktif olur.') +
+          '<i class="fas fa-sparkles"></i> <span>' +
+          (data.notice || 'Gemini API görsel üretim kotası bekleniyor; şu an hızlı önizleme gösteriliyor.') +
           '</span>'
         );
       } else if (data.imageDataUrl) {
