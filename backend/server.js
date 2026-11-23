@@ -267,6 +267,7 @@ app.get('/sitemap.xml', async (req, res) => {
       { loc: `${SITE}/antalya-cati-izolasyonu.html`,   priority: '0.9', changefreq: 'weekly'  },
       { loc: `${SITE}/antalya-boya-badana.html`,    priority: '0.9', changefreq: 'weekly'  },
       { loc: `${SITE}/dis-cephe-renkleri.html`,     priority: '0.9', changefreq: 'weekly'  },
+      { loc: `${SITE}/bina-cephe-simulasyonu.html`, priority: '0.9', changefreq: 'weekly'  },
       { loc: `${SITE}/antalya-sove-kaplama.html`,   priority: '0.9', changefreq: 'weekly'  },
       { loc: `${SITE}/hizmetler.html`,              priority: '0.9', changefreq: 'monthly' },
       { loc: `${SITE}/referanslar.html`,            priority: '0.8', changefreq: 'monthly' },
@@ -634,6 +635,7 @@ app.use('/api/messages',         require('./routes/messages'));
 app.use('/api/settings',         require('./routes/settings'));
 app.use('/api/campaigns',        require('./routes/campaigns'));
 app.use('/api/instagram-feed',   require('./routes/instagram'));
+app.use('/api/simulate',         require('./routes/simulate'));
 
 // ── Admin panel fallback — Path Traversal korumalı ──────────────────────────
 app.get('/admin', (req, res) => {

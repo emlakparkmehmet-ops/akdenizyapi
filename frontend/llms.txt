@@ -8,6 +8,7 @@
 - [2026 Antalya Mantolama m² Fiyatları ve Maliyet Hesaplama](https://antalyadiscephe.com/antalya-mantolama-fiyatlari.html): Güncel 2026 EPS ve taşyünü mantolama m² birim fiyatları tablosu ve interaktif bina maliyet hesaplama aracı.
 - [Antalya Dış Cephe Boya ve Bina Yenileme](https://antalyadiscephe.com/antalya-boya-badana.html): Apartman, site ve villa dış cephe boyama, iskeleli sıva tamiratı, ücretsiz 3D cephe renk tasarımı ve m² fiyatları.
 - [Antalya Dış Cephe Renk Kartelası ve Canlı Bina Simülatörü](https://antalyadiscephe.com/dis-cephe-renkleri.html): 30+ UV dayanımlı dış cephe boya rengi, 5 katlı söveli apartman ve müstakil villa üzerinde canlı cephe renk ve söve kombinasyonu deneme aracı.
+- [Kendi Binanızda AI Dış Cephe Simülasyonu ve Canlı Boyama](https://antalyadiscephe.com/bina-cephe-simulasyonu.html): Kendi apartman veya villa fotoğrafınızı yükleyerek yapay zeka (Mod A) ile fotogerçekçi cephe/söve yenileme veya canlı maskeleme (Mod B) ile 30 özgün AKD rengini anında deneme aracı.
 - [Antalya Dış Cephe Söve, Kat Silmesi ve Fuga Kaplama](https://antalyadiscephe.com/antalya-sove-kaplama.html): Villa ve apartmanlar için pencere sövesi, kat silmesi, yalıbaskı, köşe taşı ve 3D cephe tasarım çözümleri.
 - [Antalya Çatı ve Teras Su Yalıtımı](https://antalyadiscephe.com/antalya-cati-izolasyonu.html): Teras, çatı aktarma, poliüretan köpük ve membran su izolasyonu uygulamaları.
 - [Antalya Isı Yalıtımı Ana Rehberi](https://antalyadiscephe.com/isi-yalitimi-antalya.html): EPS ve taşyünü karşılaştırması, uygulama aşamaları ve teknik yalıtım rehberi.

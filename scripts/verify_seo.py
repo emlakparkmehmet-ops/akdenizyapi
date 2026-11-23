@@ -28,6 +28,7 @@ GEO_TLDR_PAGES = {
     "antalya-cati-izolasyonu.html",
     "antalya-sove-kaplama.html",
     "dis-cephe-renkleri.html",
+    "bina-cephe-simulasyonu.html",
     "isi-yalitimi-antalya.html",
     "dis-cephe-boya-sarfiyati.html",
     "apartman-dis-cephe-dukkana-katilir-mi.html",
