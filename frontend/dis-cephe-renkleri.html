@@ -709,6 +709,10 @@
               <button type="button" class="bina-toggle active" id="btnShowApt"><i class="fas fa-building"></i> Apartman</button>
               <button type="button" class="bina-toggle" id="btnShowVilla"><i class="fas fa-home"></i> Villa</button>
             </div>
+            <div class="bina-toggle-group" id="animModeBtns">
+              <button type="button" class="bina-toggle active" id="btnSimScaffold" title="Çelik iskele kurulup kat kat boyanır (~10 sn)">🏗️ İskele</button>
+              <button type="button" class="bina-toggle" id="btnSimCradle" title="Asma sepet ile soldan sağa boyanır (~8 sn)">🚡 Sepet</button>
+            </div>
             <div class="sove-inline" id="soveBtns">
               <span>Söve:</span>
               <button type="button" class="sove-circle active" data-trim="#F5F3EE" data-trim-name="Kırık Beyaz Söve" style="background:#F5F3EE;" title="Kırık Beyaz Söve" aria-label="Kırık Beyaz Söve"></button>
@@ -993,6 +997,7 @@
 
   <script src="/js/measurement.js?v=20261104" defer></script>
   <script src="/js/main.js?v=20261104" defer></script>
+  <script src="/js/usta-simulator.js?v=20261124"></script>
   <script>
     (function () {
       const COLORS = [
@@ -1036,116 +1041,28 @@
       let trimName = 'Kırık Beyaz Söve';
       let buildingType = 'Apartman';
 
-      const simCanvas = document.getElementById('simCanvas');
-      const simCtx = simCanvas.getContext('2d', { willReadFrequently: true });
-      const SIM_W = 1040, SIM_H = 580;
-
-      const SCENES = {
-        Apartman: {
-          baseSrc: '/images/sim-apartman-base.webp?v=20261123',
-          wallSrc: '/images/sim-apartman-wall-mask.png?v=20261123',
-          trimSrc: '/images/sim-apartman-trim-mask.png?v=20261123',
-          loaded: false, baseData: null, wallAlpha: null, trimAlpha: null
-        },
-        Villa: {
-          baseSrc: '/images/sim-villa-base.webp?v=20261123b',
-          wallSrc: '/images/sim-villa-wall-mask.png?v=20261123b',
-          trimSrc: '/images/sim-villa-trim-mask.png?v=20261123b',
-          loaded: false, baseData: null, wallAlpha: null, trimAlpha: null
+      const liveBadgeEl = document.getElementById('liveBadge');
+      const ustaSim = window.AkdenizUstaSim.create({
+        canvas: 'simCanvas',
+        width: 1040,
+        height: 580,
+        initialBuilding: buildingType,
+        initialMode: 'scaffold',
+        initialColor: selected,
+        initialPrevColor: COLORS[3], // AKD-104 Kaleiçi Kremi
+        initialTrimHex: trimHex,
+        onStatus: function (txt) {
+          if (liveBadgeEl) liveBadgeEl.textContent = txt;
         }
-      };
+      });
 
-      function hexToRgbArr(hex) {
-        const h = hex.replace('#', '');
-        return [
-          parseInt(h.slice(0, 2), 16) / 255,
-          parseInt(h.slice(2, 4), 16) / 255,
-          parseInt(h.slice(4, 6), 16) / 255
-        ];
-      }
-
-      function loadImg(src) {
-        return new Promise((resolve, reject) => {
-          const im = new Image();
-          im.onload = () => resolve(im);
-          im.onerror = reject;
-          im.src = src;
-        });
-      }
-
-      function extractPixels(img) {
-        const oc = document.createElement('canvas');
-        oc.width = SIM_W; oc.height = SIM_H;
-        const ox = oc.getContext('2d', { willReadFrequently: true });
-        ox.drawImage(img, 0, 0, SIM_W, SIM_H);
-        return ox.getImageData(0, 0, SIM_W, SIM_H).data;
-      }
-
-      function ensureScene(key) {
-        const s = SCENES[key];
-        if (s.loaded || s.loading) return;
-        s.loading = true;
-        Promise.all([loadImg(s.baseSrc), loadImg(s.wallSrc), loadImg(s.trimSrc)]).then(([bImg, wImg, tImg]) => {
-          s.baseData = extractPixels(bImg);
-          const wPx = extractPixels(wImg);
-          const tPx = extractPixels(tImg);
-          const n = SIM_W * SIM_H;
-          s.wallAlpha = new Uint8Array(n);
-          s.trimAlpha = new Uint8Array(n);
-          for (let i = 0; i < n; i++) {
-            s.wallAlpha[i] = wPx[i * 4 + 3];
-            s.trimAlpha[i] = tPx[i * 4 + 3];
-          }
-          s.loaded = true;
-          if (buildingType === key) renderSim();
-        }).catch(() => { s.loading = false; });
-      }
-
-      function renderSim() {
-        const s = SCENES[buildingType];
-        if (!s.loaded) { ensureScene(buildingType); return; }
-        const [wr, wg, wb] = hexToRgbArr(selected.hex);
-        const [tr, tg, tb] = hexToRgbArr(trimHex);
-        const src = s.baseData;
-        const wa = s.wallAlpha;
-        const ta = s.trimAlpha;
-        const outImg = simCtx.createImageData(SIM_W, SIM_H);
-        const dst = outImg.data;
-        const n = SIM_W * SIM_H;
-
-        for (let i = 0; i < n; i++) {
-          const p = i * 4;
-          let r = src[p], g = src[p + 1], b = src[p + 2];
-          const wm = wa[i];
-          if (wm > 0) {
-            const m = wm / 255;
-            const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 234.6;
-            const shade = lum > 1.08 ? 1.08 : lum;
-            const pr = Math.min(255, wr * 255 * shade);
-            const pg = Math.min(255, wg * 255 * shade);
-            const pb = Math.min(255, wb * 255 * shade);
-            r = r * (1 - m) + pr * m;
-            g = g * (1 - m) + pg * m;
-            b = b * (1 - m) + pb * m;
-          }
-          const tm = ta[i];
-          if (tm > 0) {
-            const m = tm / 255;
-            const lum = (0.299 * src[p] + 0.587 * src[p + 1] + 0.114 * src[p + 2]) / 234.6;
-            const shade = lum > 1.08 ? 1.08 : lum;
-            const pr = Math.min(255, tr * 255 * shade);
-            const pg = Math.min(255, tg * 255 * shade);
-            const pb = Math.min(255, tb * 255 * shade);
-            r = r * (1 - m) + pr * m;
-            g = g * (1 - m) + pg * m;
-            b = b * (1 - m) + pb * m;
-          }
-          dst[p] = r;
-          dst[p + 1] = g;
-          dst[p + 2] = b;
-          dst[p + 3] = 255;
+      function renderSim(isColorChange) {
+        if (!ustaSim) return;
+        if (isColorChange) {
+          ustaSim.setColor(selected);
+        } else {
+          ustaSim.setTrim(trimHex);
         }
-        simCtx.putImageData(outImg, 0, 0);
       }
 
       const quickGrid = document.getElementById('quickGrid');
@@ -1202,9 +1119,9 @@
         });
       }
 
-      function applyColor(c) {
+      function applyColor(c, skipAnim) {
         selected = c;
-        renderSim();
+        if (!skipAnim) renderSim(true);
         document.getElementById('simColorSwatch').style.background = c.hex;
         document.getElementById('simColorTitle').textContent = `${c.code} - ${c.name}`;
         document.getElementById('liveBadge').textContent = `${c.code} • ${c.name}`;
@@ -1246,12 +1163,14 @@
 
       const btnApt = document.getElementById('btnShowApt');
       const btnVilla = document.getElementById('btnShowVilla');
+      const btnScaf = document.getElementById('btnSimScaffold');
+      const btnCrad = document.getElementById('btnSimCradle');
 
       btnApt.onclick = () => {
         buildingType = 'Apartman';
         btnApt.classList.add('active');
         btnVilla.classList.remove('active');
-        renderSim();
+        if (ustaSim) ustaSim.setBuilding('Apartman');
         updateWaLinks();
       };
 
@@ -1259,15 +1178,25 @@
         buildingType = 'Villa';
         btnVilla.classList.add('active');
         btnApt.classList.remove('active');
-        ensureScene('Villa');
-        renderSim();
+        if (ustaSim) ustaSim.setBuilding('Villa');
         updateWaLinks();
       };
 
+      if (btnScaf && btnCrad) {
+        btnScaf.onclick = () => {
+          btnScaf.classList.add('active');
+          btnCrad.classList.remove('active');
+          if (ustaSim) ustaSim.setMode('scaffold');
+        };
+        btnCrad.onclick = () => {
+          btnCrad.classList.add('active');
+          btnScaf.classList.remove('active');
+          if (ustaSim) ustaSim.setMode('cradle');
+        };
+      }
+
       window.addEventListener('resize', renderQuick);
-      ensureScene('Apartman');
-      setTimeout(() => ensureScene('Villa'), 600);
-      applyColor(selected);
+      applyColor(selected, true);
     })();
   </script>
 </body>
