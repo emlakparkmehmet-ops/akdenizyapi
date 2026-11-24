@@ -192,6 +192,32 @@
     .hero-price-pill .hpp-name{font-size:.78rem;color:rgba(255,255,255,.8);font-weight:700;display:block;margin-bottom:4px;}
     .hero-price-pill .hpp-val{font-family:'Montserrat',sans-serif;font-size:1.2rem;font-weight:900;color:var(--gold);}
     .hero-fast-note{background:rgba(37,211,102,.14);border-left:4px solid #25d366;padding:10px 14px;border-radius:8px;font-size:.88rem;color:#fff;max-width:780px;margin-bottom:22px;line-height:1.5;}
+    /* ── Apartman Yöneticisi Özel Paket & Referans Kartları ── */
+    .mgr-pack{background:linear-gradient(135deg,#121826 0%,#1f2937 55%,#2d2410 100%);border:2px solid var(--gold);border-radius:20px;padding:28px 30px;margin:34px 0;color:#fff;box-shadow:var(--shadow-lg);}
+    .mgr-pack-head{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:20px;}
+    .mgr-pack-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(201,162,39,.18);border:1px solid rgba(201,162,39,.55);color:var(--gold-light);padding:4px 12px;border-radius:50px;font-size:.74rem;font-weight:800;letter-spacing:.4px;margin-bottom:10px;}
+    .mgr-pack h3{font-family:'Montserrat',sans-serif;font-size:clamp(1.2rem,2.4vw,1.5rem);font-weight:900;color:#fff;margin-bottom:8px;line-height:1.3;}
+    .mgr-pack-sub{color:#d6dce6;font-size:.9rem;line-height:1.6;max-width:680px;margin:0;}
+    .mgr-points{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:20px 0 22px;}
+    .mgr-pt{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;}
+    .mgr-pt i{color:var(--gold);font-size:1rem;margin-top:2px;flex-shrink:0;}
+    .mgr-pt strong{display:block;font-size:.86rem;color:#fff;margin-bottom:2px;}
+    .mgr-pt span{font-size:.78rem;color:#cbd5e1;line-height:1.45;}
+    .mgr-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+    .apt-ref-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin:24px 0 18px;}
+    .apt-ref-card{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s;}
+    .apt-ref-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+    .apt-ref-img{position:relative;aspect-ratio:16/10;overflow:hidden;background:#0f172a;}
+    .apt-ref-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s;}
+    .apt-ref-card:hover .apt-ref-img img{transform:scale(1.05);}
+    .apt-ref-loc{position:absolute;top:10px;left:10px;background:rgba(15,23,42,.84);color:#fff;font-size:.72rem;font-weight:800;padding:4px 10px;border-radius:50px;backdrop-filter:blur(4px);}
+    .apt-ref-loc i{color:var(--gold);margin-right:4px;}
+    .apt-ref-tag{position:absolute;bottom:10px;right:10px;background:rgba(201,162,39,.94);color:#111827;font-size:.7rem;font-weight:900;padding:3px 9px;border-radius:6px;}
+    .apt-ref-body{padding:16px 18px 18px;}
+    .apt-ref-body h4{font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:800;color:var(--text);margin-bottom:6px;}
+    .apt-ref-meta{font-size:.82rem;color:var(--text-muted);line-height:1.5;margin-bottom:10px;}
+    .apt-ref-pills{display:flex;flex-wrap:wrap;gap:6px;}
+    .apt-ref-pills span{background:#fdf8ee;border:1px solid rgba(201,162,39,.35);color:#8a6808;font-size:.72rem;font-weight:700;padding:3px 8px;border-radius:50px;}
     @media(max-width:850px){.calc-grid{grid-template-columns:1fr;}}
     @media(max-width:720px){
       table.price-table{min-width:100%;}
@@ -464,19 +490,53 @@
         </div>
       </div>
 
-      <!-- APARTMAN YÖNETİCİLERİNE ÖZEL KOMPAKT BANNER -->
-      <div style="background:linear-gradient(135deg,#1a1a1a 0%,#2d2612 100%);border:2px solid var(--gold);border-radius:18px;padding:22px 26px;margin:28px 0;color:#fff;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px;">
-        <div style="flex:1 1 380px;">
-          <h3 style="font-family:'Montserrat',sans-serif;font-size:1.2rem;font-weight:900;color:#fff;margin-bottom:6px;">
-            🏢 Apartman Yöneticilerine Özel: <span style="color:var(--gold-light);">Ücretsiz 3D Tasarım &amp; Teklif Dosyası</span>
-          </h3>
-          <p style="color:#d6d6d6;font-size:.88rem;margin:0;">
-            Bina toplantısı için 3 farklı 3D renk simülasyonu ve daire başı taksit tablosunu ücretsiz hazırlıyoruz.
-          </p>
+      <!-- APARTMAN YÖNETİCİLERİNE ÖZEL ARACISIZ TEKLİF & GÜVEN PAKETİ -->
+      <div class="mgr-pack" id="apartman-paketi">
+        <div class="mgr-pack-head">
+          <div>
+            <span class="mgr-pack-badge"><i class="fas fa-building"></i> APARTMAN &amp; SİTE YÖNETİMİNE ÖZEL</span>
+            <h3>Aracısız &amp; Komisyonsuz Doğrudan Antalya Ekibi — <span style="color:var(--gold-light);">Tek Sözleşmede Anahtar Teslim</span></h3>
+            <p class="mgr-pack-sub">
+              Aracı platform veya taşeron komisyonu ödemeden, 2008'den beri Antalya'da kendi İSG belgeli ekibimizle çalışın. Bina toplantınız için <strong>ücretsiz 3D / AI renk sunumu</strong>, daire başı ödeme planı ve resmi teklif dosyasını aynı gün hazırlıyoruz.
+            </p>
+          </div>
         </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <a href="https://wa.me/905309361017?text=Merhaba%2C%20apartman%20toplant%C4%B1m%C4%B1z%20i%C3%A7in%20%C3%BCcretsiz%203D%20bina%20tasar%C4%B1m%C4%B1%20ve%20resmi%20mantolama%20teklif%20dosyas%C4%B1%20istiyorum." target="_blank" rel="noopener" class="btn btn-wa" style="padding:11px 18px;font-size:.88rem;">
-            <i class="fab fa-whatsapp"></i> Teklif Dosyası İste
+        <div class="mgr-points">
+          <div class="mgr-pt">
+            <i class="fas fa-handshake"></i>
+            <div>
+              <strong>Aracısız Doğrudan Muhatap</strong>
+              <span>Teklif pazaryeri komisyonu yok; keşiften teslimata kadar tek resmi firma ve tek ekip.</span>
+            </div>
+          </div>
+          <div class="mgr-pt">
+            <i class="fas fa-shield-alt"></i>
+            <div>
+              <strong>10 Yıl Yazılı Garanti</strong>
+              <span>Sektör ortalamasının 2 katı; TSE belgeli malzeme ve sözleşmeli işçilik güvencesi.</span>
+            </div>
+          </div>
+          <div class="mgr-pt">
+            <i class="fas fa-hard-hat"></i>
+            <div>
+              <strong>İSG Belgeli Çelik İskele</strong>
+              <span>Güvenlik sertifikalı cephe iskelesi, belediye izin süreci ve eksiksiz iş güvenliği.</span>
+            </div>
+          </div>
+          <div class="mgr-pt">
+            <i class="fas fa-wand-magic-sparkles"></i>
+            <div>
+              <strong>Ücretsiz 3D &amp; AI Renk Sunumu</strong>
+              <span>Apartman toplantısında komşulara binanın yeni halini 3 farklı renk alternatifiyle sunun.</span>
+            </div>
+          </div>
+        </div>
+        <div class="mgr-actions">
+          <a href="https://wa.me/905309361017?text=Merhaba%2C%20apartman%20toplant%C4%B1m%C4%B1z%20i%C3%A7in%20arac%C4%B1s%C4%B1z%20resmi%20teklif%20dosyas%C4%B1%20ve%20%C3%BCcretsiz%203D%20renk%20sunumu%20istiyorum." target="_blank" rel="noopener" class="btn btn-wa" style="padding:12px 20px;font-size:.9rem;">
+            <i class="fab fa-whatsapp"></i> Toplantı Teklif Dosyası İste
+          </a>
+          <a href="/bina-cephe-simulasyonu.html" class="btn btn-primary" style="padding:12px 20px;font-size:.9rem;">
+            <i class="fas fa-camera"></i> Binanı Fotoğrafla Canlı Boya (Ücretsiz)
           </a>
         </div>
       </div>
@@ -511,6 +571,92 @@
           <h4>10 Yıl Yazılı Garanti</h4>
           <p>TSE belgeli malzeme ve sözleşmeli işçilik güvencesi.</p>
         </div>
+      </div>
+
+      <!-- ANTALYA TAMAMLANAN APARTMAN & SİTE REFERANSLARI -->
+      <div class="section-header" id="antalya-referanslar" style="margin-top:52px;">
+        <span class="section-label">ANTALYA PROJELERİMİZ</span>
+        <h2 class="section-title">Tamamlanan <span class="gold">Apartman &amp; Site Referansları</span></h2>
+        <p style="color:var(--text-muted);font-size:.92rem;max-width:620px;margin:8px auto 0;">Antalya'nın tüm ilçelerinde İSG belgeli çelik iskele ve 10 yıl yazılı garantiyle teslim ettiğimiz örnek dış cephe uygulamaları:</p>
+      </div>
+
+      <div class="apt-ref-grid">
+        <article class="apt-ref-card">
+          <div class="apt-ref-img">
+            <img src="/images/referans-dis-cephe-1.webp" alt="Bayındır Pınarlar Sitesi Muratpaşa Antalya mantolama ve mineral sıva uygulaması" width="1200" height="800" loading="lazy" />
+            <span class="apt-ref-loc"><i class="fas fa-map-marker-alt"></i> Muratpaşa / Bayındır</span>
+            <span class="apt-ref-tag">10 Yıl Garanti</span>
+          </div>
+          <div class="apt-ref-body">
+            <h4>Bayındır Pınarlar Sitesi</h4>
+            <p class="apt-ref-meta">Karbonlu EPS dış cephe mantolama, fileli sıva, dekoratif mineral kaplama ve UV silikonlu boya uygulaması.</p>
+            <div class="apt-ref-pills">
+              <span>Mantolama</span>
+              <span>Mineral Sıva</span>
+              <span>Çelik İskele</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="apt-ref-card">
+          <div class="apt-ref-img">
+            <img src="/images/referans-dis-cephe-2.webp" alt="AYT Park Villa Sitesi Antalya ısı yalıtımı ve dış cephe boyama projesi" width="1200" height="800" loading="lazy" />
+            <span class="apt-ref-loc"><i class="fas fa-map-marker-alt"></i> Antalya Merkez</span>
+            <span class="apt-ref-tag">10 Yıl Garanti</span>
+          </div>
+          <div class="apt-ref-body">
+            <h4>AYT Park Villa Sitesi</h4>
+            <p class="apt-ref-meta">Villa dış cephe ısı yalıtımı, pencere sövesi detayları ve çift kat silikonlu dış cephe boya yenilemesi.</p>
+            <div class="apt-ref-pills">
+              <span>Isı Yalıtımı</span>
+              <span>Cephe Boya</span>
+              <span>Söve Detay</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="apt-ref-card">
+          <div class="apt-ref-img">
+            <img src="/images/referans-dis-cephe-3.webp" alt="Varsak Güneş Konakları Kepez Antalya komple dış cephe yenileme" width="1200" height="901" loading="lazy" />
+            <span class="apt-ref-loc"><i class="fas fa-map-marker-alt"></i> Kepez / Varsak</span>
+            <span class="apt-ref-tag">10 Yıl Garanti</span>
+          </div>
+          <div class="apt-ref-body">
+            <h4>Varsak Güneş Konakları</h4>
+            <p class="apt-ref-meta">Komple dış cephe tamiratı, alkali dayanımlı fileli sıva sistemi, kat silmesi ve modern renk dönüşümü.</p>
+            <div class="apt-ref-pills">
+              <span>Fileli Sıva</span>
+              <span>Cephe Yenileme</span>
+              <span>EKB Dahil</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="apt-ref-card">
+          <div class="apt-ref-img">
+            <img src="/images/hero-mantolama-uygulama.webp" alt="Sarısu Klas Sitesi Konyaaltı Antalya mineral sıva ve dış cephe boya" width="1600" height="900" loading="lazy" />
+            <span class="apt-ref-loc"><i class="fas fa-map-marker-alt"></i> Konyaaltı / Sarısu</span>
+            <span class="apt-ref-tag">10 Yıl Garanti</span>
+          </div>
+          <div class="apt-ref-body">
+            <h4>Sarısu Klas Sitesi</h4>
+            <p class="apt-ref-meta">Deniz nemine ve yoğun UV güneşine dayanıklı dekoratif mineral sıva ve birinci sınıf silikonlu boya sistemi.</p>
+            <div class="apt-ref-pills">
+              <span>Mineral Sıva</span>
+              <span>UV Silikonlu Boya</span>
+              <span>Konyaaltı</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div style="text-align:center;margin:14px 0 10px;">
+        <a href="/referanslar.html" class="btn btn-outline" style="margin-right:8px;">
+          <i class="fas fa-images"></i> Tüm Referans Projeleri Gör
+        </a>
+        <a href="https://wa.me/905309361017?text=Merhaba%2C%20mahallemizdeki%20bitmi%C5%9F%20referans%20binalar%C4%B1n%C4%B1z%20ve%20%C3%BCcretsiz%20ke%C5%9Fif%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum." target="_blank" rel="noopener" class="btn btn-wa">
+          <i class="fab fa-whatsapp"></i> Bölgenizdeki Referansları Sorun
+        </a>
       </div>
 
     </div>
