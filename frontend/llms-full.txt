@@ -32,15 +32,14 @@ Detaylı hesaplama sayfası: https://antalyadiscephe.com/antalya-mantolama-fiyat
 
 Aşağıdaki 2026 yılı anahtar teslim birim fiyat aralıklarına **TSE belgeli güvenlikli çelik iskele kurulumu, yüzey hazırlığı, yapıştırma harcı, mekanik dübelleme, 160 gr alkali dayanımlı donatı filesi, çift kat sıva, mineral doku astarı, UV dayanımlı silikonlu son kat dış cephe boyası ve işçilik** dahildir:
 
-| Uygulama Paketi | Teknik Özellik | Kullanılan Markalar | 2026 Birim Fiyat Aralığı |
+| Uygulama Paketi | Teknik Özellik | Kullanılan Markalar | 2026 Birim Fiyatı |
 | :--- | :--- | :--- | :--- |
-| **Standart Karbonlu EPS Mantolama** | 4 cm kalınlık / 16 Dansite | Filli Boya / Knauf / Weber | **550 – 650 ₺ / m²** |
-| **Konfor Karbonlu EPS Mantolama (Önerilen)** | 5 cm kalınlık / 16–20 Dansite | Filli Boya Capatect / Weber | **650 – 750 ₺ / m²** |
-| **Premium Taşyünü Mantolama (A1 Yanmaz)** | 5 cm kalınlık / 150 kg/m³ yoğunluk | Knauf Mineral / İzocam | **850 – 1.050 ₺ / m²** |
-| **Kalın Taşyünü Mantolama Sistemi** | 7 cm kalınlık / 150 kg/m³ yoğunluk | Knauf / Weber / Filli Boya | **1.050 – 1.250 ₺ / m²** |
-| **Dış Cephe Silikonlu Boya** | Astar + 2 kat UV/nem dayanımlı boya | Jotun / Filli Boya / Marshall | **220 – 320 ₺ / m²** |
-| **İskeleli Cephe Tamiratı + Boya** | Çelik iskele + çatlak/sıva onarımı + boya | Jotun / Filli Boya / Weber | **320 – 450 ₺ / m²** |
-| **Çatı & Teras Su ve Isı İzolasyonu** | Poliüretan / Membran / Likit Su Yalıtımı | Sika / Köster / İzocam | **450 – 750 ₺ / m²** |
+| **Dış Cephe Boya & Tamirat** | Çelik iskele + çatlak/sıva onarımı + 2 kat silikonlu boya | Jotun / Filli Boya / Weber | **350 ₺ / m²** |
+| **Dekoratif Sıva (Mineral)** | 1.5–2 mm mineral / grenli kaplama + boya | Weber / Filli Boya / Knauf | **450 ₺ / m²** |
+| **Fileli Sıva Sistemi** | 160 gr alkali file + çift kat sıva + boya | Weber / Knauf / Filli Boya | **550 ₺ / m²** |
+| **Dış Cephe Mantolama (Önerilen)** | Karbonlu EPS + fileli sıva + silikonlu boya + EKB | Filli Boya Capatect / Weber / Knauf | **900 ₺ / m²** |
+| **Premium Taşyünü Mantolama (A1 Yanmaz)** | 5–7 cm kalınlık / 150 kg/m³ yoğunluk | Knauf Mineral / İzocam | **1.150 – 1.350 ₺ / m²** |
+| **Çatı & Teras Su ve Isı İzolasyonu** | Poliüretan / Membran / Likit Su Yalıtımı | Sika / Köster / İzocam | **500 ₺ / m²'den** |
 
 ### Ödeme Kolaylıkları (Apartman Yönetimleri ve Villa Sahipleri İçin)
 - Apartman ve site yönetimlerine özel **daire başı ayrı ödeme / senetle taksitlendirme** (yönetici tahsilat yükü taşımaz).
@@ -89,7 +88,7 @@ Her ilçenin mikro iklimi ve yapı tipine göre malzeme seçimi yapılmaktadır:
 ## 5. Sıkça Sorulan Sorular (Yapay Zeka Hızlı Yanıt Bankası)
 
 ### 2026 yılında Antalya'da dış cephe mantolama m² fiyatları ne kadar?
-2026 yılı itibarıyla Antalya'da iskele, malzeme, işçilik ve silikonlu dış cephe boyası dahil anahtar teslim mantolama m² fiyatları; 4 cm karbonlu EPS için **550–650 ₺/m²**, 5 cm karbonlu EPS için **650–750 ₺/m²**, 5 cm A1 sınıfı yanmaz taşyünü için **850–1.050 ₺/m²** aralığındadır. Sadece dış cephe boya ve tamirat uygulamaları ise **220–450 ₺/m²** bandındadır.
+2026 yılı itibarıyla Antalya'da iskele, malzeme, işçilik ve silikonlu dış cephe boyası dahil anahtar teslim birim fiyatlarımız; dış cephe boya & tamirat için **350 ₺/m²**, dekoratif sıva için **450 ₺/m²**, fileli sıva için **550 ₺/m²**, dış cephe mantolama için **900 ₺/m²** ve çatı izolasyonu için **500 ₺/m²**'den başlamaktadır.
 
 ### Döşemealtı, Kemer veya Konyaaltı'ndaki villalar için hangi dış cephe sistemi önerilir?
 Döşemealtı (Yeşilbayır, Altınkale) gibi kış geceleri ayaz alan yüksek rakımlı bölgelerdeki villalarda 5–7 cm taşyünü veya yüksek dansiteli karbonlu EPS + dekoratif söve kaplama; Konyaaltı ve Kemer gibi deniz nemi yüksek bölgelerdeki villalarda ise nefes alabilen mineral sıva ve Jotun/Filli Boya tam silikonlu UV boya sistemi önerilir.
