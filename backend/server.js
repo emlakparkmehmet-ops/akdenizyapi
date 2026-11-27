@@ -275,6 +275,10 @@ app.get('/sitemap.xml', async (req, res) => {
       { loc: `${SITE}/isi-yalitimi-antalya.html`,   priority: '0.8', changefreq: 'monthly' },
       { loc: `${SITE}/dis-cephe-boya-sarfiyati.html`, priority: '0.8', changefreq: 'monthly' },
       { loc: `${SITE}/apartman-dis-cephe-dukkana-katilir-mi.html`, priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/apartman-mantolama-karari-nasil-alinir.html`, priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/eps-mi-tasyunu-mu-antalya.html`, priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/dis-cephe-boya-kabarmasi-neden-olur.html`, priority: '0.8', changefreq: 'monthly' },
+      { loc: `${SITE}/antalya-dis-cephe-boya-secimi-silikonlu-mu-akrilik-mi.html`, priority: '0.8', changefreq: 'monthly' },
       { loc: `${SITE}/kepez-mantolama.html`,        priority: '0.8', changefreq: 'monthly' },
       { loc: `${SITE}/muratpasa-mantolama.html`,    priority: '0.8', changefreq: 'monthly' },
       { loc: `${SITE}/konyaalti-mantolama.html`,    priority: '0.8', changefreq: 'monthly' },
@@ -394,7 +398,7 @@ app.get('/hizmetler/:slug', async (req, res, next) => {
 
     const isDisCephe = service.slug === 'dis-cephe-isi-yalitimi';
     const pageTitle = isDisCephe
-      ? 'Dış Cephe Isı Yalıtımı ve EPS Mantolama Teknik Şartnamesi | Akdeniz Yapı'
+      ? 'Dış Cephe Isı Yalıtımı Teknik Şartnamesi | Akdeniz Yapı'
       : `Antalya ${service.title} | Akdeniz Yapı Dekorasyon`;
     const cleanDesc = isDisCephe
       ? 'EPS ve taşyünü dış cephe ısı yalıtımı teknik uygulama şartnamesi, malzeme standartları, yapıştırma, dübel ve fileli sıva uygulama kuralları.'
@@ -524,15 +528,32 @@ app.get('/referanslar/:slug', async (req, res, next) => {
 
     let html = fs.readFileSync(filePath, 'utf8');
 
-    const pageTitle = `${project.title} | Akdeniz Yapı Dekorasyon Referans Projesi`;
-    const cleanDesc = (project.description
+    const pageTitle = `${project.title} | Akdeniz Yapı Antalya Referansı`;
+    const baseDesc = (project.description
       ? project.description.replace(/\s+/g, ' ').trim()
-      : `${project.title} - Akdeniz Yapı Dekorasyon tarafından tamamlanan referans proje.`)
-      + (project.location ? ` (${project.location})` : '');
+      : `${project.title} dış cephe mantolama ve boya uygulaması`);
+    const locSuffix = project.location ? ` (${project.location})` : ' (Antalya)';
+    let cleanDesc = `${baseDesc}${locSuffix}`;
+    if (cleanDesc.length < 115) {
+      cleanDesc = `${cleanDesc}. Akdeniz Yapı Dekorasyon tarafından 10 yıl yazılı garanti, İSG belgeli çelik iskele ve 1. sınıf malzeme ile teslim edildi.`;
+    }
+    if (cleanDesc.length > 160) {
+      cleanDesc = cleanDesc.slice(0, 157).replace(/\s+\S*$/, '') + '...';
+    }
     const canonicalUrl = `${SITE}/referanslar/${encodeURIComponent(project.slug || project.id)}`;
     const imageUrl = project.image
       ? (project.image.startsWith('http') ? project.image : `${SITE}${project.image}`)
       : `${SITE}/images/og-banner.png`;
+
+    let otherProjects = [];
+    try {
+      otherProjects = db.allRowsAsync
+        ? await db.allRowsAsync(
+            'SELECT slug, title, location FROM projects WHERE slug IS NOT NULL AND slug != ? ORDER BY id DESC LIMIT 12',
+            [project.slug || '']
+          )
+        : [];
+    } catch (_) { otherProjects = []; }
 
     const breadcrumbLd = {
       '@context': 'https://schema.org',
@@ -565,12 +586,20 @@ app.get('/referanslar/:slug', async (req, res, next) => {
     }
 
     const detailHtml = toParagraphs(project.detail_text);
+    const otherLinksHtml = otherProjects.length
+      ? `<div style="margin-top:32px;padding-top:22px;border-top:1px solid var(--border);">
+              <h3 style="font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:800;margin-bottom:12px;">Diğer Tamamlanan Antalya Projelerimiz</h3>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                ${otherProjects.map(op => `<a href="/referanslar/${encodeURIComponent(op.slug)}" style="display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:50px;background:#fdf8ee;border:1px solid rgba(201,162,39,.35);color:var(--text);font-size:.82rem;font-weight:700;text-decoration:none;"><i class="fas fa-building" style="color:var(--gold);font-size:.75rem;"></i> ${escapeHtml(op.title)}${op.location ? ` (${escapeHtml(op.location)})` : ''}</a>`).join('\n                ')}
+              </div>
+            </div>`
+      : '';
     const ssrContent = `            <img src="${imageUrl}" alt="${safeTitle} - Akdeniz Yapı Dekorasyon referans projesi" class="detay-hero-img" width="1200" height="675" />
             <div style="margin-top:28px;">
               <h2 style="font-family:'Montserrat',sans-serif;font-size:1.25rem;font-weight:800;margin-bottom:12px;">Proje Hakkında</h2>
               ${project.description ? `<p style="color:var(--text2);line-height:1.8;font-size:.95rem;">${escapeHtml(project.description)}</p>` : ''}
               ${detailHtml ? `<div style="color:var(--text2);line-height:1.8;font-size:.92rem;margin-top:12px;">${detailHtml}</div>` : ''}
-            </div>`;
+            </div>${otherLinksHtml}`;
     html = injectSsrContent(html, ssrContent);
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
